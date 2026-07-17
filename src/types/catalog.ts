@@ -1,31 +1,36 @@
 import type { BilingualText } from './site'
 
-export type BlossomColor =
-  | 'white'
-  | 'ivory'
-  | 'blush'
-  | 'pink'
-  | 'red'
-  | 'burgundy'
-  | 'orange'
-  | 'yellow'
-  | 'lavender'
-  | 'purple'
-  | 'green'
-  | 'mixed'
+export const BLOSSOM_COLORS = [
+  'white',
+  'ivory',
+  'blush',
+  'pink',
+  'red',
+  'burgundy',
+  'orange',
+  'yellow',
+  'lavender',
+  'purple',
+  'green',
+  'mixed',
+] as const
+export type BlossomColor = (typeof BLOSSOM_COLORS)[number]
 
-export type FlowerType =
-  | 'rose'
-  | 'garden-rose'
-  | 'carnation'
-  | 'lily'
-  | 'hydrangea'
-  | 'greens-foliage'
-  | 'filler'
-  | 'tropical'
-  | 'seasonal'
+export const FLOWER_TYPES = [
+  'rose',
+  'garden-rose',
+  'carnation',
+  'lily',
+  'hydrangea',
+  'greens-foliage',
+  'filler',
+  'tropical',
+  'seasonal',
+] as const
+export type FlowerType = (typeof FLOWER_TYPES)[number]
 
-export type Season = 'year-round' | 'spring' | 'summer' | 'fall' | 'winter'
+export const SEASONS = ['year-round', 'spring', 'summer', 'fall', 'winter'] as const
+export type Season = (typeof SEASONS)[number]
 
 export interface CatalogItem {
   id: string
