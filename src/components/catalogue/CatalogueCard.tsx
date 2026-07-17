@@ -23,7 +23,7 @@ export function CatalogueCard({ item }: CatalogueCardProps) {
 
       <div className="flex flex-col gap-1">
         <h3 className="font-display text-xl leading-tight text-ink">{item.name[locale]}</h3>
-        <p className="font-display text-sm italic text-faint">{item.latin}</p>
+        <p className="font-display text-sm text-faint">{item.latin}</p>
         <p className="font-sans text-xs uppercase tracking-widest2 text-soft">{item.soldBy[locale]}</p>
       </div>
 

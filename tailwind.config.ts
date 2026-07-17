@@ -17,8 +17,8 @@ export default {
         'line-soft': 'var(--color-line-soft)',
       },
       fontFamily: {
-        display: ['"Cormorant Garamond"', 'serif'],
-        sans: ['Jost', 'sans-serif'],
+        display: ['"Devina Garden"', 'serif'],
+        sans: ['Amiamie', 'sans-serif'],
       },
       letterSpacing: {
         widest2: '0.22em',

@@ -1,8 +1,56 @@
-@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Jost:wght@400;500;600&display=swap');
-
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+/* Display face: Devina Garden ships as a single cut, so it's registered as
+   the family's "normal" style — don't pair it with Tailwind's `italic`. */
+@font-face {
+  font-family: 'Devina Garden';
+  src: url('/fonts/Devina%20Garden.otf') format('opentype');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Amiamie';
+  src:
+    url('/fonts/amiamie/Amiamie-Light.woff2') format('woff2'),
+    url('/fonts/amiamie/Amiamie-Light.woff') format('woff');
+  font-weight: 300;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Amiamie';
+  src:
+    url('/fonts/amiamie/Amiamie-LightItalic.woff2') format('woff2'),
+    url('/fonts/amiamie/Amiamie-LightItalic.woff') format('woff');
+  font-weight: 300;
+  font-style: italic;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Amiamie';
+  src:
+    url('/fonts/amiamie/Amiamie-Regular.woff2') format('woff2'),
+    url('/fonts/amiamie/Amiamie-Regular.woff') format('woff');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Amiamie';
+  src:
+    url('/fonts/amiamie/Amiamie-Italic.woff2') format('woff2'),
+    url('/fonts/amiamie/Amiamie-Italic.woff') format('woff');
+  font-weight: 400;
+  font-style: italic;
+  font-display: swap;
+}
 
 :root {
   --color-paper: #f3efe4;
@@ -38,7 +86,7 @@ html {
 body {
   background-color: var(--color-paper);
   color: var(--color-ink);
-  font-family: 'Jost', sans-serif;
+  font-family: 'Amiamie', sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-rendering: optimizeLegibility;

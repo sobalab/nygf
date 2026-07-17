@@ -35,7 +35,7 @@ export function Delivery() {
             <ol className="mt-6 flex flex-col gap-4">
               {STEPS.map((step, i) => (
                 <li key={step} className="flex gap-4">
-                  <span className="font-display text-lg italic text-faint">{i + 1}</span>
+                  <span className="font-display text-lg text-faint">{i + 1}</span>
                   <span className="font-sans text-sm text-soft">{t(`delivery.account.${step}`)}</span>
                 </li>
               ))}
