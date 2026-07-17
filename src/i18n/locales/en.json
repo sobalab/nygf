@@ -1,0 +1,147 @@
+{
+  "meta": {
+    "title": "New York Garden Flower Wholesale — Flushing, NY",
+    "description": "Wholesale cut flowers imported direct from Ecuador, Colombia, Costa Rica, Mexico, Poland & Canada. Serving florists, event planners, restaurants and hotels since 1990."
+  },
+  "common": {
+    "callCta": "Call {{phone}}",
+    "whatsappCta": "WhatsApp",
+    "askPrice": "Ask today's price",
+    "clearAll": "Clear all",
+    "languageToggle": { "en": "EN", "ko": "KO" },
+    "skipToContent": "Skip to content",
+    "menuOpen": "Menu",
+    "menuClose": "Close"
+  },
+  "nav": {
+    "cooler": "Cooler Today",
+    "catalogue": "Catalogue",
+    "sourcing": "Sourcing",
+    "delivery": "Delivery",
+    "contact": "Contact"
+  },
+  "hero": {
+    "eyebrow": "Wholesale cut flowers — Flushing, NY",
+    "headlinePre": "Fresh from the cooler,",
+    "headlineAccent": "not the internet",
+    "lede": "We import direct and sell direct — no middleman markup, no online cart. Browse what's in today, then call or WhatsApp for the day's price.",
+    "ctaPrimary": "See today's cooler",
+    "ctaSecondary": "WhatsApp us",
+    "metaSince": "Wholesale since {{year}}",
+    "metaHours": "Open early, close by afternoon",
+    "metaLocation": "Flushing, Queens"
+  },
+  "availability": {
+    "eyebrow": "Updated this morning",
+    "title": "In the cooler today — {{date}}",
+    "updated": "Updated {{time}}",
+    "sendListCta": "Send the list on WhatsApp",
+    "status": {
+      "in-stock": "In stock",
+      "limited": "Limited",
+      "pre-order": "Pre-order"
+    }
+  },
+  "catalogue": {
+    "eyebrow": "The archive",
+    "title": "Catalogue",
+    "lede": "A running record of what we regularly carry. Prices move with the market — ask us today's.",
+    "filters": {
+      "colorLabel": "Blossom colour",
+      "typeLabel": "Type",
+      "seasonLabel": "Season",
+      "clearAll": "Clear all",
+      "showing": "Showing {{count}} of {{total}}"
+    },
+    "colors": {
+      "white": "White",
+      "ivory": "Ivory",
+      "blush": "Blush",
+      "pink": "Pink",
+      "red": "Red",
+      "burgundy": "Burgundy",
+      "orange": "Orange",
+      "yellow": "Yellow",
+      "lavender": "Lavender",
+      "purple": "Purple",
+      "green": "Green",
+      "mixed": "Mixed"
+    },
+    "types": {
+      "rose": "Rose",
+      "garden-rose": "Garden Rose",
+      "carnation": "Carnation",
+      "lily": "Lily",
+      "hydrangea": "Hydrangea",
+      "greens-foliage": "Greens & Foliage",
+      "filler": "Filler",
+      "tropical": "Tropical",
+      "seasonal": "Seasonal"
+    },
+    "seasons": {
+      "year-round": "Year-round",
+      "spring": "Spring",
+      "summer": "Summer",
+      "fall": "Fall",
+      "winter": "Winter"
+    },
+    "askPrice": "Ask today's price",
+    "empty": "No items match those filters."
+  },
+  "sourcing": {
+    "eyebrow": "Direct import",
+    "title": "Sourced, not brokered",
+    "lede": "Imported direct since {{year}} — six growing regions, one cooler."
+  },
+  "whoWeSupply": {
+    "eyebrow": "Who we supply",
+    "title": "Built for the trade",
+    "lede": "From single-stem walk-ins to standing weekly orders, we stock for the people who put flowers in front of people.",
+    "audiences": {
+      "florists": {
+        "title": "Florists",
+        "body": "Standing orders, rush adds, and the odd Saturday-morning save."
+      },
+      "events": {
+        "title": "Event & wedding planners",
+        "body": "Volume pricing and advance holds for the dates that can't slip."
+      },
+      "hospitality": {
+        "title": "Restaurants & hotels",
+        "body": "Recurring lobby, table, and event stock on a schedule you set."
+      },
+      "walkins": {
+        "title": "Walk-ins & small buyers",
+        "body": "No order too small to ask — come by the cooler."
+      }
+    }
+  },
+  "delivery": {
+    "eyebrow": "Getting flowers to you",
+    "title": "Delivery & pickup",
+    "info": {
+      "zones": { "label": "Delivery zones", "value": "TODO(owner): confirm full delivery zone list" },
+      "cutoff": { "label": "Order cutoff", "value": "TODO(owner): confirm daily order cutoff time" },
+      "minimum": { "label": "Delivery minimum", "value": "TODO(owner): confirm delivery minimum" },
+      "coldChain": { "label": "Cold chain", "value": "Refrigerated van, door to cooler" },
+      "pickup": { "label": "Pickup", "value": "Available at 171-10 39th Ave, Flushing during business hours" }
+    },
+    "account": {
+      "title": "Open a wholesale account",
+      "step1": "Tell us your business and delivery address",
+      "step2": "We confirm your account and standing terms",
+      "step3": "Start ordering from the daily cooler list",
+      "cta": "Start on WhatsApp"
+    }
+  },
+  "footer": {
+    "contactTitle": "Contact",
+    "callLabel": "Call",
+    "whatsappLabel": "WhatsApp",
+    "textLabel": "Text",
+    "emailLabel": "Email",
+    "hoursTitle": "Hours",
+    "addressTitle": "Address",
+    "rights": "© {{year}} New York Garden Flower Wholesale, Inc."
+  }
+}

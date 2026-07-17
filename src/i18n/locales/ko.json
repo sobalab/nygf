@@ -1,0 +1,147 @@
+{
+  "meta": {
+    "title": "뉴욕 가든 플라워 홀세일 — 플러싱, 뉴욕",
+    "description": "에콰도르, 콜롬비아, 코스타리카, 멕시코, 폴란드, 캐나다에서 직수입한 도매 절화. 1990년부터 플로리스트, 이벤트 플래너, 레스토랑과 호텔에 공급합니다."
+  },
+  "common": {
+    "callCta": "{{phone}}로 전화",
+    "whatsappCta": "WhatsApp",
+    "askPrice": "오늘 가격 문의",
+    "clearAll": "전체 해제",
+    "languageToggle": { "en": "EN", "ko": "KO" },
+    "skipToContent": "본문으로 바로가기",
+    "menuOpen": "메뉴",
+    "menuClose": "닫기"
+  },
+  "nav": {
+    "cooler": "오늘의 쿨러",
+    "catalogue": "카탈로그",
+    "sourcing": "수입 경로",
+    "delivery": "배송",
+    "contact": "연락처"
+  },
+  "hero": {
+    "eyebrow": "도매 절화 — 플러싱, 뉴욕",
+    "headlinePre": "쿨러에서 바로,",
+    "headlineAccent": "온라인이 아닌",
+    "lede": "직접 수입하고 직접 판매합니다 — 중간 마진도, 온라인 장바구니도 없습니다. 오늘의 입고 목록을 보시고 전화나 WhatsApp으로 가격을 문의하세요.",
+    "ctaPrimary": "오늘의 쿨러 보기",
+    "ctaSecondary": "WhatsApp 문의",
+    "metaSince": "{{year}}년부터 도매 운영",
+    "metaHours": "이른 아침 오픈, 오후 마감",
+    "metaLocation": "플러싱, 퀸즈"
+  },
+  "availability": {
+    "eyebrow": "오늘 아침 업데이트",
+    "title": "오늘 쿨러 입고 현황 — {{date}}",
+    "updated": "{{time}} 업데이트",
+    "sendListCta": "WhatsApp으로 목록 받기",
+    "status": {
+      "in-stock": "재고 있음",
+      "limited": "수량 제한",
+      "pre-order": "예약 주문"
+    }
+  },
+  "catalogue": {
+    "eyebrow": "아카이브",
+    "title": "카탈로그",
+    "lede": "정기적으로 취급하는 품목 기록입니다. 가격은 시장에 따라 변동되니 오늘의 가격을 문의해 주세요.",
+    "filters": {
+      "colorLabel": "꽃 색상",
+      "typeLabel": "종류",
+      "seasonLabel": "시즌",
+      "clearAll": "전체 해제",
+      "showing": "{{total}}개 중 {{count}}개 표시"
+    },
+    "colors": {
+      "white": "화이트",
+      "ivory": "아이보리",
+      "blush": "블러쉬",
+      "pink": "핑크",
+      "red": "레드",
+      "burgundy": "버건디",
+      "orange": "오렌지",
+      "yellow": "옐로우",
+      "lavender": "라벤더",
+      "purple": "퍼플",
+      "green": "그린",
+      "mixed": "혼합"
+    },
+    "types": {
+      "rose": "장미",
+      "garden-rose": "가든로즈",
+      "carnation": "카네이션",
+      "lily": "백합",
+      "hydrangea": "수국",
+      "greens-foliage": "그린 & 폴리지",
+      "filler": "필러",
+      "tropical": "트로피컬",
+      "seasonal": "시즌 스페셜"
+    },
+    "seasons": {
+      "year-round": "연중",
+      "spring": "봄",
+      "summer": "여름",
+      "fall": "가을",
+      "winter": "겨울"
+    },
+    "askPrice": "오늘 가격 문의",
+    "empty": "해당 필터에 맞는 품목이 없습니다."
+  },
+  "sourcing": {
+    "eyebrow": "직수입",
+    "title": "브로커 없이, 직수입",
+    "lede": "{{year}}년부터 직수입 — 여섯 개 산지, 하나의 쿨러."
+  },
+  "whoWeSupply": {
+    "eyebrow": "공급 대상",
+    "title": "도매 거래를 위한 준비",
+    "lede": "단골 플로리스트부터 워크인 손님까지, 꽃을 사람들 앞에 놓는 모든 이들을 위해 재고를 갖춥니다.",
+    "audiences": {
+      "florists": {
+        "title": "플로리스트",
+        "body": "정기 주문, 긴급 추가 주문, 그리고 가끔의 토요일 아침 긴급 요청까지."
+      },
+      "events": {
+        "title": "이벤트 & 웨딩 플래너",
+        "body": "미룰 수 없는 날짜를 위한 대량 가격과 사전 예약."
+      },
+      "hospitality": {
+        "title": "레스토랑 & 호텔",
+        "body": "로비, 테이블, 행사용 정기 공급을 원하는 일정에 맞춰."
+      },
+      "walkins": {
+        "title": "워크인 & 소규모 구매자",
+        "body": "적은 수량도 괜찮습니다 — 쿨러로 직접 방문해 주세요."
+      }
+    }
+  },
+  "delivery": {
+    "eyebrow": "배송 안내",
+    "title": "배송 & 픽업",
+    "info": {
+      "zones": { "label": "배송 지역", "value": "TODO(owner): 전체 배송 지역 확인 필요" },
+      "cutoff": { "label": "주문 마감 시간", "value": "TODO(owner): 일일 마감 시간 확인 필요" },
+      "minimum": { "label": "최소 주문 금액", "value": "TODO(owner): 최소 주문 금액 확인 필요" },
+      "coldChain": { "label": "콜드체인", "value": "냉장 차량으로 쿨러까지 직접 배송" },
+      "pickup": { "label": "픽업", "value": "영업시간 중 171-10 39th Ave, Flushing에서 픽업 가능" }
+    },
+    "account": {
+      "title": "도매 계정 개설",
+      "step1": "사업체 정보와 배송 주소를 알려주세요",
+      "step2": "계정과 거래 조건을 확인해 드립니다",
+      "step3": "매일의 쿨러 목록으로 주문을 시작하세요",
+      "cta": "WhatsApp으로 시작하기"
+    }
+  },
+  "footer": {
+    "contactTitle": "연락처",
+    "callLabel": "전화",
+    "whatsappLabel": "WhatsApp",
+    "textLabel": "문자",
+    "emailLabel": "이메일",
+    "hoursTitle": "영업시간",
+    "addressTitle": "주소",
+    "rights": "© {{year}} New York Garden Flower Wholesale, Inc."
+  }
+}
