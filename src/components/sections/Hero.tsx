@@ -13,7 +13,7 @@ export function Hero() {
         <div className="flex flex-col gap-6">
           <span className="font-sans text-xs uppercase tracking-widest2 text-soft">{t('hero.eyebrow')}</span>
           <h1 className="font-display text-5xl font-medium leading-[1.08] text-ink sm:text-6xl">
-            {t('hero.headlinePre')} <em className="text-sage-deep">{t('hero.headlineAccent')}</em>
+            {t('hero.headlinePre')} <em className="not-italic text-sage-deep">{t('hero.headlineAccent')}</em>
           </h1>
           <p className="max-w-md font-sans text-base leading-relaxed text-soft">{t('hero.lede')}</p>
 

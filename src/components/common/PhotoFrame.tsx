@@ -27,7 +27,7 @@ export function PhotoFrame({ src, alt, latin, className = '' }: PhotoFrameProps)
         />
       ) : (
         <div className="flex h-full w-full items-center justify-center p-6 text-center">
-          <span className="font-display text-base italic text-faint">{latin}</span>
+          <span className="font-display text-base text-faint">{latin}</span>
         </div>
       )}
     </div>
