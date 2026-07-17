@@ -35,13 +35,13 @@ export function AvailabilityBoard() {
 
         <ul className="mt-10 divide-y divide-line-soft border-y border-line-soft">
           {availability.items.map((item) => (
-            <li key={item.name} className="flex flex-wrap items-center justify-between gap-x-6 gap-y-2 py-4">
-              <div className="flex items-center gap-3">
-                <span className={`h-2 w-2 shrink-0 rounded-full ${STATUS_DOT[item.status]}`} aria-hidden="true" />
-                <span className="font-display text-lg text-ink">{item.name}</span>
-                {item.detail ? <span className="font-sans text-xs text-faint">— {item.detail}</span> : null}
-              </div>
-              <span className="font-sans text-xs uppercase tracking-widest2 text-soft">
+            <li key={item.name} className="flex flex-wrap items-baseline gap-x-3 gap-y-1 py-4">
+              <span className={`h-2 w-2 shrink-0 self-center rounded-full ${STATUS_DOT[item.status]}`} aria-hidden="true" />
+              <span className="font-display text-lg text-ink">{item.name}</span>
+              {item.detail ? <span className="font-sans text-xs text-faint">({item.detail})</span> : null}
+              {/* Ledger-style dot leader — hidden on narrow screens where there's no room for it to breathe. */}
+              <span className="hidden h-0 flex-1 border-b border-dotted border-line sm:block" aria-hidden="true" />
+              <span className="ml-auto font-sans text-xs uppercase tracking-widest2 text-soft sm:ml-0">
                 {t(`availability.status.${item.status}`)}
               </span>
             </li>

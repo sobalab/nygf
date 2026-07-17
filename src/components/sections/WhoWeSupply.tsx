@@ -16,11 +16,11 @@ export function WhoWeSupply() {
           tone="paper"
         />
 
-        <div className="mt-14 grid gap-x-10 gap-y-12 sm:grid-cols-2">
+        <div className="mt-16 grid gap-x-12 gap-y-16 sm:grid-cols-2">
           {AUDIENCES.map((key) => (
-            <div key={key} className="border-t border-paper/20 pt-6">
+            <div key={key}>
               <h3 className="font-display text-2xl text-paper">{t(`whoWeSupply.audiences.${key}.title`)}</h3>
-              <p className="mt-2 max-w-sm font-sans text-sm leading-relaxed text-paper-2/75">
+              <p className="mt-3 max-w-sm font-sans text-sm leading-relaxed text-paper-2/75">
                 {t(`whoWeSupply.audiences.${key}.body`)}
               </p>
             </div>

@@ -33,7 +33,24 @@ export function Hero() {
           </ul>
         </div>
 
-        <div className="mx-auto w-full max-w-md">
+        <div className="relative mx-auto w-full max-w-md">
+          {/* Herbarium-style mounting corners — signals "specimen plate" without illustrating one. */}
+          <span
+            className="pointer-events-none absolute -left-2.5 -top-2.5 h-[18px] w-[18px] border-l border-t border-soft"
+            aria-hidden="true"
+          />
+          <span
+            className="pointer-events-none absolute -right-2.5 -top-2.5 h-[18px] w-[18px] border-r border-t border-soft"
+            aria-hidden="true"
+          />
+          <span
+            className="pointer-events-none absolute -bottom-2.5 -left-2.5 h-[18px] w-[18px] border-b border-l border-soft"
+            aria-hidden="true"
+          />
+          <span
+            className="pointer-events-none absolute -bottom-2.5 -right-2.5 h-[18px] w-[18px] border-b border-r border-soft"
+            aria-hidden="true"
+          />
           <div className="border border-line p-3">
             <InteractiveStage
               className="aspect-[4/5] w-full"
