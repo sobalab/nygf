@@ -15,16 +15,23 @@ function readStoredLocale(): Locale {
 
 export function persistLocale(locale: Locale): void {
   window.localStorage.setItem(LOCALE_STORAGE_KEY, locale)
+  document.documentElement.lang = locale
 }
+
+const initialLocale = readStoredLocale()
 
 i18n.use(initReactI18next).init({
   resources: {
     en: { translation: en },
     ko: { translation: ko },
   },
-  lng: readStoredLocale(),
+  lng: initialLocale,
   fallbackLng: 'en',
   interpolation: { escapeValue: false },
 })
+
+if (typeof document !== 'undefined') {
+  document.documentElement.lang = initialLocale
+}
 
 export default i18n
