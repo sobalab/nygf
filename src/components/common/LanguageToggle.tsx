@@ -24,9 +24,7 @@ export function LanguageToggle() {
       >
         EN
       </button>
-      <span className="text-line" aria-hidden="true">
-        /
-      </span>
+      <span className="h-3 w-px bg-line" aria-hidden="true" />
       <button
         type="button"
         onClick={() => setLocale('ko')}

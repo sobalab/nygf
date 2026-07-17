@@ -16,7 +16,7 @@ export function CatalogueCard({ item }: CatalogueCardProps) {
     <article className="flex flex-col gap-3">
       <div className="relative">
         <PhotoFrame src={item.image} alt={item.name[locale]} latin={item.latin} />
-        <span className="absolute right-2 top-2 rotate-3 bg-paper px-2 py-1 font-sans text-[10px] uppercase tracking-widest2 text-soft">
+        <span className="absolute right-2 top-2 rotate-2 border border-line bg-paper px-2 py-0.5 font-sans text-[10px] uppercase tracking-widest2 text-soft">
           N° {String(item.index).padStart(2, '0')}
         </span>
       </div>

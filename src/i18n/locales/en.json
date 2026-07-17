@@ -1,6 +1,6 @@
 {
   "meta": {
-    "title": "New York Garden Flower Wholesale — Flushing, NY",
+    "title": "New York Garden Flower Wholesale, Flushing NY",
     "description": "Wholesale cut flowers imported direct from Ecuador, Colombia, Costa Rica, Mexico, Poland & Canada. Serving florists, event planners, restaurants and hotels since 1990."
   },
   "common": {
@@ -21,10 +21,10 @@
     "contact": "Contact"
   },
   "hero": {
-    "eyebrow": "Wholesale cut flowers — Flushing, NY",
+    "eyebrow": "Wholesale cut flowers, Flushing NY",
     "headlinePre": "Fresh from the cooler,",
     "headlineAccent": "not the internet",
-    "lede": "We import direct and sell direct — no middleman markup, no online cart. Browse what's in today, then call or WhatsApp for the day's price.",
+    "lede": "We import direct and sell direct: no middleman markup, no online cart. Browse what's in today, then call or WhatsApp for the day's price.",
     "ctaPrimary": "See today's cooler",
     "ctaSecondary": "WhatsApp us",
     "metaSince": "Wholesale since {{year}}",
@@ -33,7 +33,7 @@
   },
   "availability": {
     "eyebrow": "Updated this morning",
-    "title": "In the cooler today — {{date}}",
+    "title": "In the cooler today: {{date}}",
     "updated": "Updated {{time}}",
     "sendListCta": "Send the list on WhatsApp",
     "status": {
@@ -45,8 +45,9 @@
   "catalogue": {
     "eyebrow": "The archive",
     "title": "Catalogue",
-    "lede": "A running record of what we regularly carry. Prices move with the market — ask us today's.",
+    "lede": "A running record of what we regularly carry. Prices move with the market. Ask us today's.",
     "filters": {
+      "title": "Filters",
       "colorLabel": "Blossom colour",
       "typeLabel": "Type",
       "seasonLabel": "Season",
@@ -91,7 +92,7 @@
   "sourcing": {
     "eyebrow": "Direct import",
     "title": "Sourced, not brokered",
-    "lede": "Imported direct since {{year}} — six growing regions, one cooler."
+    "lede": "Imported direct since {{year}}: six growing regions, one cooler."
   },
   "whoWeSupply": {
     "eyebrow": "Who we supply",
@@ -112,7 +113,7 @@
       },
       "walkins": {
         "title": "Walk-ins & small buyers",
-        "body": "No order too small to ask — come by the cooler."
+        "body": "No order too small to ask. Come by the cooler."
       }
     }
   },

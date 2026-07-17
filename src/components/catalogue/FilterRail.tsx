@@ -27,7 +27,7 @@ export function FilterRail({
   const activeCount = filters.colors.length + filters.types.length + filters.seasons.length
 
   return (
-    <aside aria-label={t('catalogue.filters.typeLabel')}>
+    <aside aria-label={t('catalogue.filters.title')}>
       <button
         type="button"
         className="mb-4 flex w-full items-center justify-between border border-line px-4 py-3 font-sans text-xs uppercase tracking-widest2 text-ink lg:hidden"
@@ -36,7 +36,7 @@ export function FilterRail({
         onClick={() => setRailOpen((open) => !open)}
       >
         <span>
-          {t('catalogue.filters.typeLabel')}
+          {t('catalogue.filters.title')}
           {activeCount > 0 ? ` (${activeCount})` : ''}
         </span>
         <span aria-hidden="true">{railOpen ? '−' : '+'}</span>
