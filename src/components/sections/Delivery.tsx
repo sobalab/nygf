@@ -4,7 +4,7 @@ import { openAccountMessage, waHref } from '../../lib/links'
 import { CtaButton } from '../common/CtaButton'
 import { SectionHeading } from '../common/SectionHeading'
 
-const INFO_KEYS = ['zones', 'cutoff', 'minimum', 'coldChain', 'pickup'] as const
+const INFO_KEYS = ['zones', 'coldChain', 'pickup'] as const
 const STEPS = ['step1', 'step2', 'step3'] as const
 
 export function Delivery() {
@@ -35,7 +35,7 @@ export function Delivery() {
             <ol className="mt-6 flex flex-col gap-4">
               {STEPS.map((step, i) => (
                 <li key={step} className="flex gap-4">
-                  <span className="font-display text-lg text-faint">{i + 1}</span>
+                  <span className="font-sans text-sm text-faint">{i + 1}</span>
                   <span className="font-sans text-sm text-soft">{t(`delivery.account.${step}`)}</span>
                 </li>
               ))}

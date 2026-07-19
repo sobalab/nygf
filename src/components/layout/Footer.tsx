@@ -11,7 +11,8 @@ export function Footer() {
     <footer id="contact" className="border-t border-line bg-paper-2">
       <div className="mx-auto grid max-w-6xl gap-10 px-6 py-16 sm:grid-cols-2 lg:grid-cols-4">
         <div className="flex flex-col gap-2">
-          <span className="font-display text-lg text-ink">{siteConfig.wordmark.line1}</span>
+          <img src="/nygf-logo.svg" alt="" className="h-14 w-auto self-start" />
+          <span className="mt-2 font-display text-lg text-ink">{siteConfig.wordmark.line1}</span>
           <span className="font-sans text-[10px] uppercase tracking-widest2 text-soft">
             {siteConfig.wordmark.line2}
           </span>

@@ -52,17 +52,20 @@
   font-display: swap;
 }
 
+/* Gallery-neutral palette: near-white page, cool light-gray cells, near-black
+   ink, sage kept as the single accent. Token names keep their original
+   "paper" naming so components didn't need touching. */
 :root {
-  --color-paper: #f3efe4;
-  --color-paper-2: #ece7d7;
-  --color-white: #fbfaf4;
-  --color-ink: #2e2a22;
-  --color-soft: #6e6656;
-  --color-faint: #9a917f;
+  --color-paper: #fafaf8;
+  --color-paper-2: #efefec;
+  --color-white: #ffffff;
+  --color-ink: #1a1a17;
+  --color-soft: #52524c;
+  --color-faint: #7a7a72;
   --color-sage: #6e7a5a;
   --color-sage-deep: #4c5540;
-  --color-line: #d9d3c2;
-  --color-line-soft: #e4dfd0;
+  --color-line: #ddddd8;
+  --color-line-soft: #e8e8e4;
 
   color-scheme: light;
 }
@@ -100,7 +103,7 @@ body::before {
   inset: 0;
   z-index: 9999;
   pointer-events: none;
-  opacity: 0.035;
+  opacity: 0.02;
   mix-blend-mode: multiply;
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180' viewBox='0 0 180 180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
 }

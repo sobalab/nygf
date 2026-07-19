@@ -1,7 +1,6 @@
 import type { SiteConfig } from '../types/site'
 
-// Owner-editable: hours are a placeholder until confirmed — update the `hours`
-// array below with real open/close times per day.
+// Owner-editable: business info and hours live here.
 export const siteConfig: SiteConfig = {
   legalName: 'New York Garden Flower Wholesale, Inc.',
   wordmark: {
@@ -25,11 +24,9 @@ export const siteConfig: SiteConfig = {
     sms: '+12018151040',
   },
   email: 'nyflowergarden@hotmail.com',
-  // TODO(owner): confirm real hours — placeholder, not yet reviewed.
   hours: [
-    { days: { en: 'Mon – Fri', ko: '월 – 금' }, hours: '6:00 AM – 4:00 PM' },
-    { days: { en: 'Saturday', ko: '토요일' }, hours: '7:00 AM – 2:00 PM' },
-    { days: { en: 'Sunday', ko: '일요일' }, hours: 'Closed' },
+    { days: { en: 'Mon – Sat', ko: '월 – 토' }, hours: '6:00 AM – 2:00 PM' },
+    { days: { en: 'Sunday', ko: '일요일' }, hours: '6:00 AM – 12:00 PM' },
   ],
   originsImportedSince: 1990,
 }

@@ -4,7 +4,7 @@ import { catalog } from '../../data/catalog'
 import { emptyFilters, filterCatalog, isFiltersEmpty, toggleValue, type CatalogFilters } from '../../lib/filterCatalog'
 import type { BlossomColor, FlowerType, Season } from '../../types/catalog'
 import { CatalogueGrid } from '../catalogue/CatalogueGrid'
-import { FilterRail } from '../catalogue/FilterRail'
+import { FilterBar } from '../catalogue/FilterBar'
 import { SectionHeading } from '../common/SectionHeading'
 
 export function Catalogue() {
@@ -28,19 +28,24 @@ export function Catalogue() {
 
   return (
     <section id="catalogue" className="border-b border-line bg-paper">
-      <div className="mx-auto max-w-6xl px-6 py-20">
+      <div className="mx-auto max-w-6xl px-6 py-16">
         <SectionHeading eyebrow={t('catalogue.eyebrow')} title={t('catalogue.title')} lede={t('catalogue.lede')} />
 
-        <div className="mt-12 grid gap-10 lg:grid-cols-[220px_1fr]">
-          <FilterRail
+        <div className="mt-10">
+          <FilterBar
             filters={filters}
             hasActiveFilters={!isFiltersEmpty(filters)}
+            shownCount={filtered.length}
+            totalCount={catalog.length}
             onToggleColor={toggleColor}
             onToggleType={toggleType}
             onToggleSeason={toggleSeason}
             onClearAll={clearAll}
           />
-          <CatalogueGrid items={filtered} total={catalog.length} />
+        </div>
+
+        <div className="mt-12">
+          <CatalogueGrid items={filtered} />
         </div>
       </div>
     </section>
