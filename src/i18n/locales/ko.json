@@ -25,16 +25,20 @@
     "headlinePre": "쿨러에서 바로,",
     "headlineAccent": "온라인이 아닌",
     "lede": "직접 수입하고 직접 판매합니다. 중간 마진도, 온라인 장바구니도 없습니다. 오늘의 입고 목록을 보시고 전화나 WhatsApp으로 가격을 문의하세요.",
-    "ctaPrimary": "오늘의 쿨러 보기",
+    "ctaPrimary": "카탈로그 보기",
     "ctaSecondary": "WhatsApp 문의",
     "metaSince": "{{year}}년부터 도매 운영",
-    "metaHours": "이른 아침 오픈, 오후 마감",
-    "metaLocation": "플러싱, 퀸즈"
+    "metaHours": "매일 오전 6시 오픈",
+    "metaLocation": "플러싱, 퀸즈",
+    "plateAlt": "한 번에 한 송이씩 그려지는 생성형 식물 표본",
+    "pauseMotion": "애니메이션 일시정지",
+    "playMotion": "애니메이션 재생"
   },
   "availability": {
     "eyebrow": "오늘 아침 업데이트",
     "title": "오늘 쿨러 입고 현황: {{date}}",
     "updated": "{{time}} 업데이트",
+    "summary": "쿨러 품목 {{count}}개",
     "sendListCta": "WhatsApp으로 목록 받기",
     "status": {
       "in-stock": "재고 있음",
@@ -121,9 +125,7 @@
     "eyebrow": "배송 안내",
     "title": "배송 & 픽업",
     "info": {
-      "zones": { "label": "배송 지역", "value": "TODO(owner): 전체 배송 지역 확인 필요" },
-      "cutoff": { "label": "주문 마감 시간", "value": "TODO(owner): 일일 마감 시간 확인 필요" },
-      "minimum": { "label": "최소 주문 금액", "value": "TODO(owner): 최소 주문 금액 확인 필요" },
+      "zones": { "label": "배송 지역", "value": "뉴욕 대도시권 및 인근 코네티컷 지역" },
       "coldChain": { "label": "콜드체인", "value": "냉장 차량으로 쿨러까지 직접 배송" },
       "pickup": { "label": "픽업", "value": "영업시간 중 171-10 39th Ave, Flushing에서 픽업 가능" }
     },

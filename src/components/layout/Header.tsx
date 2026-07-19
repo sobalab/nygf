@@ -6,7 +6,6 @@ import { CtaButton } from '../common/CtaButton'
 import { LanguageToggle } from '../common/LanguageToggle'
 
 const NAV_ITEMS = [
-  { key: 'cooler', href: '#cooler-today' },
   { key: 'catalogue', href: '#catalogue' },
   { key: 'sourcing', href: '#sourcing' },
   { key: 'delivery', href: '#delivery' },
@@ -20,16 +19,19 @@ export function Header() {
   return (
     <header className="sticky top-0 z-50 border-b border-line bg-paper/95 backdrop-blur-sm">
       <div className="mx-auto flex max-w-6xl items-center justify-between gap-4 px-6 py-4">
-        <a href="#home" className="flex flex-col leading-none">
-          <span className="font-display text-xl font-medium text-ink">{siteConfig.wordmark.line1}</span>
-          <span className="font-sans text-[10px] uppercase tracking-widest2 text-soft">
-            {siteConfig.wordmark.line2}
+        <a href="#home" className="flex items-center gap-3">
+          <img src="/nygf-logo.svg" alt="" className="h-10 w-auto" />
+          <span className="flex flex-col leading-none">
+            <span className="font-display text-xl font-medium text-ink">{siteConfig.wordmark.line1}</span>
+            <span className="font-sans text-[10px] uppercase tracking-widest2 text-soft">
+              {siteConfig.wordmark.line2}
+            </span>
           </span>
         </a>
 
         <nav
           className="hidden items-center gap-8 font-sans text-xs uppercase tracking-widest2 text-soft md:flex"
-          aria-label={t('nav.cooler')}
+          aria-label={t('nav.catalogue')}
         >
           {NAV_ITEMS.map((item) => (
             <a key={item.key} href={item.href} className="transition-colors hover:text-ink">

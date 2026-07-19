@@ -34,7 +34,6 @@ export interface SiteConfig {
     sms: string
   }
   email: string
-  /** TODO(owner): confirm real hours — placeholder until reviewed. */
   hours: HoursRow[]
   originsImportedSince: number
 }

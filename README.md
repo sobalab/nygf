@@ -35,11 +35,13 @@ objects — no CMS, no build step beyond the normal `npm run build`.
 
 ### 1. Today's cooler list — `src/data/availability.ts`
 
-Edit this every morning. `date` drives the heading, `updatedAt` drives the
-"Updated" timestamp, and each item's `status` is one of `'in-stock'`,
-`'limited'`, or `'pre-order'`. Item names here are freeform strings (not
-translated per-locale) — write them in whatever language is fastest for the
-morning update.
+The cooler section is currently unmounted from the page (removed by request),
+but the component (`src/components/sections/AvailabilityBoard.tsx`) and this
+data file are kept intact. To bring it back, re-add `<AvailabilityBoard />` in
+`src/App.tsx` and restore the nav item in `src/components/layout/Header.tsx`.
+When mounted: edit this file every morning — `date` drives the heading,
+`updatedAt` drives the "Updated" timestamp, and each item's `status` is one of
+`'in-stock'`, `'limited'`, or `'pre-order'`.
 
 ### 2. Add a catalog item + photo — `src/data/catalog.ts` + `public/images/catalog/`
 
@@ -67,9 +69,10 @@ The six sourcing countries shown in the Sourcing grid.
 
 ### 5. Delivery details — `src/i18n/locales/en.json` and `ko.json`
 
-Delivery zones, order cutoff, and delivery minimum are marked
-`TODO(owner)` placeholders inside `delivery.info.*.value` in both locale
-files (see below) — fill in the real values before launch.
+Delivery info rows (zones, cold chain, pickup) live under `delivery.info.*`
+in both locale files. To add or remove a row, edit the `INFO_KEYS` list in
+`src/components/sections/Delivery.tsx` and add the matching label/value pair
+to both locale files.
 
 ## Translating strings
 
@@ -103,26 +106,33 @@ without touching component code:
    and is the one place a non-technical daily update would benefit most from
    a lightweight CMS entry form instead of editing TypeScript.
 
-## Where three.js / p5 plug in later
+## The hero's generative plate
 
-The hero's framed "plate" renders `<InteractiveStage>`
-(`src/components/stage/InteractiveStage.tsx`). It's wrapped in
-`React.memo` and owns its own `containerRef`, isolated so a future
-WebGL/canvas render loop won't re-render on every page-level state change
-(filters, language toggle, scroll). Right now it renders a static fallback —
-a photo if `fallbackSrc` resolves, otherwise a plain paper-toned block.
+The hero's framed "plate" renders a live **p5.js generative botanical print**: a
+dot-matrix "specimen" drawn one flower at a time, each in its species' real
+colours, cycling draw-in → hold → dissolve → next. The forms are fully
+procedural (no photos).
 
-The mount point is commented directly in that file. To wire up a sketch
-later:
+- **Sketch:** `src/components/stage/flowerSketch.ts` (the p5 harness — render,
+  animation state machine, pause/resume) and `src/components/stage/flowerArchetypes.ts`
+  (the botanical archetypes: form + species ink palette, colours sourced from
+  `src/lib/blossomSwatches.ts`).
+- **Mount point:** `src/components/stage/InteractiveStage.tsx` — a memoized,
+  generic container that lazy-mounts a sketch on first intersection. p5 is
+  dynamic-imported, so it is **code-split** and only downloads when the plate is
+  on-screen (desktop). It never loads on mobile, where the plate is hidden.
+  When no `mount` prop is passed, it falls back to a `fallbackSrc` image / plain
+  plate instead (that path is unused by the hero but kept for reuse).
+- **Motion & accessibility:** `prefers-reduced-motion` renders one static frame
+  (no loop); otherwise a pause/play button on the plate lets anyone stop the
+  motion (WCAG 2.2.2). The loop also pauses when off-screen or the tab is hidden.
 
-- **three.js / `@react-three/fiber`**: render an R3F `<Canvas>` as a child of
-  the container inside `InteractiveStage`.
-- **p5.js**: in a `useEffect`, do
-  `new p5(sketch, containerRef.current)` and clean it up (`instance.remove()`)
-  on unmount.
+p5 (`p5@^1.11.13`) **is installed**. three.js / `@react-three/fiber` are not — to
+add a WebGL sketch instead, render an R3F `<Canvas>` into `InteractiveStage`'s
+container via the same `mount` prop, and ask before adding those dependencies.
 
-Neither library is installed yet — ask before adding `three`,
-`@react-three/fiber`, or `p5` as dependencies.
+To add a flower species, append an archetype to `ARCHETYPES` in
+`flowerArchetypes.ts` (a `type`, an `inks` palette, and a `draw(ctx)` routine).
 
 ## Project structure
 
@@ -137,9 +147,9 @@ src/
     blossomSwatches.ts   Filter-rail swatch colours per blossom colour
   components/
     layout/              Header, Footer
-    stage/                InteractiveStage (future three.js/p5 mount point)
+    stage/                InteractiveStage mount point + p5 generative flower sketch
     sections/             The 8 page sections (Hero, AvailabilityBoard, Catalogue, …)
-    catalogue/             FilterRail, CatalogueCard, CatalogueGrid
+    catalogue/             FilterBar, CatalogueCard, CatalogueGrid
     common/                 Small shared UI: SectionHeading, CtaButton, LanguageToggle, PhotoFrame
 public/
   images/
@@ -150,7 +160,7 @@ public/
 ## Notes on placeholders
 
 The following are intentionally marked `TODO(owner)` in the code/data and
-should not be treated as final: business hours, delivery zones, order
-cutoff, delivery minimum, all daily availability contents, and every
-catalog item's colour/season tags. Search the codebase for `TODO(owner)` to
-find them all.
+should not be treated as final: the daily availability contents (currently
+unmounted) and every catalog item's colour/season tags. Search the codebase
+for `TODO(owner)` to find them. Business hours and delivery zones are
+confirmed real values.

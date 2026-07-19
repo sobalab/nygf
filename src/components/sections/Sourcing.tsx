@@ -3,13 +3,17 @@ import { origins } from '../../data/origins'
 import { siteConfig } from '../../data/siteConfig'
 import { SectionHeading } from '../common/SectionHeading'
 
+/**
+ * Slim origin strip — one bordered row of six countries so it reads as
+ * provenance metadata rather than competing with the gallery above.
+ */
 export function Sourcing() {
   const { t, i18n } = useTranslation()
   const locale: 'en' | 'ko' = i18n.language === 'ko' ? 'ko' : 'en'
 
   return (
     <section id="sourcing" className="border-b border-line bg-paper-2">
-      <div className="mx-auto max-w-6xl px-6 py-20">
+      <div className="mx-auto max-w-6xl px-6 py-14">
         <SectionHeading
           eyebrow={t('sourcing.eyebrow')}
           title={t('sourcing.title')}
@@ -18,14 +22,14 @@ export function Sourcing() {
           className="mx-auto"
         />
 
-        <div className="mt-14 grid grid-cols-2 border-l border-t border-line sm:grid-cols-3 lg:grid-cols-6">
+        <div className="mt-10 grid grid-cols-2 border-l border-t border-line sm:grid-cols-3 lg:grid-cols-6">
           {origins.map((origin) => (
             <div
               key={origin.id}
-              className="flex flex-col items-center gap-3 border-b border-r border-line px-4 py-10 text-center"
+              className="flex flex-col items-center gap-2 border-b border-r border-line px-3 py-6 text-center"
             >
-              <span className="font-display text-2xl text-faint">{origin.numeral}</span>
-              <span className="font-sans text-sm uppercase tracking-widest2 text-ink">{origin.country[locale]}</span>
+              <span className="font-sans text-sm tracking-widest2 text-faint">{origin.numeral}</span>
+              <span className="font-sans text-xs uppercase tracking-widest2 text-ink">{origin.country[locale]}</span>
             </div>
           ))}
         </div>

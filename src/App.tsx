@@ -1,5 +1,4 @@
 import { useTranslation } from 'react-i18next'
-import { AvailabilityBoard } from './components/sections/AvailabilityBoard'
 import { Catalogue } from './components/sections/Catalogue'
 import { Delivery } from './components/sections/Delivery'
 import { Hero } from './components/sections/Hero'
@@ -22,7 +21,6 @@ function App() {
       <Header />
       <main id="main-content">
         <Hero />
-        <AvailabilityBoard />
         <Catalogue />
         <Sourcing />
         <WhoWeSupply />

@@ -1,36 +1,105 @@
-import { memo, useRef, useState } from 'react'
+import { memo, useEffect, useRef, useState } from 'react'
+
+/** Mounts arbitrary imperative content (a canvas sketch) into the container. */
+export type StageMount = (
+  el: HTMLElement,
+  opts: { reducedMotion: boolean; signal: AbortSignal },
+) => (() => void) | void | Promise<(() => void) | void>
 
 interface InteractiveStageProps {
   className?: string
+  /** Tailwind background class for the plate (shows under/instead of a sketch). */
+  background?: string
+  /**
+   * Imperative mount point for a p5/three sketch. Receives the container element
+   * and the user's reduced-motion preference; returns a cleanup function. When
+   * provided, the sketch owns the plate. When absent, the `fallbackSrc` image /
+   * plain plate renders instead.
+   */
+  mount?: StageMount
+  /**
+   * The caller's reduced-motion preference, passed through to `mount`. Passed as
+   * a prop (rather than read here) so a reactive hook can flip it live and this
+   * effect re-runs — remounting the sketch in the new mode.
+   */
+  reducedMotion?: boolean
   fallbackSrc?: string
   fallbackAlt?: string
 }
 
 /**
- * Designated mount point for a future three.js (@react-three/fiber) or p5.js
- * sketch — this is the hero's framed "plate". Wrapped in React.memo so a heavy
- * WebGL/canvas render loop mounted here later won't re-render on every
- * page-level state change (filters, language toggle, scroll, etc).
- *
- * For now it renders a static fallback: a real photo if `fallbackSrc` resolves,
- * otherwise a plain paper-toned block. No illustrated/SVG line art.
+ * The hero's framed "plate" and the designated mount point for a generative
+ * sketch. Wrapped in React.memo so the sketch's render loop never re-runs on
+ * page-level state changes (language toggle, scroll). Keep every prop passed to
+ * it referentially stable (no translated strings, a useCallback'd `mount`) or
+ * the memo breaks and the canvas remounts.
  */
-function InteractiveStageBase({ className = '', fallbackSrc, fallbackAlt = '' }: InteractiveStageProps) {
+function InteractiveStageBase({
+  className = '',
+  background = 'bg-paper-2',
+  mount,
+  reducedMotion = false,
+  fallbackSrc,
+  fallbackAlt = '',
+}: InteractiveStageProps) {
   const containerRef = useRef<HTMLDivElement>(null)
   const [imageFailed, setImageFailed] = useState(false)
 
+  useEffect(() => {
+    const el = containerRef.current
+    if (!mount || !el) return
+
+    let cleanup: (() => void) | void
+    let started = false
+    const controller = new AbortController()
+
+    // Lazy-mount on first intersection: the sketch (and the p5 download) only
+    // start when the plate is actually on-screen. A hidden plate (mobile's
+    // `hidden lg:block`) has zero size and never intersects, so nothing mounts
+    // and p5 is never fetched there.
+    const start = () => {
+      if (started || controller.signal.aborted) return
+      started = true
+      // `mount` is async (lazy-imports p5). The signal lets it bail BEFORE
+      // creating the sketch if we were torn down first — key for StrictMode's
+      // mount→cleanup→mount and p5's deferred setup (which would otherwise leave
+      // an orphan canvas). If it resolves after cleanup anyway, tear down at once.
+      Promise.resolve(mount(el, { reducedMotion, signal: controller.signal }))
+        .then((c) => {
+          if (controller.signal.aborted) {
+            c?.()
+            return
+          }
+          cleanup = c
+        })
+        .catch((err) => {
+          // e.g. a stale-deploy dynamic-import failure. Swallow so it isn't an
+          // unhandled rejection; the plate is decorative and simply stays empty.
+          if (import.meta.env.DEV) console.error('InteractiveStage mount failed', err)
+        })
+    }
+
+    const io = new IntersectionObserver(
+      (entries) => {
+        if (entries.some((e) => e.isIntersecting)) {
+          start()
+          io.disconnect()
+        }
+      },
+      { rootMargin: '100px' },
+    )
+    io.observe(el)
+
+    return () => {
+      controller.abort()
+      io.disconnect()
+      cleanup?.()
+    }
+  }, [mount, reducedMotion])
+
   return (
-    <div ref={containerRef} className={`relative overflow-hidden bg-paper-2 ${className}`}>
-      {/*
-        FUTURE CANVAS MOUNT POINT
-        Swap this fallback for an R3F <Canvas> (three.js) or a p5 sketch bound
-        to `containerRef.current`, e.g.:
-          - three.js:  render <Canvas> as a child of this container
-          - p5:        useEffect(() => { const s = new p5(sketch, containerRef.current); return () => s.remove() }, [])
-        The sketch should own its own render loop / local state so it never
-        forces a re-render of the surrounding page.
-      */}
-      {fallbackSrc && !imageFailed ? (
+    <div ref={containerRef} className={`relative overflow-hidden ${background} ${className}`}>
+      {mount ? null : fallbackSrc && !imageFailed ? (
         <img
           src={fallbackSrc}
           alt={fallbackAlt}

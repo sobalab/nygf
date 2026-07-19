@@ -25,16 +25,20 @@
     "headlinePre": "Fresh from the cooler,",
     "headlineAccent": "not the internet",
     "lede": "We import direct and sell direct: no middleman markup, no online cart. Browse what's in today, then call or WhatsApp for the day's price.",
-    "ctaPrimary": "See today's cooler",
+    "ctaPrimary": "Browse the catalogue",
     "ctaSecondary": "WhatsApp us",
     "metaSince": "Wholesale since {{year}}",
-    "metaHours": "Open early, close by afternoon",
-    "metaLocation": "Flushing, Queens"
+    "metaHours": "Open daily from 6 AM",
+    "metaLocation": "Flushing, Queens",
+    "plateAlt": "A generative botanical specimen, drawn one flower at a time",
+    "pauseMotion": "Pause the animation",
+    "playMotion": "Play the animation"
   },
   "availability": {
     "eyebrow": "Updated this morning",
     "title": "In the cooler today: {{date}}",
     "updated": "Updated {{time}}",
+    "summary": "{{count}} items in the cooler",
     "sendListCta": "Send the list on WhatsApp",
     "status": {
       "in-stock": "In stock",
@@ -121,9 +125,7 @@
     "eyebrow": "Getting flowers to you",
     "title": "Delivery & pickup",
     "info": {
-      "zones": { "label": "Delivery zones", "value": "TODO(owner): confirm full delivery zone list" },
-      "cutoff": { "label": "Order cutoff", "value": "TODO(owner): confirm daily order cutoff time" },
-      "minimum": { "label": "Delivery minimum", "value": "TODO(owner): confirm delivery minimum" },
+      "zones": { "label": "Delivery zones", "value": "New York metropolitan area and nearby Connecticut" },
       "coldChain": { "label": "Cold chain", "value": "Refrigerated van, door to cooler" },
       "pickup": { "label": "Pickup", "value": "Available at 171-10 39th Ave, Flushing during business hours" }
     },
