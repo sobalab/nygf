@@ -12,6 +12,16 @@
   font-display: swap;
 }
 
+/* Editorial italic serif accent (Feronia). Single italic cut, registered as
+   `normal` so it's used directly without Tailwind's `italic` doubling it up. */
+@font-face {
+  font-family: 'Feronia';
+  src: url('/fonts/Feroniapi-MediumItalic.woff') format('woff');
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+
 @font-face {
   font-family: 'Amiamie';
   src:
@@ -52,20 +62,38 @@
   font-display: swap;
 }
 
-/* Gallery-neutral palette: near-white page, cool light-gray cells, near-black
-   ink, sage kept as the single accent. Token names keep their original
-   "paper" naming so components didn't need touching. */
+/* Soft editorial-floral palette: a dusty mauve page field, warm cream sheets
+   floating on it, deep plum-charcoal ink, plum as the single accent, and a
+   petal pink for highlights. Legacy token names (paper/paper-2/sage) are kept
+   as aliases so nothing that still references them breaks. */
 :root {
-  --color-paper: #fafaf8;
-  --color-paper-2: #efefec;
-  --color-white: #ffffff;
-  --color-ink: #1a1a17;
-  --color-soft: #52524c;
-  --color-faint: #7a7a72;
-  --color-sage: #6e7a5a;
-  --color-sage-deep: #4c5540;
-  --color-line: #ddddd8;
-  --color-line-soft: #e8e8e4;
+  /* RGB channel triplets (not hex) so Tailwind's /opacity modifiers resolve to
+     rgb(<triplet> / <alpha>). Hex here would make every /opacity utility fall
+     back to inherited ink. */
+  --color-cream: 253 251 247;
+  --color-cream-2: 245 238 232;
+  --color-white: 255 255 255;
+
+  --color-mauve: 229 218 225;
+  --color-mauve-deep: 215 199 211;
+
+  --color-ink: 52 37 44;
+  --color-soft: 95 81 88;
+  --color-faint: 124 110 119;
+
+  --color-plum: 109 74 88;
+  --color-plum-deep: 69 42 54;
+  --color-petal: 230 196 204;
+  --color-petal-soft: 240 220 223;
+
+  --color-line: 231 220 223;
+  --color-line-soft: 240 232 231;
+
+  /* Legacy aliases (older components referenced these names). */
+  --color-paper: var(--color-cream);
+  --color-paper-2: var(--color-cream-2);
+  --color-sage: var(--color-plum);
+  --color-sage-deep: var(--color-plum-deep);
 
   color-scheme: light;
 }
@@ -87,8 +115,17 @@ html {
 }
 
 body {
-  background-color: var(--color-paper);
-  color: var(--color-ink);
+  /* The mauve field the cream sheets float on — a soft top-to-bottom drift
+     from cool lilac into a warmer dusty mauve, fixed so it doesn't scroll. */
+  background-color: rgb(var(--color-mauve));
+  background-image: linear-gradient(
+    180deg,
+    rgb(var(--color-mauve)) 0%,
+    #e2d6de 42%,
+    rgb(var(--color-mauve-deep)) 100%
+  );
+  background-attachment: fixed;
+  color: rgb(var(--color-ink));
   font-family: 'Amiamie', sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
@@ -96,19 +133,45 @@ body {
   position: relative;
 }
 
-/* Faint paper-grain overlay: fixed, non-interactive, tuned for both light backgrounds and the dark WhoWeSupply panel. */
+/* Faint paper-grain overlay: fixed, non-interactive, keeps the flat fills from
+   looking digital. Very low opacity so it reads as texture, not noise. */
 body::before {
   content: '';
   position: fixed;
   inset: 0;
   z-index: 9999;
   pointer-events: none;
-  opacity: 0.02;
+  opacity: 0.025;
   mix-blend-mode: multiply;
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180' viewBox='0 0 180 180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
 }
 
 ::selection {
-  background-color: var(--color-sage);
-  color: var(--color-white);
+  background-color: rgb(var(--color-plum));
+  color: rgb(var(--color-white));
+}
+
+/* Fade/rise-in used by sections as they enter — disabled under reduced motion
+   by the block above. */
+@keyframes rise-in {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* The hero's out-of-focus bloom field: layered soft radial washes in blush,
+   rose, and cream that read as blurred flowers, fading down into the page. */
+.hero-bloom-field {
+  background-image:
+    radial-gradient(38% 52% at 12% 6%, rgba(233, 201, 207, 0.9), transparent 70%),
+    radial-gradient(44% 58% at 86% 2%, rgba(214, 156, 176, 0.72), transparent 70%),
+    radial-gradient(30% 42% at 66% 22%, rgba(198, 132, 146, 0.42), transparent 72%),
+    radial-gradient(52% 56% at 46% -12%, rgba(246, 226, 224, 0.9), transparent 74%),
+    radial-gradient(40% 46% at 28% 30%, rgba(224, 196, 208, 0.5), transparent 72%),
+    linear-gradient(180deg, #ead8dd 0%, rgba(229, 218, 225, 0) 62%);
 }

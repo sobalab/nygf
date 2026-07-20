@@ -106,43 +106,43 @@ without touching component code:
    and is the one place a non-technical daily update would benefit most from
    a lightweight CMS entry form instead of editing TypeScript.
 
-## The hero's generative plate
+## The hero's particle specimen
 
-The hero's framed "plate" renders a live **p5.js generative botanical specimen**:
-a **rotating 3D point cloud** drawn one flower at a time, each in its species'
-real colours, rendered as halftone dots on the light plate and cycling
-draw-in → hold → dissolve → next. Each archetype emits points in 3D space with per-point surface normals; the
-sketch rotates them around the vertical axis (with a downward viewing tilt),
-perspective-projects, depth-sorts, and lights each point (lambert against a
-fixed source) so lit faces lighten toward the plate and shadowed faces stay
-deep ink — highlights and shadow sweep across the bloom as it turns, giving it
-volume. Petals also carry a base→tip colour gradient. The forms are fully
-procedural (no photos); rendering is plain 2D canvas + hand-rolled 3D projection
-and lighting (no WebGL).
+The hero's framed "plate" is a **three.js particle specimen**: a rotating 3D
+flower built from tens of thousands of GPU particles, glowing on a dark plate,
+cycling one flower at a time across five species (rose, peony, sunflower, lily,
+orchid). Each species has a procedural 3D form (petals/disc/stem sampled as 3D
+surfaces) and every particle is coloured by sampling the **reference photo**
+(`public/images/flowers/*.jpg`, front-projected onto the form) — so the shape
+and colour come from the real flowers, rendered as points. The cloud rotates
+under a fixed camera that looks slightly down into the blooms.
 
-- **Sketch:** `src/components/stage/flowerSketch.ts` (the p5 harness — render,
-  animation state machine, pause/resume) and `src/components/stage/flowerArchetypes.ts`
-  (the botanical archetypes: form + species ink palette, colours sourced from
-  `src/lib/blossomSwatches.ts`).
+Particles are soft additive sprites. To keep dense cores glowing as bright
+*colour* instead of clipping to white, they accumulate into an **HDR float
+buffer** which a post pass then **ACES tone-maps** to the screen — a proper
+bloom-style pipeline. The dark plate is what lets the glow (and the white
+lily/orchid) read; the rest of the page stays light around the framed screen.
+
+- **Scene:** `src/components/stage/heroFlowerScene.ts` — the whole three.js
+  pipeline: species geometry generation + photo colour sampling, the additive
+  particle shader, the HDR render target + tone-map post pass, rotation, the
+  species cross-fade cycle, pause/resume, resize, and full GPU disposal.
 - **Mount point:** `src/components/stage/InteractiveStage.tsx` — a memoized,
-  generic container that lazy-mounts a sketch on first intersection. p5 is
+  generic container that lazy-mounts the scene on first intersection. three.js is
   dynamic-imported, so it is **code-split** and only downloads when the plate is
   on-screen (desktop). It never loads on mobile, where the plate is hidden.
-  When no `mount` prop is passed, it falls back to a `fallbackSrc` image / plain
-  plate instead (that path is unused by the hero but kept for reuse).
-- **Motion & accessibility:** `prefers-reduced-motion` renders one static frame
+- **Motion & accessibility:** `prefers-reduced-motion` renders one static flower
   (no loop); otherwise a pause/play button on the plate lets anyone stop the
   motion (WCAG 2.2.2). The loop also pauses when off-screen or the tab is hidden.
 
-p5 (`p5@^1.11.13`) **is installed**. three.js / `@react-three/fiber` are not — to
-add a WebGL sketch instead, render an R3F `<Canvas>` into `InteractiveStage`'s
-container via the same `mount` prop, and ask before adding those dependencies.
-
-To add a flower species, append an archetype to `ARCHETYPES` in
-`flowerArchetypes.ts` — a `type`, an `inks` palette, and a `draw(ctx)` routine
-that emits 3D points via `ctx.push(x, y, z, hex)` (y up; stem base near y=-1.05,
-bloom around y=+0.5). The shared `stem`/`petal`/`shell`/`spike`/`leaf` helpers
-cover most forms.
+three.js (`three@^0.180`) is the only 3D dependency. To add a flower species:
+drop a 4:5 crop of the bloom in `public/images/flowers/`, then append an entry to
+`SPECIES` in `heroFlowerScene.ts` — the `image` path, a `cx,cy,r` UV mapping
+(flower centre + sample radius in the crop, 0..1), the geometric bloom radius
+`geoR`, and a `build(e)` routine that emits bloom particles via `e.bloom(x,y,z)`
+(coloured from the photo) and stem/leaf particles via `e.stem(x,y,z)`. y is up;
+bloom centred at the origin, stem base near y=-2.3. The shared
+`petal`/`discFill`/`ball`/`stemAndLeaves` helpers cover most forms.
 
 ## Project structure
 

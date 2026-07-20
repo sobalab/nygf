@@ -11,35 +11,33 @@ export function Delivery() {
   const { t } = useTranslation()
 
   return (
-    <section id="delivery" className="border-b border-line bg-paper">
-      <div className="mx-auto max-w-6xl px-6 py-20">
+    <section id="delivery" className="scroll-mt-24 px-4 py-16 sm:px-6 sm:py-20">
+      <div className="mx-auto max-w-6xl">
         <SectionHeading eyebrow={t('delivery.eyebrow')} title={t('delivery.title')} />
 
-        <div className="mt-14 grid gap-12 lg:grid-cols-[1.2fr_1fr]">
-          <dl className="flex flex-col divide-y divide-line-soft border-y border-line-soft">
+        <div className="mt-14 grid gap-10 lg:grid-cols-[1.15fr_1fr]">
+          <dl className="grid gap-10 sm:grid-cols-2 lg:grid-cols-1">
             {INFO_KEYS.map((key) => (
-              <div
-                key={key}
-                className="flex flex-col gap-1 py-5 sm:flex-row sm:items-baseline sm:justify-between sm:gap-6"
-              >
-                <dt className="font-sans text-xs uppercase tracking-widest2 text-faint">
+              <div key={key} className="flex flex-col gap-2">
+                <dt className="font-sans text-[11px] uppercase tracking-widest2 text-plum">
                   {t(`delivery.info.${key}.label`)}
                 </dt>
-                <dd className="font-sans text-sm text-ink sm:text-right">{t(`delivery.info.${key}.value`)}</dd>
+                <dd className="max-w-md font-accent text-lg leading-relaxed text-ink">
+                  {t(`delivery.info.${key}.value`)}
+                </dd>
               </div>
             ))}
           </dl>
 
-          <div className="border border-line p-8">
+          <div className="rounded-sheet bg-cream p-8 shadow-sheet lg:p-10">
             <h3 className="font-display text-2xl text-ink">{t('delivery.account.title')}</h3>
-            <ol className="mt-6 flex flex-col gap-4">
-              {STEPS.map((step, i) => (
-                <li key={step} className="flex gap-4">
-                  <span className="font-sans text-sm text-faint">{i + 1}</span>
-                  <span className="font-sans text-sm text-soft">{t(`delivery.account.${step}`)}</span>
-                </li>
+            <div className="mt-6 flex flex-col gap-3">
+              {STEPS.map((step) => (
+                <p key={step} className="font-sans text-sm leading-relaxed text-soft">
+                  {t(`delivery.account.${step}`)}
+                </p>
               ))}
-            </ol>
+            </div>
             <CtaButton href={waHref(siteConfig, openAccountMessage())} variant="solid" className="mt-8 w-full">
               {t('delivery.account.cta')}
             </CtaButton>

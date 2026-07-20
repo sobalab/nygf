@@ -4,16 +4,16 @@ import { siteConfig } from '../../data/siteConfig'
 import { SectionHeading } from '../common/SectionHeading'
 
 /**
- * Slim origin strip — one bordered row of six countries so it reads as
- * provenance metadata rather than competing with the gallery above.
+ * Provenance strip: six growing regions set as a quiet centred row, so it reads
+ * as origin metadata rather than competing with the catalogue sheet above.
  */
 export function Sourcing() {
   const { t, i18n } = useTranslation()
   const locale: 'en' | 'ko' = i18n.language === 'ko' ? 'ko' : 'en'
 
   return (
-    <section id="sourcing" className="border-b border-line bg-paper-2">
-      <div className="mx-auto max-w-6xl px-6 py-14">
+    <section id="sourcing" className="scroll-mt-24 px-4 py-16 sm:px-6 sm:py-20">
+      <div className="mx-auto max-w-5xl">
         <SectionHeading
           eyebrow={t('sourcing.eyebrow')}
           title={t('sourcing.title')}
@@ -22,17 +22,16 @@ export function Sourcing() {
           className="mx-auto"
         />
 
-        <div className="mt-10 grid grid-cols-2 border-l border-t border-line sm:grid-cols-3 lg:grid-cols-6">
+        <ul className="mt-14 grid grid-cols-2 gap-x-8 gap-y-10 sm:grid-cols-3 lg:grid-cols-6">
           {origins.map((origin) => (
-            <div
-              key={origin.id}
-              className="flex flex-col items-center gap-2 border-b border-r border-line px-3 py-6 text-center"
-            >
-              <span className="font-sans text-sm tracking-widest2 text-faint">{origin.numeral}</span>
-              <span className="font-sans text-xs uppercase tracking-widest2 text-ink">{origin.country[locale]}</span>
-            </div>
+            <li key={origin.id} className="flex flex-col items-center gap-2 text-center">
+              <span className="font-accent text-2xl text-plum">{origin.numeral}</span>
+              <span className="font-sans text-[11px] uppercase tracking-widest2 text-ink">
+                {origin.country[locale]}
+              </span>
+            </li>
           ))}
-        </div>
+        </ul>
       </div>
     </section>
   )

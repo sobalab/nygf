@@ -10,6 +10,7 @@ import {
   type FlowerType,
   type Season,
 } from '../../types/catalog'
+import { FilterPill } from './FilterPill'
 
 interface FilterBarProps {
   filters: CatalogFilters
@@ -23,9 +24,8 @@ interface FilterBarProps {
 }
 
 /**
- * Horizontal filter box above the gallery — label column left, toggles right,
- * one hairline-divided row per filter group, always visible on every
- * breakpoint. Replaces the old collapsible sidebar rail.
+ * Pill filter row above the grid: one rounded dropdown per group (type, colour,
+ * season), a live count, and a clear-all. Replaces the old bordered filter box.
  */
 export function FilterBar({
   filters,
@@ -40,54 +40,75 @@ export function FilterBar({
   const { t } = useTranslation()
 
   return (
-    <div className="border border-line" role="group" aria-label={t('catalogue.filters.title')}>
-      <FilterRow label={t('catalogue.filters.colorLabel')}>
-        {BLOSSOM_COLORS.map((color) => {
-          const active = filters.colors.includes(color)
-          return (
-            <button
-              key={color}
-              type="button"
-              onClick={() => onToggleColor(color)}
-              aria-pressed={active}
-              title={t(`catalogue.colors.${color}`)}
-              className={`h-6 w-6 rounded-full border transition-shadow ${
-                active ? 'border-ink ring-2 ring-ink ring-offset-2 ring-offset-paper' : 'border-line'
-              }`}
-              style={{ background: BLOSSOM_SWATCH[color] }}
-            >
-              <span className="sr-only">{t(`catalogue.colors.${color}`)}</span>
-            </button>
-          )
-        })}
-      </FilterRow>
+    <div className="flex flex-wrap items-center gap-x-3 gap-y-4" role="group" aria-label={t('catalogue.filters.title')}>
+      <FilterPill label={t('catalogue.filters.typeLabel')} activeCount={filters.types.length}>
+        <PanelHeading>{t('catalogue.filters.typeLabel')}</PanelHeading>
+        <div className="grid grid-cols-2 gap-x-4 gap-y-1">
+          {FLOWER_TYPES.map((type) => (
+            <CheckRow
+              key={type}
+              active={filters.types.includes(type)}
+              onClick={() => onToggleType(type)}
+              label={t(`catalogue.types.${type}`)}
+            />
+          ))}
+        </div>
+      </FilterPill>
 
-      <FilterRow label={t('catalogue.filters.typeLabel')}>
-        {FLOWER_TYPES.map((type) => (
-          <TogglePill key={type} active={filters.types.includes(type)} onClick={() => onToggleType(type)}>
-            {t(`catalogue.types.${type}`)}
-          </TogglePill>
-        ))}
-      </FilterRow>
+      <FilterPill label={t('catalogue.filters.pillColor')} activeCount={filters.colors.length}>
+        <PanelHeading>{t('catalogue.filters.colorLabel')}</PanelHeading>
+        <div className="grid grid-cols-2 gap-x-4 gap-y-1">
+          {BLOSSOM_COLORS.map((color) => {
+            const active = filters.colors.includes(color)
+            return (
+              <button
+                key={color}
+                type="button"
+                onClick={() => onToggleColor(color)}
+                aria-pressed={active}
+                className={`group flex items-center gap-2.5 rounded-lg px-2 py-1.5 text-left transition-colors hover:bg-cream-2 ${
+                  active ? 'text-ink' : 'text-soft'
+                }`}
+              >
+                <span
+                  className={`h-4 w-4 shrink-0 rounded-full border transition-shadow ${
+                    active ? 'border-plum-deep ring-2 ring-plum-deep ring-offset-1 ring-offset-cream' : 'border-line'
+                  }`}
+                  style={{ background: BLOSSOM_SWATCH[color] }}
+                  aria-hidden="true"
+                />
+                <span className="font-sans text-xs">{t(`catalogue.colors.${color}`)}</span>
+              </button>
+            )
+          })}
+        </div>
+      </FilterPill>
 
-      <FilterRow label={t('catalogue.filters.seasonLabel')}>
-        {SEASONS.map((season) => (
-          <TogglePill key={season} active={filters.seasons.includes(season)} onClick={() => onToggleSeason(season)}>
-            {t(`catalogue.seasons.${season}`)}
-          </TogglePill>
-        ))}
-      </FilterRow>
+      <FilterPill label={t('catalogue.filters.seasonLabel')} activeCount={filters.seasons.length}>
+        <PanelHeading>{t('catalogue.filters.seasonLabel')}</PanelHeading>
+        <div className="flex flex-col gap-1">
+          {SEASONS.map((season) => (
+            <CheckRow
+              key={season}
+              active={filters.seasons.includes(season)}
+              onClick={() => onToggleSeason(season)}
+              label={t(`catalogue.seasons.${season}`)}
+            />
+          ))}
+        </div>
+      </FilterPill>
 
-      <div className="flex flex-wrap items-center justify-between gap-3 px-4 py-3 sm:px-5">
-        <button
-          type="button"
-          onClick={onClearAll}
-          disabled={!hasActiveFilters}
-          className="font-sans text-xs uppercase tracking-widest2 text-soft underline decoration-line-soft underline-offset-4 transition-colors hover:text-ink disabled:cursor-not-allowed disabled:text-faint disabled:no-underline"
-        >
-          {t('catalogue.filters.clearAll')}
-        </button>
-        <span className="font-sans text-xs uppercase tracking-widest2 text-faint" role="status" aria-live="polite">
+      <div className="ml-auto flex items-center gap-4">
+        {hasActiveFilters ? (
+          <button
+            type="button"
+            onClick={onClearAll}
+            className="font-sans text-[11px] uppercase tracking-widest2 text-plum underline decoration-plum/30 underline-offset-4 transition-colors hover:text-plum-deep hover:decoration-plum-deep"
+          >
+            {t('catalogue.filters.clearAll')}
+          </button>
+        ) : null}
+        <span className="font-sans text-[11px] uppercase tracking-widest2 text-faint" role="status" aria-live="polite">
           {t('catalogue.filters.showing', { count: shownCount, total: totalCount })}
         </span>
       </div>
@@ -95,34 +116,33 @@ export function FilterBar({
   )
 }
 
-function FilterRow({ label, children }: { label: string; children: ReactNode }) {
-  return (
-    <div className="flex flex-col gap-3 border-b border-line-soft px-4 py-4 sm:flex-row sm:items-center sm:gap-6 sm:px-5">
-      <span className="w-44 shrink-0 font-sans text-xs uppercase tracking-widest2 text-faint">{label}</span>
-      <div className="flex flex-wrap items-center gap-2">{children}</div>
-    </div>
-  )
+function PanelHeading({ children }: { children: ReactNode }) {
+  return <p className="mb-3 font-sans text-[10px] uppercase tracking-widest2 text-faint">{children}</p>
 }
 
-function TogglePill({
-  active,
-  onClick,
-  children,
-}: {
-  active: boolean
-  onClick: () => void
-  children: ReactNode
-}) {
+function CheckRow({ active, onClick, label }: { active: boolean; onClick: () => void; label: string }) {
   return (
     <button
       type="button"
       onClick={onClick}
       aria-pressed={active}
-      className={`border px-3 py-1.5 font-sans text-xs uppercase tracking-widest2 transition-colors ${
-        active ? 'border-ink bg-ink text-paper' : 'border-line text-soft hover:border-ink hover:text-ink'
+      className={`flex items-center gap-2.5 rounded-lg px-2 py-1.5 text-left transition-colors hover:bg-cream-2 ${
+        active ? 'text-ink' : 'text-soft'
       }`}
     >
-      {children}
+      <span
+        className={`grid h-4 w-4 shrink-0 place-items-center rounded-[5px] border transition-colors ${
+          active ? 'border-plum-deep bg-plum-deep text-cream' : 'border-line bg-cream'
+        }`}
+        aria-hidden="true"
+      >
+        {active ? (
+          <svg viewBox="0 0 10 8" className="h-2 w-2.5 fill-none stroke-current" strokeWidth="1.8">
+            <path d="M1 4l2.5 2.5L9 1" strokeLinecap="round" strokeLinejoin="round" />
+          </svg>
+        ) : null}
+      </span>
+      <span className="font-sans text-xs">{label}</span>
     </button>
   )
 }
