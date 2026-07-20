@@ -9,8 +9,8 @@ interface CatalogueCardProps {
 }
 
 /**
- * Catalogue card: a tinted (or photographic) bloom tile with the name beneath
- * it, the Latin name in italic, and a quiet ask-price link that warms on hover.
+ * Catalogue card: a flat colour (or photographic) tile with the name, Latin
+ * name, and a quiet ask-price link beneath it.
  */
 export function CatalogueCard({ item }: CatalogueCardProps) {
   const { t, i18n } = useTranslation()
@@ -23,18 +23,15 @@ export function CatalogueCard({ item }: CatalogueCardProps) {
         alt={item.name[locale]}
         latin={item.latin}
         colors={item.colors}
-        className="shadow-bloom ring-1 ring-inset ring-black/[0.03]"
+        className="ring-1 ring-inset ring-black/[0.04]"
       />
 
-      <div className="mt-4 flex items-start justify-between gap-3">
-        <h3 className="text-label text-ink">{item.name[locale]}</h3>
-        <span className="mt-0.5 shrink-0 text-meta text-faint">N°{String(item.index).padStart(2, '0')}</span>
-      </div>
-      <p className="mt-0.5 font-accent text-sm text-faint">{item.latin}</p>
+      <h3 className="mt-3 text-label text-ink">{item.name[locale]}</h3>
+      <p className="mt-0.5 text-sm text-faint">{item.latin}</p>
 
       <a
         href={waHref(siteConfig, askPriceMessage(item.name.en))}
-        className="mt-3 inline-flex w-fit items-center gap-1.5 text-ui text-plum transition-colors hover:text-plum-deep focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-plum focus-visible:ring-offset-2 focus-visible:ring-offset-cream"
+        className="mt-2 inline-flex w-fit items-center gap-1.5 text-ui text-plum transition-colors hover:text-plum-deep focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-plum focus-visible:ring-offset-2 focus-visible:ring-offset-white"
       >
         {t('catalogue.askPrice')}
         <span aria-hidden="true" className="transition-transform duration-200 group-hover:translate-x-0.5">

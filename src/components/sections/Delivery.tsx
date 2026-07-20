@@ -25,7 +25,7 @@ export function Delivery() {
             ))}
           </dl>
 
-          <div className="rounded-sheet bg-cream p-8 shadow-sheet lg:p-10">
+          <div className="rounded-sheet border border-line bg-white p-8 lg:p-10">
             <h3 className="font-display text-2xl text-ink">{t('delivery.account.title')}</h3>
             <div className="mt-6 flex flex-col gap-3">
               {STEPS.map((step) => (
