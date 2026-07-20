@@ -108,10 +108,17 @@ without touching component code:
 
 ## The hero's generative plate
 
-The hero's framed "plate" renders a live **p5.js generative botanical print**: a
-dot-matrix "specimen" drawn one flower at a time, each in its species' real
-colours, cycling draw-in → hold → dissolve → next. The forms are fully
-procedural (no photos).
+The hero's framed "plate" renders a live **p5.js generative botanical specimen**:
+a **rotating 3D point cloud** drawn one flower at a time, each in its species'
+real colours, rendered as halftone dots on the light plate and cycling
+draw-in → hold → dissolve → next. Each archetype emits points in 3D space with per-point surface normals; the
+sketch rotates them around the vertical axis (with a downward viewing tilt),
+perspective-projects, depth-sorts, and lights each point (lambert against a
+fixed source) so lit faces lighten toward the plate and shadowed faces stay
+deep ink — highlights and shadow sweep across the bloom as it turns, giving it
+volume. Petals also carry a base→tip colour gradient. The forms are fully
+procedural (no photos); rendering is plain 2D canvas + hand-rolled 3D projection
+and lighting (no WebGL).
 
 - **Sketch:** `src/components/stage/flowerSketch.ts` (the p5 harness — render,
   animation state machine, pause/resume) and `src/components/stage/flowerArchetypes.ts`
@@ -132,7 +139,10 @@ add a WebGL sketch instead, render an R3F `<Canvas>` into `InteractiveStage`'s
 container via the same `mount` prop, and ask before adding those dependencies.
 
 To add a flower species, append an archetype to `ARCHETYPES` in
-`flowerArchetypes.ts` (a `type`, an `inks` palette, and a `draw(ctx)` routine).
+`flowerArchetypes.ts` — a `type`, an `inks` palette, and a `draw(ctx)` routine
+that emits 3D points via `ctx.push(x, y, z, hex)` (y up; stem base near y=-1.05,
+bloom around y=+0.5). The shared `stem`/`petal`/`shell`/`spike`/`leaf` helpers
+cover most forms.
 
 ## Project structure
 
