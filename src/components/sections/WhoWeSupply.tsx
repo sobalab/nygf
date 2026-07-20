@@ -22,7 +22,7 @@ export function WhoWeSupply() {
           {AUDIENCES.map((key) => (
             <div key={key}>
               <h3 className="font-display text-2xl text-cream">{t(`whoWeSupply.audiences.${key}.title`)}</h3>
-              <p className="mt-3 max-w-sm font-sans text-sm leading-relaxed text-cream/85">
+              <p className="mt-3 max-w-sm text-body-sm text-cream/85">
                 {t(`whoWeSupply.audiences.${key}.body`)}
               </p>
             </div>

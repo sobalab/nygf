@@ -9,7 +9,7 @@ const NAV_ITEMS = [
   { key: 'catalogue', href: '#catalogue' },
   { key: 'sourcing', href: '#sourcing' },
   { key: 'delivery', href: '#delivery' },
-  { key: 'contact', href: '#contact' },
+  { key: 'contact', href: '#/contact' },
 ] as const
 
 export function Header() {
@@ -17,7 +17,8 @@ export function Header() {
   const [menuOpen, setMenuOpen] = useState(false)
   const [scrolled, setScrolled] = useState(false)
 
-  // Transparent over the hero florals at the top; cream backdrop once scrolled.
+  // A soft cream veil over the hero florals at the top (keeps header text above
+  // AA contrast); a solid cream backdrop once scrolled.
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 24)
     onScroll()
@@ -25,10 +26,14 @@ export function Header() {
     return () => window.removeEventListener('scroll', onScroll)
   }, [])
 
+  const solid = scrolled || menuOpen
+
   return (
     <header
       className={`sticky top-0 z-50 transition-colors duration-300 ${
-        scrolled || menuOpen ? 'border-b border-line bg-cream/90 backdrop-blur-md' : 'border-b border-transparent'
+        solid
+          ? 'border-b border-line bg-cream/90 backdrop-blur-md'
+          : 'border-b border-transparent bg-gradient-to-b from-cream/75 via-cream/35 to-transparent backdrop-blur-[2px]'
       }`}
     >
       <div className="mx-auto flex max-w-6xl items-center justify-between gap-4 px-4 py-4 sm:px-6">
@@ -36,16 +41,11 @@ export function Header() {
           <img src="/nygf-logo.svg" alt="" className="h-9 w-auto" />
           <span className="flex flex-col leading-none">
             <span className="font-display text-lg text-ink">{siteConfig.wordmark.line1}</span>
-            <span className="font-sans text-[9px] uppercase tracking-widest3 text-plum">
-              {siteConfig.wordmark.line2}
-            </span>
+            <span className="text-eyebrow text-plum">{siteConfig.wordmark.line2}</span>
           </span>
         </a>
 
-        <nav
-          className="hidden items-center gap-9 font-sans text-[11px] uppercase tracking-widest2 text-soft md:flex"
-          aria-label={t('nav.catalogue')}
-        >
+        <nav className="hidden items-center gap-9 text-label text-soft lg:flex" aria-label={t('nav.primary')}>
           {NAV_ITEMS.map((item) => (
             <a key={item.key} href={item.href} className="transition-colors hover:text-plum">
               {t(`nav.${item.key}`)}
@@ -53,7 +53,7 @@ export function Header() {
           ))}
         </nav>
 
-        <div className="hidden items-center gap-5 md:flex">
+        <div className="hidden items-center gap-5 lg:flex">
           <LanguageToggle />
           <CtaButton href={telHref(siteConfig)} variant="outline">
             {t('common.callCta', { phone: siteConfig.phone.display })}
@@ -62,7 +62,7 @@ export function Header() {
 
         <button
           type="button"
-          className="font-sans text-[11px] uppercase tracking-widest2 text-ink md:hidden"
+          className="text-label text-ink lg:hidden"
           aria-expanded={menuOpen}
           aria-controls="mobile-nav"
           onClick={() => setMenuOpen((open) => !open)}
@@ -72,8 +72,8 @@ export function Header() {
       </div>
 
       {menuOpen ? (
-        <div id="mobile-nav" className="border-t border-line bg-cream px-4 py-6 sm:px-6 md:hidden">
-          <nav className="flex flex-col gap-4 font-sans text-sm uppercase tracking-widest2 text-soft">
+        <div id="mobile-nav" className="border-t border-line bg-cream px-4 py-6 sm:px-6 lg:hidden">
+          <nav className="flex flex-col gap-4 text-label text-soft" aria-label={t('nav.primary')}>
             {NAV_ITEMS.map((item) => (
               <a
                 key={item.key}

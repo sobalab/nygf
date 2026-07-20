@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react'
+import { useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { catalog } from '../../data/catalog'
 import { emptyFilters, filterCatalog, isFiltersEmpty, toggleValue, type CatalogFilters } from '../../lib/filterCatalog'
@@ -13,14 +13,17 @@ export function Catalogue() {
   const { t } = useTranslation()
   const [filters, setFilters] = useState<CatalogFilters>(emptyFilters)
   const [visibleCount, setVisibleCount] = useState(PAGE_SIZE)
+  const [prevFilters, setPrevFilters] = useState(filters)
+
+  // Reset the reveal to the first page the moment filters change — done during
+  // render (not in an effect) so the collapse happens in the same commit and no
+  // extra tiles ever flash between paint and effect.
+  if (filters !== prevFilters) {
+    setPrevFilters(filters)
+    setVisibleCount(PAGE_SIZE)
+  }
 
   const filtered = useMemo(() => filterCatalog(catalog, filters), [filters])
-
-  // A new filter selection resets the reveal back to the first page.
-  useEffect(() => {
-    setVisibleCount(PAGE_SIZE)
-  }, [filters])
-
   const visible = filtered.slice(0, visibleCount)
   const hasMore = visibleCount < filtered.length
 

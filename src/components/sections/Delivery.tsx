@@ -19,12 +19,8 @@ export function Delivery() {
           <dl className="grid gap-10 sm:grid-cols-2 lg:grid-cols-1">
             {INFO_KEYS.map((key) => (
               <div key={key} className="flex flex-col gap-2">
-                <dt className="font-sans text-[11px] uppercase tracking-widest2 text-plum">
-                  {t(`delivery.info.${key}.label`)}
-                </dt>
-                <dd className="max-w-md font-accent text-lg leading-relaxed text-ink">
-                  {t(`delivery.info.${key}.value`)}
-                </dd>
+                <dt className="text-eyebrow text-plum">{t(`delivery.info.${key}.label`)}</dt>
+                <dd className="max-w-md text-body-lg text-ink">{t(`delivery.info.${key}.value`)}</dd>
               </div>
             ))}
           </dl>
@@ -33,7 +29,7 @@ export function Delivery() {
             <h3 className="font-display text-2xl text-ink">{t('delivery.account.title')}</h3>
             <div className="mt-6 flex flex-col gap-3">
               {STEPS.map((step) => (
-                <p key={step} className="font-sans text-sm leading-relaxed text-soft">
+                <p key={step} className="text-body-sm text-soft">
                   {t(`delivery.account.${step}`)}
                 </p>
               ))}

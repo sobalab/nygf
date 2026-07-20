@@ -29,4 +29,8 @@ export const siteConfig: SiteConfig = {
     { days: { en: 'Sunday', ko: '일요일' }, hours: '6:00 AM – 12:00 PM' },
   ],
   originsImportedSince: 1990,
+  // TODO(owner): paste the Web3Forms access key (free, from web3forms.com signed
+  // up with nyflowergarden@hotmail.com) so contact-form inquiries auto-email the
+  // shop. Until then the form falls back to WhatsApp + a mailto copy.
+  web3formsAccessKey: 'YOUR_WEB3FORMS_ACCESS_KEY',
 }

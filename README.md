@@ -63,6 +63,27 @@ real stock rather than treating them as final.
 Legal name, address, phone/WhatsApp/email, and `hours`. `hours` is marked
 `TODO(owner)` — the current values are placeholders pending confirmation.
 
+`web3formsAccessKey` powers the contact form's auto-email (see below).
+
+### Contact form (`#/contact`) — auto-email + WhatsApp
+
+The Contact page is its own view at `#/contact` (a lightweight hash route — no
+router dependency). On submit it opens a prefilled WhatsApp draft to the shop
+**and** emails a copy of the inquiry to the shop as the confirmation record.
+
+The email is sent through [Web3Forms](https://web3forms.com) — a free, static-
+site-friendly service (no server needed):
+
+1. Sign up at web3forms.com using the shop email (`nyflowergarden@hotmail.com`)
+   so inquiries land in that inbox.
+2. Copy the **access key** (a UUID) it gives you.
+3. Paste it into `web3formsAccessKey` in `src/data/siteConfig.ts`, replacing
+   `'YOUR_WEB3FORMS_ACCESS_KEY'`. The key is public-safe (it only permits
+   submissions to your address), so it's fine to commit.
+
+Until a real key is set, the form still works — it just falls back to opening
+WhatsApp plus a one-tap "email a copy" (`mailto:`) draft instead of auto-sending.
+
 ### 4. Origins — `src/data/origins.ts`
 
 The six sourcing countries shown in the Sourcing grid.

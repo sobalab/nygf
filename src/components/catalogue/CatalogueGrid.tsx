@@ -33,7 +33,7 @@ export function CatalogueGrid({ items, hasMore, onLoadMore }: CatalogueGridProps
           <button
             type="button"
             onClick={onLoadMore}
-            className="rounded-pill bg-plum-deep px-9 py-3.5 font-sans text-[11px] uppercase tracking-widest2 text-cream shadow-pill transition-colors duration-200 hover:bg-plum focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-plum focus-visible:ring-offset-2 focus-visible:ring-offset-cream"
+            className="rounded-btn bg-plum-deep px-8 py-3.5 text-ui text-cream shadow-pill transition-colors duration-200 hover:bg-plum focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-plum focus-visible:ring-offset-2 focus-visible:ring-offset-cream"
           >
             {t('catalogue.loadMore')}
           </button>

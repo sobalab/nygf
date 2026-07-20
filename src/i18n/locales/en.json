@@ -14,6 +14,7 @@
     "menuClose": "Close"
   },
   "nav": {
+    "primary": "Main navigation",
     "cooler": "Cooler Today",
     "catalogue": "Catalogue",
     "sourcing": "Sourcing",
@@ -139,6 +140,32 @@
       "step2": "We confirm your account and standing terms",
       "step3": "Start ordering from the daily cooler list",
       "cta": "Start on WhatsApp"
+    }
+  },
+  "contactPage": {
+    "eyebrow": "Get in touch",
+    "title": "Contact us",
+    "lede": "Tell us what you're after and we'll send back today's price. We reply fastest on WhatsApp.",
+    "back": "Back to home",
+    "directTitle": "Or reach us directly",
+    "form": {
+      "nameLabel": "Your name",
+      "businessLabel": "Business",
+      "phoneLabel": "Phone",
+      "emailLabel": "Email",
+      "optional": "optional",
+      "messageLabel": "What do you need?",
+      "messagePlaceholder": "Flowers, quantities, and the date you need them.",
+      "submit": "Send inquiry",
+      "sending": "Sending…",
+      "invalid": "Add your name, a phone number, and a short message so we can help.",
+      "error": "We couldn't email the shop just now. Your WhatsApp draft is ready below, or reach us directly.",
+      "sentTitle": "Your inquiry is on its way.",
+      "sentBody": "We've emailed a copy to the shop and opened WhatsApp so you can send it directly. We'll reply with today's pricing.",
+      "sentBodyNoEmail": "We've opened WhatsApp so you can send your inquiry directly. You can also email a copy to the shop below.",
+      "whatsappButton": "Continue on WhatsApp",
+      "emailCopyButton": "Email a copy to the shop",
+      "again": "Send another inquiry"
     }
   },
   "footer": {

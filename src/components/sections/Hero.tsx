@@ -21,11 +21,11 @@ export function Hero() {
 
       <div className="relative mx-auto max-w-6xl px-4 pb-10 pt-24 sm:px-6 sm:pt-28">
         <div className="animate-rise-in rounded-sheet bg-cream/95 px-6 py-10 shadow-sheet backdrop-blur-sm sm:px-10 lg:px-14 lg:py-14">
-          <span className="font-sans text-[11px] uppercase tracking-widest3 text-plum">{t('hero.eyebrow')}</span>
+          <span className="text-eyebrow text-plum">{t('hero.eyebrow')}</span>
 
           <div className="mt-8 grid items-center gap-10 lg:grid-cols-[1.35fr_1fr]">
             <div className="flex flex-col gap-6">
-              <h1 className="font-display text-4xl leading-[1.06] text-ink sm:text-5xl lg:text-6xl">
+              <h1 className="font-display text-[2.5rem] leading-[1.05] text-ink sm:text-[3.5rem] lg:text-6xl">
                 {t('hero.headlinePre')} <span className="text-plum">{t('hero.headlineAccent')}</span>
               </h1>
               <p className="max-w-md font-accent text-xl leading-relaxed text-soft">{t('hero.lede')}</p>
@@ -39,7 +39,7 @@ export function Hero() {
                 </CtaButton>
               </div>
 
-              <ul className="mt-4 flex flex-wrap gap-x-8 gap-y-2 font-sans text-[11px] uppercase tracking-widest2 text-faint">
+              <ul className="mt-4 flex flex-wrap gap-x-8 gap-y-2 text-meta text-faint">
                 <li>{t('hero.metaSince', { year: siteConfig.establishedYear })}</li>
                 <li>{t('hero.metaHours')}</li>
                 <li>{t('hero.metaLocation')}</li>
@@ -48,7 +48,7 @@ export function Hero() {
 
             {/* Feature bloom — the one true photograph on the page. */}
             <figure className="relative mx-auto w-full max-w-[360px]">
-              <div className="overflow-hidden rounded-[22px] shadow-bloom">
+              <div className="overflow-hidden rounded-sheet shadow-bloom">
                 <img
                   src="/images/flowers/rose.jpg"
                   alt={t('hero.featureAlt')}
