@@ -10,13 +10,14 @@ interface FilterPillProps {
 }
 
 /**
- * A rounded filter pill that opens a soft popover panel. Filled plum when the
+ * A rounded filter control that opens a soft popover panel. Filled plum when the
  * group has active selections, outlined otherwise. Closes on outside click or
- * Escape; keyboard and screen-reader wired via aria-expanded / aria-controls.
+ * Escape; Escape returns focus to the trigger so keyboard users aren't dropped.
  */
 export function FilterPill({ label, activeCount, align = 'left', children }: FilterPillProps) {
   const [open, setOpen] = useState(false)
   const rootRef = useRef<HTMLDivElement>(null)
+  const triggerRef = useRef<HTMLButtonElement>(null)
   const panelId = useId()
   const active = activeCount > 0
 
@@ -26,7 +27,12 @@ export function FilterPill({ label, activeCount, align = 'left', children }: Fil
       if (rootRef.current && !rootRef.current.contains(e.target as Node)) setOpen(false)
     }
     function onKeyDown(e: KeyboardEvent) {
-      if (e.key === 'Escape') setOpen(false)
+      if (e.key === 'Escape') {
+        setOpen(false)
+        // Focus the still-mounted trigger before React unmounts the panel, so
+        // focus lands on the pill instead of falling to <body>.
+        triggerRef.current?.focus()
+      }
     }
     document.addEventListener('pointerdown', onPointerDown)
     document.addEventListener('keydown', onKeyDown)
@@ -39,11 +45,12 @@ export function FilterPill({ label, activeCount, align = 'left', children }: Fil
   return (
     <div ref={rootRef} className="relative">
       <button
+        ref={triggerRef}
         type="button"
         onClick={() => setOpen((v) => !v)}
         aria-expanded={open}
         aria-controls={panelId}
-        className={`inline-flex items-center gap-2 rounded-pill border px-5 py-2.5 font-sans text-[11px] uppercase tracking-widest2 shadow-pill transition-colors duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-plum focus-visible:ring-offset-2 focus-visible:ring-offset-cream ${
+        className={`inline-flex items-center gap-2 rounded-btn border px-4 py-2.5 text-ui shadow-pill transition-colors duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-plum focus-visible:ring-offset-2 focus-visible:ring-offset-cream ${
           active
             ? 'border-plum-deep bg-plum-deep text-cream'
             : 'border-line bg-cream text-soft hover:border-plum/50 hover:text-ink'
@@ -51,7 +58,7 @@ export function FilterPill({ label, activeCount, align = 'left', children }: Fil
       >
         <span>{label}</span>
         {active ? (
-          <span className="grid h-4 min-w-4 place-items-center rounded-pill bg-cream/25 px-1 text-[10px] leading-none text-cream">
+          <span className="grid h-4 min-w-4 place-items-center rounded-chip bg-cream/25 px-1 text-[10px] leading-none text-cream">
             {activeCount}
           </span>
         ) : null}
@@ -67,7 +74,7 @@ export function FilterPill({ label, activeCount, align = 'left', children }: Fil
       {open ? (
         <div
           id={panelId}
-          className={`absolute top-[calc(100%+10px)] z-30 min-w-[15rem] rounded-2xl border border-line bg-cream p-4 shadow-sheet ${
+          className={`absolute top-[calc(100%+10px)] z-30 min-w-[15rem] rounded-sheet border border-line bg-cream p-4 shadow-sheet ${
             align === 'right' ? 'right-0' : 'left-0'
           }`}
         >

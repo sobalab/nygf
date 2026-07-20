@@ -14,35 +14,29 @@ export function Footer() {
           <div className="flex flex-col gap-2">
             <img src="/nygf-logo.svg" alt="" className="h-14 w-auto self-start" />
             <span className="mt-3 font-display text-lg text-ink">{siteConfig.wordmark.line1}</span>
-            <span className="font-sans text-[9px] uppercase tracking-widest3 text-plum">
-              {siteConfig.wordmark.line2}
-            </span>
-            <p className="mt-4 max-w-[22ch] font-accent text-sm text-soft">{siteConfig.legalName}</p>
+            <span className="text-eyebrow text-plum">{siteConfig.wordmark.line2}</span>
+            <p className="mt-4 max-w-[24ch] font-accent text-sm text-soft">{siteConfig.legalName}</p>
           </div>
 
           <div className="flex flex-col gap-2.5">
-            <h3 className="mb-1 font-sans text-[11px] uppercase tracking-widest2 text-faint">
-              {t('footer.contactTitle')}
-            </h3>
-            <a href={telHref(siteConfig)} className="font-sans text-sm text-ink transition-colors hover:text-plum">
+            <h3 className="mb-1 text-eyebrow text-faint">{t('footer.contactTitle')}</h3>
+            <a href={telHref(siteConfig)} className="text-body text-ink transition-colors hover:text-plum">
               {t('footer.callLabel')}: {siteConfig.phone.display}
             </a>
-            <a href={waHref(siteConfig)} className="font-sans text-sm text-ink transition-colors hover:text-plum">
+            <a href={waHref(siteConfig)} className="text-body text-ink transition-colors hover:text-plum">
               {t('footer.whatsappLabel')}: {siteConfig.cell.display}
             </a>
-            <a href={smsHref(siteConfig)} className="font-sans text-sm text-ink transition-colors hover:text-plum">
+            <a href={smsHref(siteConfig)} className="text-body text-ink transition-colors hover:text-plum">
               {t('footer.textLabel')}: {siteConfig.cell.display}
             </a>
-            <a href={mailtoHref(siteConfig)} className="font-sans text-sm text-ink transition-colors hover:text-plum">
+            <a href={mailtoHref(siteConfig)} className="text-body text-ink transition-colors hover:text-plum">
               {t('footer.emailLabel')}: {siteConfig.email}
             </a>
           </div>
 
           <div className="flex flex-col gap-2">
-            <h3 className="mb-1 font-sans text-[11px] uppercase tracking-widest2 text-faint">
-              {t('footer.addressTitle')}
-            </h3>
-            <p className="font-sans text-sm leading-relaxed text-soft">
+            <h3 className="mb-1 text-eyebrow text-faint">{t('footer.addressTitle')}</h3>
+            <p className="text-body text-soft">
               {siteConfig.address.street}
               <br />
               {siteConfig.address.city}, {siteConfig.address.state} {siteConfig.address.zip}
@@ -50,12 +44,10 @@ export function Footer() {
           </div>
 
           <div className="flex flex-col gap-2">
-            <h3 className="mb-1 font-sans text-[11px] uppercase tracking-widest2 text-faint">
-              {t('footer.hoursTitle')}
-            </h3>
+            <h3 className="mb-1 text-eyebrow text-faint">{t('footer.hoursTitle')}</h3>
             <dl className="flex flex-col gap-1.5">
               {siteConfig.hours.map((row) => (
-                <div key={row.days.en} className="flex justify-between gap-4 font-sans text-sm text-soft">
+                <div key={row.days.en} className="flex justify-between gap-4 text-body text-soft">
                   <dt>{row.days[locale]}</dt>
                   <dd className="text-ink">{row.hours}</dd>
                 </div>
@@ -64,9 +56,7 @@ export function Footer() {
           </div>
         </div>
 
-        <p className="mt-14 font-sans text-[11px] uppercase tracking-widest2 text-faint">
-          {t('footer.rights', { year })}
-        </p>
+        <p className="mt-14 text-meta text-faint">{t('footer.rights', { year })}</p>
       </div>
     </footer>
   )

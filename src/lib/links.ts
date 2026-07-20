@@ -29,3 +29,37 @@ export function coolerListMessage(dateLabel: string): string {
 export function openAccountMessage(): string {
   return "Hi, I'd like to open a wholesale account."
 }
+
+export interface InquiryFields {
+  name: string
+  business?: string
+  phone?: string
+  email?: string
+  message: string
+}
+
+/** The composed inquiry body shared by the WhatsApp draft and the email copy. */
+export function inquiryMessage(f: InquiryFields): string {
+  return [
+    `Flower inquiry — ${f.name}`,
+    f.business ? `Business: ${f.business}` : null,
+    f.phone ? `Phone: ${f.phone}` : null,
+    f.email ? `Email: ${f.email}` : null,
+    '',
+    f.message,
+  ]
+    .filter((line): line is string => line !== null)
+    .join('\n')
+}
+
+/** mailto: draft to the shop, prefilled with the inquiry — the fallback email copy. */
+export function inquiryMailto(config: SiteConfig, f: InquiryFields): string {
+  const subject = `Flower inquiry — ${f.name}`
+  return `mailto:${config.email}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(inquiryMessage(f))}`
+}
+
+/** Whether the contact form can auto-email via Web3Forms (a real key is set). */
+export function isFormServiceConfigured(config: SiteConfig): boolean {
+  const key = config.web3formsAccessKey
+  return Boolean(key) && key !== 'YOUR_WEB3FORMS_ACCESS_KEY'
+}

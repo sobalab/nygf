@@ -25,7 +25,7 @@ interface FilterBarProps {
 
 /**
  * Pill filter row above the grid: one rounded dropdown per group (type, colour,
- * season), a live count, and a clear-all. Replaces the old bordered filter box.
+ * season), a live count, and a clear-all.
  */
 export function FilterBar({
   filters,
@@ -66,7 +66,7 @@ export function FilterBar({
                 type="button"
                 onClick={() => onToggleColor(color)}
                 aria-pressed={active}
-                className={`group flex items-center gap-2.5 rounded-lg px-2 py-1.5 text-left transition-colors hover:bg-cream-2 ${
+                className={`group flex items-center gap-2.5 rounded-btn px-2 py-1.5 text-left transition-colors hover:bg-cream-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-plum ${
                   active ? 'text-ink' : 'text-soft'
                 }`}
               >
@@ -77,14 +77,14 @@ export function FilterBar({
                   style={{ background: BLOSSOM_SWATCH[color] }}
                   aria-hidden="true"
                 />
-                <span className="font-sans text-xs">{t(`catalogue.colors.${color}`)}</span>
+                <span className="text-label">{t(`catalogue.colors.${color}`)}</span>
               </button>
             )
           })}
         </div>
       </FilterPill>
 
-      <FilterPill label={t('catalogue.filters.seasonLabel')} activeCount={filters.seasons.length}>
+      <FilterPill label={t('catalogue.filters.seasonLabel')} activeCount={filters.seasons.length} align="right">
         <PanelHeading>{t('catalogue.filters.seasonLabel')}</PanelHeading>
         <div className="flex flex-col gap-1">
           {SEASONS.map((season) => (
@@ -103,12 +103,12 @@ export function FilterBar({
           <button
             type="button"
             onClick={onClearAll}
-            className="font-sans text-[11px] uppercase tracking-widest2 text-plum underline decoration-plum/30 underline-offset-4 transition-colors hover:text-plum-deep hover:decoration-plum-deep"
+            className="text-meta text-plum underline decoration-plum/30 underline-offset-4 transition-colors hover:text-plum-deep hover:decoration-plum-deep focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-plum"
           >
             {t('catalogue.filters.clearAll')}
           </button>
         ) : null}
-        <span className="font-sans text-[11px] uppercase tracking-widest2 text-faint" role="status" aria-live="polite">
+        <span className="text-meta text-faint" role="status" aria-live="polite">
           {t('catalogue.filters.showing', { count: shownCount, total: totalCount })}
         </span>
       </div>
@@ -117,7 +117,7 @@ export function FilterBar({
 }
 
 function PanelHeading({ children }: { children: ReactNode }) {
-  return <p className="mb-3 font-sans text-[10px] uppercase tracking-widest2 text-faint">{children}</p>
+  return <p className="mb-3 text-eyebrow text-faint">{children}</p>
 }
 
 function CheckRow({ active, onClick, label }: { active: boolean; onClick: () => void; label: string }) {
@@ -126,12 +126,12 @@ function CheckRow({ active, onClick, label }: { active: boolean; onClick: () => 
       type="button"
       onClick={onClick}
       aria-pressed={active}
-      className={`flex items-center gap-2.5 rounded-lg px-2 py-1.5 text-left transition-colors hover:bg-cream-2 ${
+      className={`flex items-center gap-2.5 rounded-btn px-2 py-1.5 text-left transition-colors hover:bg-cream-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-plum ${
         active ? 'text-ink' : 'text-soft'
       }`}
     >
       <span
-        className={`grid h-4 w-4 shrink-0 place-items-center rounded-[5px] border transition-colors ${
+        className={`grid h-4 w-4 shrink-0 place-items-center rounded-chip border transition-colors ${
           active ? 'border-plum-deep bg-plum-deep text-cream' : 'border-line bg-cream'
         }`}
         aria-hidden="true"
@@ -142,7 +142,7 @@ function CheckRow({ active, onClick, label }: { active: boolean; onClick: () => 
           </svg>
         ) : null}
       </span>
-      <span className="font-sans text-xs">{label}</span>
+      <span className="text-label">{label}</span>
     </button>
   )
 }

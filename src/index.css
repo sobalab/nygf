@@ -70,12 +70,11 @@
   /* RGB channel triplets (not hex) so Tailwind's /opacity modifiers resolve to
      rgb(<triplet> / <alpha>). Hex here would make every /opacity utility fall
      back to inherited ink. */
+
+  /* --- Fixed year-round (sheets, text, the plum brand accent). --- */
   --color-cream: 253 251 247;
   --color-cream-2: 245 238 232;
   --color-white: 255 255 255;
-
-  --color-mauve: 229 218 225;
-  --color-mauve-deep: 215 199 211;
 
   --color-ink: 52 37 44;
   --color-soft: 95 81 88;
@@ -83,8 +82,6 @@
 
   --color-plum: 109 74 88;
   --color-plum-deep: 69 42 54;
-  --color-petal: 230 196 204;
-  --color-petal-soft: 240 220 223;
 
   --color-line: 231 220 223;
   --color-line-soft: 240 232 231;
@@ -95,7 +92,92 @@
   --color-sage: var(--color-plum);
   --color-sage-deep: var(--color-plum-deep);
 
+  /* --- Seasonal: the page field, hero bloom wash, petal tone, and tile cast.
+     main.tsx stamps <html data-season>; the blocks below override these. Base
+     defaults are summer, so the palette is sane before JS runs. --- */
+  --color-mauve: 238 224 214;
+  --color-field-mid: 236 215 210;
+  --color-mauve-deep: 230 200 198;
+  --color-petal: 237 199 192;
+  --color-petal-soft: 244 220 213;
+  --hero-field:
+    radial-gradient(38% 52% at 12% 6%, rgba(238, 196, 187, 0.9), transparent 70%),
+    radial-gradient(44% 58% at 86% 2%, rgba(226, 150, 150, 0.7), transparent 70%),
+    radial-gradient(30% 42% at 66% 22%, rgba(206, 130, 120, 0.4), transparent 72%),
+    radial-gradient(52% 56% at 46% -12%, rgba(248, 228, 214, 0.9), transparent 74%),
+    radial-gradient(40% 46% at 28% 30%, rgba(230, 190, 175, 0.5), transparent 72%),
+    linear-gradient(180deg, #efd9d2 0%, transparent 62%);
+  --season-tile-cast: linear-gradient(140deg, rgba(255, 214, 168, 0.55), rgba(255, 196, 180, 0.3));
+
   color-scheme: light;
+}
+
+/* Spring — fresh sage drifting into soft blush; peony/tulip hero wash. */
+:root[data-season='spring'] {
+  --color-mauve: 228 231 220;
+  --color-field-mid: 231 224 218;
+  --color-mauve-deep: 236 217 217;
+  --color-petal: 233 205 207;
+  --color-petal-soft: 241 222 224;
+  --hero-field:
+    radial-gradient(38% 52% at 12% 6%, rgba(226, 205, 210, 0.9), transparent 70%),
+    radial-gradient(44% 58% at 86% 2%, rgba(210, 175, 190, 0.68), transparent 70%),
+    radial-gradient(30% 42% at 60% 24%, rgba(180, 196, 150, 0.42), transparent 72%),
+    radial-gradient(52% 56% at 46% -12%, rgba(238, 232, 220, 0.9), transparent 74%),
+    radial-gradient(40% 46% at 28% 30%, rgba(214, 206, 180, 0.42), transparent 72%),
+    linear-gradient(180deg, #e6e0dc 0%, transparent 62%);
+  --season-tile-cast: linear-gradient(140deg, rgba(210, 225, 180, 0.5), rgba(240, 210, 215, 0.3));
+}
+
+/* Summer — warm peach/coral; roses in full bloom (also the base default). */
+:root[data-season='summer'] {
+  --color-mauve: 238 224 214;
+  --color-field-mid: 236 215 210;
+  --color-mauve-deep: 230 200 198;
+  --color-petal: 237 199 192;
+  --color-petal-soft: 244 220 213;
+  --hero-field:
+    radial-gradient(38% 52% at 12% 6%, rgba(238, 196, 187, 0.9), transparent 70%),
+    radial-gradient(44% 58% at 86% 2%, rgba(226, 150, 150, 0.7), transparent 70%),
+    radial-gradient(30% 42% at 66% 22%, rgba(206, 130, 120, 0.4), transparent 72%),
+    radial-gradient(52% 56% at 46% -12%, rgba(248, 228, 214, 0.9), transparent 74%),
+    radial-gradient(40% 46% at 28% 30%, rgba(230, 190, 175, 0.5), transparent 72%),
+    linear-gradient(180deg, #efd9d2 0%, transparent 62%);
+  --season-tile-cast: linear-gradient(140deg, rgba(255, 214, 168, 0.55), rgba(255, 196, 180, 0.3));
+}
+
+/* Fall — warm sand, terracotta, dusty rose-brown; dahlia/chrysanthemum wash. */
+:root[data-season='fall'] {
+  --color-mauve: 233 221 201;
+  --color-field-mid: 226 205 184;
+  --color-mauve-deep: 216 191 178;
+  --color-petal: 224 185 162;
+  --color-petal-soft: 236 210 192;
+  --hero-field:
+    radial-gradient(38% 52% at 12% 6%, rgba(224, 185, 162, 0.9), transparent 70%),
+    radial-gradient(44% 58% at 86% 2%, rgba(200, 140, 110, 0.62), transparent 70%),
+    radial-gradient(30% 42% at 66% 22%, rgba(168, 96, 80, 0.36), transparent 72%),
+    radial-gradient(52% 56% at 46% -12%, rgba(240, 224, 196, 0.9), transparent 74%),
+    radial-gradient(40% 46% at 28% 30%, rgba(214, 170, 130, 0.48), transparent 72%),
+    linear-gradient(180deg, #e9dcc9 0%, transparent 62%);
+  --season-tile-cast: linear-gradient(140deg, rgba(228, 175, 120, 0.5), rgba(210, 140, 120, 0.3));
+}
+
+/* Winter — cool blue-lilac, frost, soft plum; amaryllis/evergreen wash. */
+:root[data-season='winter'] {
+  --color-mauve: 223 225 233;
+  --color-field-mid: 220 214 224;
+  --color-mauve-deep: 211 204 214;
+  --color-petal: 214 206 222;
+  --color-petal-soft: 230 225 238;
+  --hero-field:
+    radial-gradient(38% 52% at 12% 6%, rgba(214, 206, 222, 0.9), transparent 70%),
+    radial-gradient(44% 58% at 86% 2%, rgba(190, 175, 205, 0.66), transparent 70%),
+    radial-gradient(30% 42% at 66% 22%, rgba(150, 130, 160, 0.34), transparent 72%),
+    radial-gradient(52% 56% at 46% -12%, rgba(236, 232, 240, 0.9), transparent 74%),
+    radial-gradient(40% 46% at 28% 30%, rgba(206, 196, 220, 0.46), transparent 72%),
+    linear-gradient(180deg, #dfe0e9 0%, transparent 62%);
+  --season-tile-cast: linear-gradient(140deg, rgba(200, 212, 240, 0.5), rgba(216, 206, 232, 0.3));
 }
 
 html {
@@ -121,7 +203,7 @@ body {
   background-image: linear-gradient(
     180deg,
     rgb(var(--color-mauve)) 0%,
-    #e2d6de 42%,
+    rgb(var(--color-field-mid)) 42%,
     rgb(var(--color-mauve-deep)) 100%
   );
   background-attachment: fixed;
@@ -164,14 +246,18 @@ body::before {
   }
 }
 
-/* The hero's out-of-focus bloom field: layered soft radial washes in blush,
-   rose, and cream that read as blurred flowers, fading down into the page. */
+/* The hero's out-of-focus bloom field: layered soft radial washes that read as
+   blurred flowers, fading into the page. The washes are seasonal (--hero-field). */
 .hero-bloom-field {
-  background-image:
-    radial-gradient(38% 52% at 12% 6%, rgba(233, 201, 207, 0.9), transparent 70%),
-    radial-gradient(44% 58% at 86% 2%, rgba(214, 156, 176, 0.72), transparent 70%),
-    radial-gradient(30% 42% at 66% 22%, rgba(198, 132, 146, 0.42), transparent 72%),
-    radial-gradient(52% 56% at 46% -12%, rgba(246, 226, 224, 0.9), transparent 74%),
-    radial-gradient(40% 46% at 28% 30%, rgba(224, 196, 208, 0.5), transparent 72%),
-    linear-gradient(180deg, #ead8dd 0%, rgba(229, 218, 225, 0) 62%);
+  background-image: var(--hero-field);
+}
+
+/* A soft seasonal cast blended over the tinted catalogue tiles — warms them in
+   summer, cools them in winter, while each flower's own colour shows through. */
+.tile-season-cast {
+  position: absolute;
+  inset: 0;
+  background: var(--season-tile-cast);
+  mix-blend-mode: soft-light;
+  pointer-events: none;
 }

@@ -22,7 +22,7 @@ export function BloomTile({ src, alt, latin, colors, className = '' }: BloomTile
   const primary = colors[0] ?? 'blush'
 
   return (
-    <div className={`relative aspect-[4/5] overflow-hidden rounded-[18px] ${className}`}>
+    <div className={`relative aspect-[4/5] overflow-hidden rounded-tile ${className}`}>
       {!failed ? (
         <img
           src={src}
@@ -37,9 +37,18 @@ export function BloomTile({ src, alt, latin, colors, className = '' }: BloomTile
           style={{ background: bloomTint(primary) }}
           aria-hidden="true"
         >
-          <span className="text-center font-accent text-base leading-snug text-plum-deep/75">{latin}</span>
+          {/* Seasonal cast, blended under the label so it warms/cools the tint. */}
+          <span className="tile-season-cast" />
+          {/* Full-opacity ink + a soft cream glow keeps the label legible over
+              every tint (the same name is also printed below the tile). */}
+          <span
+            className="text-center font-accent text-base leading-snug text-plum-deep"
+            style={{ textShadow: '0 0 14px rgba(253, 251, 247, 0.9)' }}
+          >
+            {latin}
+          </span>
           {/* Soft inner vignette so the tile has depth, not a flat swatch. */}
-          <span className="pointer-events-none absolute inset-0 rounded-[18px] shadow-[inset_0_0_60px_-20px_rgba(69,42,54,0.35)]" />
+          <span className="pointer-events-none absolute inset-0 rounded-tile shadow-[inset_0_0_60px_-20px_rgba(69,42,54,0.35)]" />
         </div>
       )}
     </div>
