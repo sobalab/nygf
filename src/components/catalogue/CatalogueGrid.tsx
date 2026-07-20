@@ -15,7 +15,7 @@ export function CatalogueGrid({ items, hasMore, onLoadMore }: CatalogueGridProps
   if (items.length === 0) {
     return (
       <div className="rounded-sheet border border-dashed border-line px-6 py-20 text-center">
-        <p className="font-accent text-lg text-soft">{t('catalogue.empty')}</p>
+        <p className="text-lg font-light text-soft">{t('catalogue.empty')}</p>
       </div>
     )
   }
@@ -33,7 +33,7 @@ export function CatalogueGrid({ items, hasMore, onLoadMore }: CatalogueGridProps
           <button
             type="button"
             onClick={onLoadMore}
-            className="rounded-btn bg-plum-deep px-8 py-3.5 text-ui text-cream shadow-pill transition-colors duration-200 hover:bg-plum focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-plum focus-visible:ring-offset-2 focus-visible:ring-offset-cream"
+            className="rounded-btn border border-ink px-8 py-3 text-ui text-ink transition-colors duration-200 hover:bg-ink hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-plum focus-visible:ring-offset-2 focus-visible:ring-offset-white"
           >
             {t('catalogue.loadMore')}
           </button>

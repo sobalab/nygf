@@ -8,14 +8,14 @@ export function Footer() {
   const year = new Date().getFullYear()
 
   return (
-    <footer id="contact" className="scroll-mt-24 px-4 pb-10 pt-4 sm:px-6">
-      <div className="mx-auto max-w-6xl rounded-sheet bg-cream px-6 py-14 shadow-sheet sm:px-10 lg:px-14">
+    <footer id="contact" className="scroll-mt-24 border-t border-line px-4 pb-12 pt-14 sm:px-6">
+      <div className="mx-auto max-w-6xl">
         <div className="grid gap-10 sm:grid-cols-2 lg:grid-cols-4">
           <div className="flex flex-col gap-2">
             <img src="/nygf-logo.svg" alt="" className="h-14 w-auto self-start" />
             <span className="mt-3 font-display text-lg text-ink">{siteConfig.wordmark.line1}</span>
             <span className="text-eyebrow text-plum">{siteConfig.wordmark.line2}</span>
-            <p className="mt-4 max-w-[24ch] font-accent text-sm text-soft">{siteConfig.legalName}</p>
+            <p className="mt-4 max-w-[24ch] text-sm text-soft">{siteConfig.legalName}</p>
           </div>
 
           <div className="flex flex-col gap-2.5">

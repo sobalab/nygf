@@ -41,14 +41,14 @@ export function Catalogue() {
   }
 
   return (
-    <section id="catalogue" className="scroll-mt-24 px-4 pb-16 pt-4 sm:px-6 sm:pb-24">
-      <div className="mx-auto max-w-6xl rounded-sheet bg-cream px-5 py-12 shadow-sheet sm:px-10 lg:px-14 lg:py-16">
-        <div className="flex flex-col gap-6 md:flex-row md:items-end md:justify-between">
+    <section id="catalogue" className="scroll-mt-24 px-4 py-14 sm:px-6 sm:py-20">
+      <div className="mx-auto max-w-6xl">
+        <div className="flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
           <SectionHeading eyebrow={t('catalogue.eyebrow')} title={t('catalogue.title')} />
-          <p className="max-w-sm font-accent text-lg leading-relaxed text-soft md:text-right">{t('catalogue.lede')}</p>
+          <p className="max-w-sm text-base font-light leading-relaxed text-soft md:text-right">{t('catalogue.lede')}</p>
         </div>
 
-        <div className="mt-12">
+        <div className="mt-10 border-t border-line pt-8">
           <FilterBar
             filters={filters}
             hasActiveFilters={!isFiltersEmpty(filters)}

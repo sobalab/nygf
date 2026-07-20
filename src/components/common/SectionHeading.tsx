@@ -9,7 +9,7 @@ interface SectionHeadingProps {
 
 /**
  * Section header: a small plum kicker (sentence case, no all-caps), a large
- * Devina display title, and an optional italic-serif lede. `tone="cream"`
+ * Gambarino display title, and an optional light lede. `tone="cream"`
  * inverts the colours for use on the deep plum band.
  */
 export function SectionHeading({
@@ -26,11 +26,11 @@ export function SectionHeading({
   const ledeColor = tone === 'cream' ? 'text-cream/90' : 'text-soft'
 
   return (
-    <div className={`flex flex-col gap-4 ${alignCls} ${className}`}>
+    <div className={`flex flex-col gap-3 ${alignCls} ${className}`}>
       {eyebrow ? <span className={`text-eyebrow ${eyebrowColor}`}>{eyebrow}</span> : null}
-      <h2 className={`font-display text-4xl font-normal leading-[1.05] sm:text-[3.25rem] ${titleColor}`}>{title}</h2>
+      <h2 className={`font-display text-3xl font-normal leading-[1.1] sm:text-4xl ${titleColor}`}>{title}</h2>
       {lede ? (
-        <p className={`max-w-xl font-accent text-lg leading-relaxed ${ledeColor} ${align === 'center' ? 'mx-auto' : ''}`}>
+        <p className={`max-w-md text-base font-light leading-relaxed ${ledeColor} ${align === 'center' ? 'mx-auto' : ''}`}>
           {lede}
         </p>
       ) : null}

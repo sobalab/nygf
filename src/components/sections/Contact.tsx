@@ -106,7 +106,7 @@ export function Contact() {
         </a>
 
         <div className="mt-6 grid gap-8 lg:grid-cols-[1.2fr_0.8fr]">
-          <div className="rounded-sheet bg-cream p-6 shadow-sheet sm:p-10">
+          <div className="rounded-sheet border border-line bg-white p-6 sm:p-10">
             <SectionHeading eyebrow={t('contactPage.eyebrow')} title={t('contactPage.title')} lede={t('contactPage.lede')} />
 
             {status === 'sent' ? (
@@ -193,7 +193,7 @@ export function Contact() {
             )}
           </div>
 
-          <aside className="rounded-sheet bg-cream p-6 shadow-sheet sm:p-8">
+          <aside className="rounded-sheet border border-line bg-white p-6 sm:p-8">
             <h3 className="text-eyebrow text-plum">{t('contactPage.directTitle')}</h3>
             <div className="mt-5 flex flex-col gap-3">
               <ContactLink href={telHref(siteConfig)} label={t('footer.callLabel')} value={siteConfig.phone.display} />

@@ -31,9 +31,7 @@ export function Header() {
   return (
     <header
       className={`sticky top-0 z-50 transition-colors duration-300 ${
-        solid
-          ? 'border-b border-line bg-cream/90 backdrop-blur-md'
-          : 'border-b border-transparent bg-gradient-to-b from-cream/75 via-cream/35 to-transparent backdrop-blur-[2px]'
+        solid ? 'border-b border-line bg-white/90 backdrop-blur-sm' : 'border-b border-transparent'
       }`}
     >
       <div className="mx-auto flex max-w-6xl items-center justify-between gap-4 px-4 py-4 sm:px-6">

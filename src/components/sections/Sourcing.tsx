@@ -25,7 +25,7 @@ export function Sourcing() {
         <ul className="mt-14 grid grid-cols-2 gap-x-8 gap-y-10 sm:grid-cols-3 lg:grid-cols-6">
           {origins.map((origin) => (
             <li key={origin.id} className="flex flex-col items-center gap-2 text-center">
-              <span className="font-accent text-2xl text-plum">{origin.numeral}</span>
+              <span className="font-display text-2xl text-plum">{origin.numeral}</span>
               <span className="text-label text-ink">{origin.country[locale]}</span>
             </li>
           ))}
