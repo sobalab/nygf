@@ -32,7 +32,9 @@
     "metaLocation": "Flushing, Queens",
     "plateAlt": "A generative botanical specimen, drawn one flower at a time",
     "pauseMotion": "Pause the animation",
-    "playMotion": "Play the animation"
+    "playMotion": "Play the animation",
+    "featureAlt": "A single burgundy garden rose against a soft blush ground",
+    "featureCaption": "Garden rose, from this morning's cooler"
   },
   "availability": {
     "eyebrow": "Updated this morning",
@@ -53,6 +55,7 @@
     "filters": {
       "title": "Filters",
       "colorLabel": "Blossom colour",
+      "pillColor": "Colour",
       "typeLabel": "Type",
       "seasonLabel": "Season",
       "clearAll": "Clear all",
@@ -91,6 +94,7 @@
       "winter": "Winter"
     },
     "askPrice": "Ask today's price",
+    "loadMore": "Load more",
     "empty": "No items match those filters."
   },
   "sourcing": {

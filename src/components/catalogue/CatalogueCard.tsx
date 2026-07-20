@@ -2,15 +2,16 @@ import { useTranslation } from 'react-i18next'
 import { siteConfig } from '../../data/siteConfig'
 import { askPriceMessage, waHref } from '../../lib/links'
 import type { CatalogItem } from '../../types/catalog'
-import { PhotoFrame } from '../common/PhotoFrame'
+import { BloomTile } from './BloomTile'
 
 interface CatalogueCardProps {
   item: CatalogItem
 }
 
 /**
- * Gallery card: the photo floats inset on a paper-2 cell, and all metadata
- * sits in a quiet row below the cell — name left, archive number right.
+ * Catalogue card: a tinted (or photographic) bloom tile with the name set in
+ * tracked small-caps beneath it, the Latin name in italic, and a quiet
+ * ask-price link that warms on hover.
  */
 export function CatalogueCard({ item }: CatalogueCardProps) {
   const { t, i18n } = useTranslation()
@@ -18,29 +19,30 @@ export function CatalogueCard({ item }: CatalogueCardProps) {
 
   return (
     <article className="group flex flex-col">
-      <div className="bg-paper-2 px-8 py-10 transition-colors duration-200 group-hover:bg-line-soft sm:px-10 sm:py-12">
-        <PhotoFrame
-          src={item.image}
-          alt={item.name[locale]}
-          latin={item.latin}
-          className="mx-auto w-full max-w-[240px]"
-        />
-      </div>
+      <BloomTile
+        src={item.image}
+        alt={item.name[locale]}
+        latin={item.latin}
+        colors={item.colors}
+        className="shadow-bloom ring-1 ring-inset ring-black/[0.03]"
+      />
 
-      <div className="mt-3 flex items-baseline justify-between gap-4">
-        <h3 className="font-sans text-sm font-medium leading-snug text-ink">{item.name[locale]}</h3>
-        <span className="shrink-0 font-sans text-[10px] uppercase tracking-widest2 text-faint">
-          N° {String(item.index).padStart(2, '0')}
+      <div className="mt-4 flex items-start justify-between gap-3">
+        <h3 className="font-sans text-xs uppercase tracking-widest2 text-ink">{item.name[locale]}</h3>
+        <span className="mt-0.5 shrink-0 font-sans text-[10px] tracking-widest2 text-faint">
+          N°{String(item.index).padStart(2, '0')}
         </span>
       </div>
-      <p className="mt-1 font-sans text-xs text-faint">{item.latin}</p>
-      <p className="font-sans text-xs uppercase tracking-widest2 text-soft">{item.soldBy[locale]}</p>
+      <p className="mt-1 font-accent text-sm text-faint">{item.latin}</p>
 
       <a
         href={waHref(siteConfig, askPriceMessage(item.name.en))}
-        className="mt-2 inline-flex w-fit items-center gap-1 border-b border-sage-deep/40 font-sans text-xs uppercase tracking-widest2 text-sage-deep transition-colors hover:border-ink hover:text-ink"
+        className="mt-3 inline-flex w-fit items-center gap-1.5 font-sans text-[11px] uppercase tracking-widest2 text-plum transition-colors hover:text-plum-deep focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-plum focus-visible:ring-offset-2 focus-visible:ring-offset-cream"
       >
         {t('catalogue.askPrice')}
+        <span aria-hidden="true" className="transition-transform duration-200 group-hover:translate-x-0.5">
+          &rarr;
+        </span>
       </a>
     </article>
   )

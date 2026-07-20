@@ -32,7 +32,9 @@
     "metaLocation": "플러싱, 퀸즈",
     "plateAlt": "한 번에 한 송이씩 그려지는 생성형 식물 표본",
     "pauseMotion": "애니메이션 일시정지",
-    "playMotion": "애니메이션 재생"
+    "playMotion": "애니메이션 재생",
+    "featureAlt": "부드러운 블러쉬 배경의 버건디 가든 로즈 한 송이",
+    "featureCaption": "가든 로즈, 오늘 아침 쿨러에서"
   },
   "availability": {
     "eyebrow": "오늘 아침 업데이트",
@@ -53,6 +55,7 @@
     "filters": {
       "title": "필터",
       "colorLabel": "꽃 색상",
+      "pillColor": "색상",
       "typeLabel": "종류",
       "seasonLabel": "시즌",
       "clearAll": "전체 해제",
@@ -91,6 +94,7 @@
       "winter": "겨울"
     },
     "askPrice": "오늘 가격 문의",
+    "loadMore": "더 보기",
     "empty": "해당 필터에 맞는 품목이 없습니다."
   },
   "sourcing": {

@@ -3,21 +3,42 @@ import type { CatalogItem } from '../../types/catalog'
 import { CatalogueCard } from './CatalogueCard'
 
 interface CatalogueGridProps {
+  /** The currently-revealed slice of the filtered catalogue. */
   items: CatalogItem[]
+  hasMore: boolean
+  onLoadMore: () => void
 }
 
-export function CatalogueGrid({ items }: CatalogueGridProps) {
+export function CatalogueGrid({ items, hasMore, onLoadMore }: CatalogueGridProps) {
   const { t } = useTranslation()
 
   if (items.length === 0) {
-    return <p className="py-16 text-center font-sans text-sm text-faint">{t('catalogue.empty')}</p>
+    return (
+      <div className="rounded-sheet border border-dashed border-line px-6 py-20 text-center">
+        <p className="font-accent text-lg text-soft">{t('catalogue.empty')}</p>
+      </div>
+    )
   }
 
   return (
-    <div className="grid gap-x-6 gap-y-12 sm:grid-cols-2 lg:grid-cols-3">
-      {items.map((item) => (
-        <CatalogueCard key={item.id} item={item} />
-      ))}
+    <div>
+      <div className="grid grid-cols-2 gap-x-6 gap-y-10 lg:grid-cols-4">
+        {items.map((item) => (
+          <CatalogueCard key={item.id} item={item} />
+        ))}
+      </div>
+
+      {hasMore ? (
+        <div className="mt-14 flex justify-center">
+          <button
+            type="button"
+            onClick={onLoadMore}
+            className="rounded-pill bg-plum-deep px-9 py-3.5 font-sans text-[11px] uppercase tracking-widest2 text-cream shadow-pill transition-colors duration-200 hover:bg-plum focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-plum focus-visible:ring-offset-2 focus-visible:ring-offset-cream"
+          >
+            {t('catalogue.loadMore')}
+          </button>
+        </div>
+      ) : null}
     </div>
   )
 }

@@ -1,117 +1,62 @@
-import { useCallback, useEffect, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { siteConfig } from '../../data/siteConfig'
-import { usePrefersReducedMotion } from '../../lib/usePrefersReducedMotion'
 import { waHref } from '../../lib/links'
 import { CtaButton } from '../common/CtaButton'
-import { InteractiveStage, type StageMount } from '../stage/InteractiveStage'
-import type { SketchControl } from '../stage/flowerSketch'
 
 /**
- * Compact statement band — the page's weight sits with the availability
- * ledger and the gallery below, so this stays short and gets out of the way.
+ * Editorial floral hero: a soft out-of-focus bloom field bleeds across the top
+ * of the page, and a cream panel floats over it holding the brand statement,
+ * the calls to action, and a single feature bloom. (The former 3D particle
+ * plate lives on in src/components/stage/, unmounted.)
  */
 export function Hero() {
   const { t } = useTranslation()
-  const reducedMotion = usePrefersReducedMotion()
-  const [paused, setPaused] = useState(false)
-  // Live handle the sketch populates in setup(), so the pause button can drive it.
-  const controlRef = useRef<SketchControl | null>(null)
-
-  // Lazy-load p5 + the sketch only when the plate mounts (desktop, non-blocking):
-  // dynamic import keeps p5 out of the initial bundle. useCallback keeps this
-  // referentially stable so InteractiveStage's memo holds and the canvas never
-  // remounts on language toggle or scroll.
-  const mountFlower = useCallback<StageMount>(async (el, { reducedMotion, signal }) => {
-    const [{ default: p5 }, { createFlowerSketch }] = await Promise.all([
-      import('p5'),
-      import('../stage/flowerSketch'),
-    ])
-    // Bail before creating p5 if we were torn down during the async import
-    // (StrictMode double-invoke) — avoids an orphaned p5 canvas.
-    if (signal.aborted) return
-    const control: SketchControl = {}
-    const instance = new p5(createFlowerSketch({ reducedMotion, container: el, control }), el)
-    controlRef.current = control
-    return () => {
-      controlRef.current = null
-      instance.remove()
-    }
-  }, [])
-
-  // Push the pause state into the sketch when the user toggles it.
-  useEffect(() => {
-    controlRef.current?.setPaused?.(paused)
-  }, [paused])
 
   return (
-    <section id="home" className="relative overflow-hidden border-b border-line">
-      <div className="mx-auto grid max-w-6xl items-center gap-10 px-6 py-12 lg:grid-cols-[1.4fr_1fr] lg:py-16">
-        <div className="flex flex-col gap-5">
-          <span className="font-sans text-xs uppercase tracking-widest2 text-soft">{t('hero.eyebrow')}</span>
-          <h1 className="font-display text-4xl leading-[1.12] text-ink sm:text-5xl">
-            {t('hero.headlinePre')} <em className="not-italic text-sage-deep">{t('hero.headlineAccent')}</em>
-          </h1>
-          <p className="max-w-md font-sans text-base leading-relaxed text-soft">{t('hero.lede')}</p>
+    <section id="home" className="relative overflow-hidden">
+      {/* Full-bleed soft floral wash, fading down into the mauve page field. */}
+      <div className="pointer-events-none absolute inset-x-0 top-0 h-[70vh]" aria-hidden="true">
+        <div className="absolute inset-0 hero-bloom-field" />
+      </div>
 
-          <div className="mt-1 flex flex-wrap gap-4">
-            <CtaButton href="#catalogue" variant="solid">
-              {t('hero.ctaPrimary')}
-            </CtaButton>
-            <CtaButton href={waHref(siteConfig)} variant="outline">
-              {t('hero.ctaSecondary')}
-            </CtaButton>
-          </div>
+      <div className="relative mx-auto max-w-6xl px-4 pb-10 pt-24 sm:px-6 sm:pt-28">
+        <div className="animate-rise-in rounded-sheet bg-cream/95 px-6 py-10 shadow-sheet backdrop-blur-sm sm:px-10 lg:px-14 lg:py-14">
+          <span className="font-sans text-[11px] uppercase tracking-widest3 text-plum">{t('hero.eyebrow')}</span>
 
-          <ul className="mt-4 flex flex-wrap gap-x-8 gap-y-2 border-t border-line-soft pt-4 font-sans text-xs uppercase tracking-widest2 text-faint">
-            <li>{t('hero.metaSince', { year: siteConfig.establishedYear })}</li>
-            <li>{t('hero.metaHours')}</li>
-            <li>{t('hero.metaLocation')}</li>
-          </ul>
-        </div>
+          <div className="mt-8 grid items-center gap-10 lg:grid-cols-[1.35fr_1fr]">
+            <div className="flex flex-col gap-6">
+              <h1 className="font-display text-4xl leading-[1.06] text-ink sm:text-5xl lg:text-6xl">
+                {t('hero.headlinePre')} <span className="text-plum">{t('hero.headlineAccent')}</span>
+              </h1>
+              <p className="max-w-md font-accent text-xl leading-relaxed text-soft">{t('hero.lede')}</p>
 
-        <div className="relative mx-auto hidden w-full max-w-[280px] lg:block">
-          {/* Herbarium-style mounting corners — signals "specimen plate" without illustrating one. */}
-          <span
-            className="pointer-events-none absolute -left-2.5 -top-2.5 h-[18px] w-[18px] border-l border-t border-soft"
-            aria-hidden="true"
-          />
-          <span
-            className="pointer-events-none absolute -right-2.5 -top-2.5 h-[18px] w-[18px] border-r border-t border-soft"
-            aria-hidden="true"
-          />
-          <span
-            className="pointer-events-none absolute -bottom-2.5 -left-2.5 h-[18px] w-[18px] border-b border-l border-soft"
-            aria-hidden="true"
-          />
-          <span
-            className="pointer-events-none absolute -bottom-2.5 -right-2.5 h-[18px] w-[18px] border-b border-r border-soft"
-            aria-hidden="true"
-          />
-          {/* Generative botanical print — decorative; the hero's meaning is in the text. */}
-          <div className="relative border border-line p-3" role="img" aria-label={t('hero.plateAlt')}>
-            <InteractiveStage className="aspect-[4/5] w-full" mount={mountFlower} reducedMotion={reducedMotion} />
-            {/* WCAG 2.2.2: an in-page control to stop the auto-playing motion. */}
-            {reducedMotion ? null : (
-              <button
-                type="button"
-                onClick={() => setPaused((v) => !v)}
-                aria-pressed={paused}
-                aria-label={paused ? t('hero.playMotion') : t('hero.pauseMotion')}
-                className="absolute bottom-4 right-4 flex h-7 w-7 items-center justify-center bg-white/80 text-ink opacity-40 transition-opacity hover:opacity-100 focus-visible:opacity-100 focus-visible:outline focus-visible:outline-1 focus-visible:outline-ink"
-              >
-                {paused ? (
-                  <svg viewBox="0 0 12 12" className="h-3 w-3 fill-current" aria-hidden="true">
-                    <path d="M3 2l7 4-7 4z" />
-                  </svg>
-                ) : (
-                  <svg viewBox="0 0 12 12" className="h-3 w-3 fill-current" aria-hidden="true">
-                    <rect x="3" y="2" width="2.4" height="8" />
-                    <rect x="6.6" y="2" width="2.4" height="8" />
-                  </svg>
-                )}
-              </button>
-            )}
+              <div className="mt-1 flex flex-wrap gap-3">
+                <CtaButton href="#catalogue" variant="solid">
+                  {t('hero.ctaPrimary')}
+                </CtaButton>
+                <CtaButton href={waHref(siteConfig)} variant="outline">
+                  {t('hero.ctaSecondary')}
+                </CtaButton>
+              </div>
+
+              <ul className="mt-4 flex flex-wrap gap-x-8 gap-y-2 font-sans text-[11px] uppercase tracking-widest2 text-faint">
+                <li>{t('hero.metaSince', { year: siteConfig.establishedYear })}</li>
+                <li>{t('hero.metaHours')}</li>
+                <li>{t('hero.metaLocation')}</li>
+              </ul>
+            </div>
+
+            {/* Feature bloom — the one true photograph on the page. */}
+            <figure className="relative mx-auto w-full max-w-[360px]">
+              <div className="overflow-hidden rounded-[22px] shadow-bloom">
+                <img
+                  src="/images/flowers/rose.jpg"
+                  alt={t('hero.featureAlt')}
+                  className="aspect-[4/5] w-full object-cover"
+                />
+              </div>
+              <figcaption className="mt-3 text-right font-accent text-sm text-faint">{t('hero.featureCaption')}</figcaption>
+            </figure>
           </div>
         </div>
       </div>
