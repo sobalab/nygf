@@ -1,39 +1,10 @@
-"use client";
-
-import { useState } from "react";
-
-const flowers = [
-  { name: "Ranunculus", color: "Buttercream", length: "40 cm", group: "Seasonal", image: "https://images.unsplash.com/photo-1490750967868-88aa4486c946?auto=format&fit=crop&w=1000&q=88" },
-  { name: "Garden Rose", color: "Quicksand", length: "50 cm", group: "Roses", image: "https://images.unsplash.com/photo-1518895949257-7621c3c786d7?auto=format&fit=crop&w=1000&q=88" },
-  { name: "Lisianthus", color: "White", length: "70 cm", group: "Classics", image: "https://images.unsplash.com/photo-1523438885200-e635ba2c371e?auto=format&fit=crop&w=1000&q=88" },
-  { name: "Delphinium", color: "Sky blue", length: "90 cm", group: "Classics", image: "https://images.unsplash.com/photo-1469259943454-aa100abba749?auto=format&fit=crop&w=1000&q=88" },
-  { name: "Anemone", color: "Panda", length: "35 cm", group: "Seasonal", image: "https://images.unsplash.com/photo-1501004318641-b39e6451bec6?auto=format&fit=crop&w=1000&q=88" },
-  { name: "Spray Rose", color: "Blush", length: "50 cm", group: "Roses", image: "https://images.unsplash.com/photo-1562690868-60bbe7293e94?auto=format&fit=crop&w=1000&q=88" },
-];
-
-const categories = ["All flowers", "Roses", "Classics", "Seasonal"];
-
-function Arrow() {
-  return <span aria-hidden="true">↗</span>;
-}
+import { previewGroups } from "./catalogue-data";
+import { Arrow, SiteFooter, SiteHeader } from "./chrome";
 
 export default function Home() {
-  const [active, setActive] = useState("All flowers");
-  const [menuOpen, setMenuOpen] = useState(false);
-  const visibleFlowers = active === "All flowers" ? flowers : flowers.filter((flower) => flower.group === active);
-
   return (
     <main>
-      <header className="site-header">
-        <a href="#top" className="wordmark" aria-label="New York Garden Flower Wholesale home">New York Garden <i>/ Flower Wholesale</i><small>Est. 1990</small></a>
-        <button className="menu-toggle" onClick={() => setMenuOpen(!menuOpen)} aria-expanded={menuOpen} aria-label="Toggle menu">{menuOpen ? "Close" : "Menu"}</button>
-        <nav className={menuOpen ? "nav open" : "nav"} aria-label="Main navigation">
-          <a href="#catalogue" onClick={() => setMenuOpen(false)}>Catalogue</a>
-          <a href="#about" onClick={() => setMenuOpen(false)}>Our story</a>
-          <a href="#services" onClick={() => setMenuOpen(false)}>For the trade</a>
-        </nav>
-        <a className="header-cta" href="https://wa.me/12018151040?text=Hello%2C%20I%27d%20like%20to%20ask%20about%20today%27s%20flower%20availability." target="_blank" rel="noreferrer">Today&apos;s availability <Arrow /></a>
-      </header>
+      <SiteHeader home />
 
       <section className="hero" id="top">
         <img className="hero-image" src="https://images.unsplash.com/photo-1487412912498-0447578fcca8?auto=format&fit=crop&w=2200&q=90" alt="A quiet arrangement of soft seasonal flowers" />
@@ -65,20 +36,17 @@ export default function Home() {
       <section className="catalogue section-pad" id="catalogue">
         <div className="section-heading">
           <h2>The Flower Edit</h2>
-          <p className="section-note">Browse a sample of our changing selection. Market prices move daily and are never posted—call or WhatsApp for today&apos;s availability and price.</p>
-        </div>
-        <div className="filter-row" aria-label="Filter flower catalogue">
-          {categories.map((category) => <button key={category} className={active === category ? "active" : ""} onClick={() => setActive(category)}>{category}</button>)}
+          <p className="section-note">Market prices move daily and are never posted. Call or WhatsApp for today&apos;s availability and price.</p>
         </div>
         <div className="flower-grid">
-          {visibleFlowers.map((flower, index) => (
-            <article className="flower-card" key={flower.name}>
-              <div className="flower-image-wrap"><img src={flower.image} alt={`${flower.color} ${flower.name}`} /></div>
-              <div className="flower-meta"><h3>{flower.name}</h3><p>{flower.color}<br />{flower.length}</p></div>
-            </article>
+          {previewGroups.map((group) => (
+            <a className="flower-card" key={group.id} href="/catalogue">
+              <div className="flower-image-wrap" />
+              <div className="flower-meta"><h3>{group.label}</h3><p>{group.items.length} {group.items.length === 1 ? "variety" : "varieties"}</p></div>
+            </a>
           ))}
         </div>
-        <a href="https://wa.me/12018151040?text=Hello%2C%20could%20you%20send%20me%20today%27s%20flower%20availability%20and%20pricing%3F" target="_blank" rel="noreferrer" className="outline-button">Ask on WhatsApp <Arrow /></a>
+        <a href="/catalogue" className="outline-button">View full catalogue <Arrow /></a>
       </section>
 
       <section className="trade section-pad" id="services">
@@ -92,7 +60,7 @@ export default function Home() {
 
       <section className="story section-pad" id="story">
         <div className="story-image"><img src="https://images.unsplash.com/photo-1487070183336-b863922373d4?auto=format&fit=crop&w=1500&q=90" alt="Florist carefully preparing flowers by hand" /></div>
-        <div className="story-copy"><blockquote>“Flowers are perishable.<br />Trust is what lasts.”</blockquote><p>For more than three decades, New York Garden Flower Wholesale has imported cut flowers directly and served the people who make New York&apos;s spaces and celebrations bloom—from florists and wedding planners to restaurants, hotels, and neighborhood walk-ins.</p><p className="signature">— New York Garden Flower Wholesale, Inc.</p></div>
+        <div className="story-copy"><blockquote>“Flowers are perishable.<br />Trust is what lasts.”</blockquote><p>For more than three decades, New York Garden Flower Wholesale has imported cut flowers directly and served the people who make New York&apos;s spaces and celebrations bloom, from florists and wedding planners to restaurants, hotels, and neighborhood walk-ins.</p><p className="signature">— New York Garden Flower Wholesale, Inc.</p></div>
       </section>
 
       <section className="contact section-pad" id="contact">
@@ -103,8 +71,7 @@ export default function Home() {
         <a className="email-link" href="mailto:nyflowergarden@hotmail.com?subject=Wholesale%20flower%20inquiry">nyflowergarden@hotmail.com</a>
       </section>
 
-      <footer><a href="#top" className="wordmark">New York Garden <i>/ Flower Wholesale</i><small>Est. 1990</small></a><p>Direct-import wholesale cut flowers.</p><div><span>© 2026 New York Garden Flower Wholesale, Inc.</span><a href="#top">Back to top ↑</a></div></footer>
+      <SiteFooter home />
     </main>
   );
 }
-
