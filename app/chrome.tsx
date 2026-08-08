@@ -12,8 +12,14 @@ export function SiteHeader({ home = false }: { home?: boolean }) {
 
   return (
     <header className="site-header">
-      <a href={home ? "#top" : "/"} className="wordmark" aria-label="New York Garden Flower Wholesale home">New York Garden <i>/ Flower Wholesale</i><small>Est. 1990</small></a>
-      <button className="menu-toggle" onClick={() => setMenuOpen(!menuOpen)} aria-expanded={menuOpen} aria-label="Toggle menu">{menuOpen ? "Close" : "Menu"}</button>
+      <a href={home ? "#top" : "/"} className="wordmark" aria-label="New York Garden Flower Wholesale home">
+        <img className="wordmark-mark" src="/logo.svg" alt="" aria-hidden="true" />
+        <span>New York Garden Flower Wholesale</span>
+        <small>INC.</small>
+      </a>
+      <button className="menu-toggle" onClick={() => setMenuOpen(!menuOpen)} aria-expanded={menuOpen} aria-label={menuOpen ? "Close menu" : "Open menu"}>
+        <span className="menu-icon" aria-hidden="true"><span /><span /><span /></span>
+      </button>
       <nav className={menuOpen ? "nav open" : "nav"} aria-label="Main navigation">
         <a href="/catalogue" onClick={() => setMenuOpen(false)}>Catalogue</a>
         <a href={`${prefix}#about`} onClick={() => setMenuOpen(false)}>Our story</a>
@@ -27,7 +33,7 @@ export function SiteHeader({ home = false }: { home?: boolean }) {
 export function SiteFooter({ home = false }: { home?: boolean }) {
   return (
     <footer>
-      <a href={home ? "#top" : "/"} className="wordmark">New York Garden <i>/ Flower Wholesale</i><small>Est. 1990</small></a>
+      <a href={home ? "#top" : "/"} className="wordmark"><span>New York Garden Flower Wholesale</span><small>INC.</small></a>
       <p>Direct-import wholesale cut flowers.</p>
       <div>
         <span>© 2026 New York Garden Flower Wholesale, Inc.</span>

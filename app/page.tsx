@@ -7,11 +7,11 @@ export default function Home() {
       <SiteHeader home />
 
       <section className="hero" id="top">
-        <img className="hero-image" src="https://images.unsplash.com/photo-1487412912498-0447578fcca8?auto=format&fit=crop&w=2200&q=90" alt="A quiet arrangement of soft seasonal flowers" />
+        <img className="hero-image" src="/media/hero.webp" alt="Buckets of freshly cut roses, lilies, tulips and chrysanthemums on the wholesale floor" fetchPriority="high" />
         <div className="hero-shade" />
         <div className="hero-copy">
           <p className="eyebrow light">Direct importer in Flushing, New York since 1990</p>
-          <h1>Exceptional Flowers,<br /><em>Chosen With Care.</em></h1>
+          <h1>Exceptional Flowers,<br /><em>Sourced With Care.</em></h1>
           <div className="hero-bottom">
             <p>Wholesale cut flowers, imported directly from farm to shop for florists, planners, hospitality, and walk-in buyers.</p>
             <a href="/catalogue" className="hero-button">View our catalogue</a>
@@ -21,14 +21,14 @@ export default function Home() {
 
       <section className="intro section-pad" id="about">
         <div className="intro-copy">
-          <h2>Direct From the Farm.<br />Closer to Your Work.</h2>
+          <h2>Direct From the Farm.<br />Closer to Your Needs.</h2>
           <div className="intro-detail">
             <p>We clear our own shipments, with no broker between grower and shop. Our flowers arrive from Ecuador, Colombia, Costa Rica, Mexico, Poland, and Canada.</p>
             <a className="text-link" href="#story">Our story <Arrow /></a>
           </div>
         </div>
         <div className="statement-image-wrap">
-          <img className="statement-image" src="https://images.unsplash.com/photo-1455659817273-f96807779a8a?auto=format&fit=crop&w=1800&q=90" alt="Fresh flower stems arranged in a workroom" />
+          <img className="statement-image" src="/media/our-story.webp" alt="Wrapped bunches of tulips in red, pink, orange and purple on the market floor" loading="lazy" />
           <span className="vertical-note">Selected daily, delivered fresh</span>
         </div>
       </section>
@@ -59,13 +59,13 @@ export default function Home() {
       </section>
 
       <section className="story section-pad" id="story">
-        <div className="story-image"><img src="https://images.unsplash.com/photo-1487070183336-b863922373d4?auto=format&fit=crop&w=1500&q=90" alt="Florist carefully preparing flowers by hand" /></div>
+        <div className="story-image"><img src="/media/story.webp" alt="A wrapped bouquet of pink roses, gerberas and eucalyptus on a dark wood bench" loading="lazy" /></div>
         <div className="story-copy"><blockquote>“Flowers are perishable.<br />Trust is what lasts.”</blockquote><p>For more than three decades, New York Garden Flower Wholesale has imported cut flowers directly and served the people who make New York&apos;s spaces and celebrations bloom, from florists and wedding planners to restaurants, hotels, and neighborhood walk-ins.</p><p className="signature">— New York Garden Flower Wholesale, Inc.</p></div>
       </section>
 
       <section className="contact section-pad" id="contact">
         <p className="eyebrow light">오늘의 가격과 재고를 문의하세요<br />Ask for today&apos;s price and availability</p>
-        <h2>What Are You<br /><em>Making Next?</em></h2>
+        <h2>What Are You<br /><em>Celebrating Next?</em></h2>
         <a className="contact-button" href="https://wa.me/12018151040?text=Hello%2C%20I%27d%20like%20to%20ask%20about%20today%27s%20flowers." target="_blank" rel="noreferrer">Message on WhatsApp</a>
         <div className="contact-details"><p><span>Store phone (voice only)</span><a href="tel:+17188861190">718-886-1190</a></p><p><span>Owner (WhatsApp or SMS)</span><a href="https://wa.me/12018151040" target="_blank" rel="noreferrer">201-815-1040</a><br /><a href="sms:+12018151040">Send SMS</a></p><p><span>Visit / Pickup</span><a href="https://maps.google.com/?q=171-10+39th+Ave+Flushing+NY+11358" target="_blank" rel="noreferrer">171-10 39th Ave<br />Flushing, NY 11358</a></p><p><span>Hours</span>Mon–Sat, 6 AM–2 PM<br />Sunday, 6 AM–12 PM</p></div>
         <a className="email-link" href="mailto:nyflowergarden@hotmail.com?subject=Wholesale%20flower%20inquiry">nyflowergarden@hotmail.com</a>
