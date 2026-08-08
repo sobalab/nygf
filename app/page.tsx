@@ -1,4 +1,4 @@
-import { previewGroups } from "./catalogue-data";
+import { previewFlowers } from "./catalogue-data";
 import { Arrow, SiteFooter, SiteHeader } from "./chrome";
 
 export default function Home() {
@@ -14,7 +14,7 @@ export default function Home() {
           <h1>Exceptional Flowers,<br /><em>Chosen With Care.</em></h1>
           <div className="hero-bottom">
             <p>Wholesale cut flowers, imported directly from farm to shop for florists, planners, hospitality, and walk-in buyers.</p>
-            <a href="#catalogue" className="circle-link" aria-label="Explore the catalogue">Explore<br />the collection <span>↓</span></a>
+            <a href="/catalogue" className="hero-button">View our catalogue</a>
           </div>
         </div>
       </section>
@@ -39,14 +39,14 @@ export default function Home() {
           <p className="section-note">Market prices move daily and are never posted. Call or WhatsApp for today&apos;s availability and price.</p>
         </div>
         <div className="flower-grid">
-          {previewGroups.map((group) => (
-            <a className="flower-card" key={group.id} href="/catalogue">
-              <div className="flower-image-wrap" />
-              <div className="flower-meta"><h3>{group.label}</h3><p>{group.items.length} {group.items.length === 1 ? "variety" : "varieties"}</p></div>
+          {previewFlowers.map((flower) => (
+            <a className="flower-card" key={flower.name} href="/catalogue">
+              <div className="flower-image-wrap">{flower.image ? <img src={flower.image} alt={flower.name} /> : null}</div>
+              <div className="flower-meta"><h3>{flower.name}</h3><p>{flower.group}</p></div>
             </a>
           ))}
         </div>
-        <a href="/catalogue" className="outline-button">View full catalogue <Arrow /></a>
+        <a href="/catalogue" className="solid-button">View full catalogue</a>
       </section>
 
       <section className="trade section-pad" id="services">
@@ -66,7 +66,7 @@ export default function Home() {
       <section className="contact section-pad" id="contact">
         <p className="eyebrow light">오늘의 가격과 재고를 문의하세요<br />Ask for today&apos;s price and availability</p>
         <h2>What Are You<br /><em>Making Next?</em></h2>
-        <a className="contact-button" href="https://wa.me/12018151040?text=Hello%2C%20I%27d%20like%20to%20ask%20about%20today%27s%20flowers." target="_blank" rel="noreferrer">Message on WhatsApp <Arrow /></a>
+        <a className="contact-button" href="https://wa.me/12018151040?text=Hello%2C%20I%27d%20like%20to%20ask%20about%20today%27s%20flowers." target="_blank" rel="noreferrer">Message on WhatsApp</a>
         <div className="contact-details"><p><span>Store phone (voice only)</span><a href="tel:+17188861190">718-886-1190</a></p><p><span>Owner (WhatsApp or SMS)</span><a href="https://wa.me/12018151040" target="_blank" rel="noreferrer">201-815-1040</a><br /><a href="sms:+12018151040">Send SMS</a></p><p><span>Visit / Pickup</span><a href="https://maps.google.com/?q=171-10+39th+Ave+Flushing+NY+11358" target="_blank" rel="noreferrer">171-10 39th Ave<br />Flushing, NY 11358</a></p><p><span>Hours</span>Mon–Sat, 6 AM–2 PM<br />Sunday, 6 AM–12 PM</p></div>
         <a className="email-link" href="mailto:nyflowergarden@hotmail.com?subject=Wholesale%20flower%20inquiry">nyflowergarden@hotmail.com</a>
       </section>

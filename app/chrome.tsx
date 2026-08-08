@@ -19,7 +19,7 @@ export function SiteHeader({ home = false }: { home?: boolean }) {
         <a href={`${prefix}#about`} onClick={() => setMenuOpen(false)}>Our story</a>
         <a href={`${prefix}#services`} onClick={() => setMenuOpen(false)}>For the trade</a>
       </nav>
-      <a className="header-cta" href="https://wa.me/12018151040?text=Hello%2C%20I%27d%20like%20to%20ask%20about%20today%27s%20flower%20availability." target="_blank" rel="noreferrer">Today&apos;s availability <Arrow /></a>
+      <a className="header-cta" href="https://wa.me/12018151040?text=Hello%2C%20I%27d%20like%20to%20ask%20about%20today%27s%20flower%20availability." target="_blank" rel="noreferrer">Today&apos;s availability</a>
     </header>
   );
 }

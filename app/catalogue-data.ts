@@ -17,10 +17,41 @@ export const groups = [
 // live in their own section rather than the filterable grid.
 export const services = ["Dutch Flowers", "Wedding Flowers"];
 
-// Cards fall back to a flat tile until real photography exists; add `image` per item to swap one in.
-export const flowers = groups.flatMap((group) => group.items.map((name) => ({ name, group: group.label, groupId: group.id })));
+// Photography we have so far, keyed by item name. Items without an entry render
+// a flat tile instead. To add one: drop the original in public/media, run
+// `npm run media` to convert it to WebP, then add a line here.
+const images: Record<string, string> = {
+  "Premium Rose": "/media/premium-rose.webp",
+  "Spray Rose": "/media/spray-rose.webp",
+  "Garden Rose": "/media/garden-rose.webp",
+  "Select-grade Carnation": "/media/select-carnations.webp",
+  "Mini Carnation": "/media/mini-carnation.webp",
+  "Premium Lilies": "/media/premium-lilies.webp",
+  "Oriental Lily": "/media/oriental-lilies.webp",
+  "Asiatic Lily": "/media/asiatic-lilies.webp",
+  "Hybrid Lilies": "/media/hybrid-lilies.webp",
+  "Calla Lilies": "/media/calla-lilies.webp",
+  "Mini Calla Lilies": "/media/mini-calla-lilies.webp",
+  "Cymbidium Orchid": "/media/cymbidium-orchid.webp",
+  "Dendrobium": "/media/dendrobium.webp",
+  "Phalaenopsis (Moth Orchid)": "/media/phalaenopsis.webp",
+  "Premium Hydrangea": "/media/hydrangea.webp",
+  "Tulips": "/media/tulips.webp",
+  "Sunflowers": "/media/sunflowers.webp",
+  "Peony": "/media/peonies.webp",
+  "Ranunculus": "/media/ranunculus.webp",
+  "Butterfly Ranunculus": "/media/butterfly-ranunculus.webp",
+  "Anemone": "/media/anemone.webp",
+  "Sweet Pea": "/media/sweet-pea.webp",
+  "Lisianthus": "/media/lisianthus.webp",
+  "Chrysanthemum": "/media/chrysanthemum.webp",
+  "Daisy": "/media/daisies.webp",
+};
+
+export const flowers = groups.flatMap((group) => group.items.map((name) => ({ name, group: group.label, groupId: group.id, image: images[name] })));
 
 export const filters = [{ id: "all", label: "All flowers" }, ...groups.map(({ id, label }) => ({ id, label }))];
 
-const previewIds = ["roses", "hydrangea", "lilies", "seasonal", "greens"];
-export const previewGroups = previewIds.map((id) => groups.find((group) => group.id === id)!);
+// The home strip leads with photographed stems rather than grey placeholders.
+const previewNames = ["Premium Rose", "Premium Hydrangea", "Premium Lilies", "Peony", "Tulips"];
+export const previewFlowers = previewNames.map((name) => flowers.find((flower) => flower.name === name)!);

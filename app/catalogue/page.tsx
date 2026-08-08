@@ -24,12 +24,12 @@ export default function Catalogue() {
         <div className="flower-grid">
           {visibleFlowers.map((flower) => (
             <article className="flower-card" key={flower.name}>
-              <div className="flower-image-wrap" />
+              <div className="flower-image-wrap">{flower.image ? <img src={flower.image} alt={flower.name} loading="lazy" /> : null}</div>
               <div className="flower-meta"><h3>{flower.name}</h3><p>{flower.group}</p></div>
             </article>
           ))}
         </div>
-        <a href="https://wa.me/12018151040?text=Hello%2C%20could%20you%20send%20me%20today%27s%20flower%20availability%20and%20pricing%3F" target="_blank" rel="noreferrer" className="outline-button">Ask on WhatsApp <Arrow /></a>
+        <a href="https://wa.me/12018151040?text=Hello%2C%20could%20you%20send%20me%20today%27s%20flower%20availability%20and%20pricing%3F" target="_blank" rel="noreferrer" className="solid-button">Ask on WhatsApp</a>
       </section>
 
       <section className="offerings section-pad">
