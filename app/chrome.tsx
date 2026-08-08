@@ -15,7 +15,6 @@ export function SiteHeader({ home = false }: { home?: boolean }) {
       <a href={home ? "#top" : "/"} className="wordmark" aria-label="New York Garden Flower Wholesale home">
         <img className="wordmark-mark" src="/logo.svg" alt="" aria-hidden="true" />
         <span>New York Garden Flower Wholesale</span>
-        <small>INC.</small>
       </a>
       <button className="menu-toggle" onClick={() => setMenuOpen(!menuOpen)} aria-expanded={menuOpen} aria-label={menuOpen ? "Close menu" : "Open menu"}>
         <span className="menu-icon" aria-hidden="true"><span /><span /><span /></span>

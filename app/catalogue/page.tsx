@@ -13,7 +13,7 @@ export default function Catalogue() {
       <SiteHeader />
 
       <section className="page-head section-pad">
-        <h1>The Flower Edit</h1>
+        <h1>Our Flowers</h1>
         <p className="section-note">Our full standing selection. Market prices move daily and are never posted. Call or WhatsApp for today&apos;s availability and price.</p>
       </section>
 

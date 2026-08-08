@@ -29,13 +29,12 @@ export default function Home() {
         </div>
         <div className="statement-image-wrap">
           <img className="statement-image" src="/media/our-story.webp" alt="Wrapped bunches of tulips in red, pink, orange and purple on the market floor" loading="lazy" />
-          <span className="vertical-note">Selected daily, delivered fresh</span>
         </div>
       </section>
 
       <section className="catalogue section-pad" id="catalogue">
         <div className="section-heading">
-          <h2>The Flower Edit</h2>
+          <h2>Our Flowers</h2>
           <p className="section-note">Market prices move daily and are never posted. Call or WhatsApp for today&apos;s availability and price.</p>
         </div>
         <div className="flower-grid">
