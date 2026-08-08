@@ -24,8 +24,10 @@ export function SiteHeader({ home = false }: { home?: boolean }) {
         <a href="/catalogue" onClick={() => setMenuOpen(false)}>Catalogue</a>
         <a href={`${prefix}#about`} onClick={() => setMenuOpen(false)}>Our story</a>
         <a href={`${prefix}#services`} onClick={() => setMenuOpen(false)}>For the trade</a>
+        {/* The header CTA is hidden below 800px, so the menu carries contact there. */}
+        <a className="nav-contact" href="/contact" onClick={() => setMenuOpen(false)}>Contact us</a>
       </nav>
-      <a className="header-cta" href="https://wa.me/12018151040?text=Hello%2C%20I%27d%20like%20to%20ask%20about%20today%27s%20flower%20availability." target="_blank" rel="noreferrer">Today&apos;s availability</a>
+      <a className="header-cta" href="/contact">Contact us</a>
     </header>
   );
 }

@@ -17,9 +17,10 @@ export const groups = [
 // live in their own section rather than the filterable grid.
 export const services = ["Dutch Flowers", "Wedding Flowers"];
 
-// Photography we have so far, keyed by item name. Items without an entry render
-// a flat tile instead. To add one: drop the original in public/media, run
-// `npm run media` to convert it to WebP, then add a line here.
+// Photography keyed by item name. Every item is covered right now; anything
+// added to `groups` without an entry here falls back to a flat tile. To add
+// one: drop the original in public/media, run `npm run media` to convert it to
+// WebP, then add a line here.
 const images: Record<string, string> = {
   "Premium Rose": "/media/premium-rose.webp",
   "Spray Rose": "/media/spray-rose.webp",
@@ -46,6 +47,18 @@ const images: Record<string, string> = {
   "Lisianthus": "/media/lisianthus.webp",
   "Chrysanthemum": "/media/chrysanthemum.webp",
   "Daisy": "/media/daisies.webp",
+  "Gerbera": "/media/gerbera.webp",
+  "Snapdragon": "/media/snapdragon.webp",
+  "Molucella": "/media/molucella.webp",
+  "Lepidium": "/media/lepidium.webp",
+  "Baby's Breath": "/media/babys-breath.webp",
+  "Solidago": "/media/solidago.webp",
+  "Statice": "/media/statice.webp",
+  "Wax Flower": "/media/wax-flower.webp",
+  "Queen of Lace": "/media/queen-of-lace.webp",
+  "Eucalyptus": "/media/eucalyptus.webp",
+  "Israeli Ruscus": "/media/israeli-ruscus.webp",
+  "Bird of Paradise": "/media/bird-of-paradise.webp",
 };
 
 export const flowers = groups.flatMap((group) => group.items.map((name) => ({ name, group: group.label, groupId: group.id, image: images[name] })));
