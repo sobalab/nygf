@@ -30,8 +30,11 @@ const TEARDOWN_STILL = 1450;
 const KEY = "nygf-splash";
 
 // Read by the inline script in the document head, which is what actually keeps
-// the splash from replaying — every link here is a full page load.
-export const splashScript = `try{if(sessionStorage.getItem('${KEY}'))document.documentElement.dataset.splash='off';else sessionStorage.setItem('${KEY}','1')}catch(e){}`;
+// the splash from replaying — every link here is a full page load. A URL that
+// carries a #section sits it out as well: the overlay holds the scroll for its
+// run, so the browser's landing on that section would be swallowed, and someone
+// who asked for one part of the page hasn't asked for the title card.
+export const splashScript = `try{if(location.hash||sessionStorage.getItem('${KEY}'))document.documentElement.dataset.splash='off';else sessionStorage.setItem('${KEY}','1')}catch(e){}`;
 
 const timing = (fall: number, open: number) =>
   ({ "--fall": `${fall}ms`, "--delay": `${open}ms` }) as CSSProperties;

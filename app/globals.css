@@ -22,6 +22,13 @@ img { display:block; width:100%; }
    section beneath starts at the top of the page and scrolls under it. */
 .site-header { height:74px; display:flex; align-items:center; justify-content:space-between; padding:0 26px; background:var(--paper); position:sticky; top:14px; z-index:20; margin:14px 14px -88px; border-radius:8px; box-shadow:0 2px 14px rgba(23,40,46,.13), 0 0 0 1px rgba(23,40,46,.07); }
 section[id] { scroll-margin-top:102px; }
+/* Our Story is the exception: it is a scroll track with a stage that pins to the
+   very top of it, so the header's worth of offset would drop a reader in just
+   short of the pin — the scene sits a header lower than it is about to, then
+   jumps up the moment they scroll. Landing flush engages the pin on arrival,
+   and the stage centres its own content well clear of the bar. Specific enough
+   to outrank the narrow-screen section[id] rule further down. */
+section[id].story { scroll-margin-top:0; }
 /* One mark, two forms: the NYGF monogram carries the header, and the name it
    stands for is spelled out in full in the footer and on the splash. All three
    are set in Baskervville SC, whose drawn small caps hold their weight against
@@ -251,7 +258,7 @@ section[id] { scroll-margin-top:102px; }
    the pinned viewport on wide monitors. */
 .story-panel { display:grid; grid-template-columns:auto minmax(0,1fr); align-items:center; gap:9vw; }
 .story-panel + .story-panel { margin-top:110px; }
-.story-image img { height:min(60svh,580px); width:auto; aspect-ratio:3/4; object-fit:cover; filter:saturate(.9); }
+.story-image img { height:min(60svh,580px); width:auto; aspect-ratio:3/4; object-fit:cover; filter:saturate(.9); border-radius:var(--tile-radius); }
 /* The display face, a step down in size from the section title above it — the
    two scenes speak in one voice, and it is the same voice that names the
    section rather than a sans answering it. */
@@ -260,8 +267,15 @@ section[id] { scroll-margin-top:102px; }
    band and cost contrast the mix keeps (5:1 on this blue). */
 .story-copy>p { max-width:540px; margin:0; color:color-mix(in srgb, var(--paper) 88%, var(--band-story)); }
 
-.story-armed { height:200svh; padding:0; }
-.story-armed .story-stage { position:sticky; top:0; height:100svh; display:grid; grid-template-rows:auto auto; align-content:center; padding:0 6vw; }
+/* Doubled up on .story so the narrow-screen padding further down, which is a
+   later rule of equal weight, can't put the padding back — it would push the
+   stage down inside its own track and the pin would engage that much late. */
+.story.story-armed { height:200svh; padding:0; }
+/* The stage pins to the very top of the window and the header floats over it,
+   so the box the scene centres itself in starts below the bar rather than
+   behind it — otherwise the title sits within a few pixels of the header for
+   the whole of the pin, which is where a reader arriving on #story now lands. */
+.story-armed .story-stage { position:sticky; top:0; height:100svh; display:grid; grid-template-rows:auto auto; align-content:center; padding:88px 6vw 0; }
 /* Both panels in the one cell, so the pair cross-fades in place. */
 .story-armed .story-panel { grid-row:2; grid-column:1; margin:0; will-change:opacity,transform; }
 /* Out, then in — not a cross-fade. Both panels now occupy the same cell in the
@@ -279,6 +293,21 @@ section[id] { scroll-margin-top:102px; }
 .story-armed .story-setup .story-image { opacity:clamp(0,calc((var(--p,0) - .54)/.08),1); }
 .story-armed .story-setup h3 { opacity:clamp(0,calc((var(--p,0) - .58)/.08),1); }
 .story-armed .story-setup p { opacity:clamp(0,calc((var(--p,0) - .62)/.08),1); }
+/* The first scene arrives rather than simply being there. Held at nothing until
+   the stage is reached, then title, photo, heading and copy rise in one behind
+   another. `backwards` is what makes this sit alongside the --p rules above:
+   each element holds the from-state through its delay, then hands opacity back
+   to its own expression the instant the run ends — which is still 1 this early
+   in the track, and is what fades the scene out again further down it. */
+.story-armed .story-stage.reveal-armed:not(.reveal-in) .story-title,
+.story-armed .story-stage.reveal-armed:not(.reveal-in) .intro-setup .story-image,
+.story-armed .story-stage.reveal-armed:not(.reveal-in) .intro-setup h3,
+.story-armed .story-stage.reveal-armed:not(.reveal-in) .intro-setup p { opacity:0; }
+.story-armed .reveal-in .story-title { animation:story-in .8s var(--ease-out) backwards; }
+.story-armed .reveal-in .intro-setup .story-image { animation:story-in .8s var(--ease-out) .16s backwards; }
+.story-armed .reveal-in .intro-setup h3 { animation:story-in .8s var(--ease-out) .32s backwards; }
+.story-armed .reveal-in .intro-setup p { animation:story-in .8s var(--ease-out) .48s backwards; }
+@keyframes story-in { from { opacity:0; transform:translateY(30px); } to { opacity:1; transform:none; } }
 /* The palest band, and the only one that takes dark type: --paper on this blue
    is 1.6:1. Ink reads at 7.3:1, so the whole band inverts — including the
    button, which was paper-on-rust and would now sink into its own ground. */
@@ -607,5 +636,12 @@ html[data-splash="off"] .splash { display:none; }
   .service-list.reveal-in article:nth-child(2),
   .service-list.reveal-in article:nth-child(3) { animation-delay:0s; }
   @keyframes card-rise { from { opacity:0; } to { opacity:1; transform:none; } }
+  /* The story stage is unarmed under this setting, so its scene never hides
+     itself and never needs staging in — but the reveal mark is still added by
+     script, so the run is called off explicitly. */
+  .reveal-in .story-title,
+  .reveal-in .intro-setup .story-image,
+  .reveal-in .intro-setup h3,
+  .reveal-in .intro-setup p { animation:none; }
 }
 
