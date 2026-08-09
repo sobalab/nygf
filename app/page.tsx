@@ -26,11 +26,17 @@ export default function Home() {
           story. Each keeps its own copy, photo and layout; the section pins and
           turns from one to the other as you scroll through it. */}
       <StoryScroll>
+        {/* Constant across both panels — it names the section, so it holds
+            while the scenes underneath it turn over. */}
+        <h2 className="story-title">Our Story</h2>
+
         <div className="story-panel intro-setup">
           <div className="intro-copy">
-            <h2>Direct From the Farm.<br />Closer to Your Needs.</h2>
+            {/* A step below the section title, and in the roman rather than the
+                small-caps cut, so the two headings don't read as one voice. */}
+            <h3>Direct From the Farm.<br />Closer to Your Needs.</h3>
             <div className="intro-detail">
-              <p>We clear our own shipments, with no broker between grower and shop. Our flowers arrive from Ecuador, Colombia, Costa Rica, Mexico, Holland, and Canada.</p>
+              <p>For more than three decades, New York Garden Flower Wholesale has imported cut flowers directly and served the people who make New York&apos;s spaces and celebrations bloom, from florists and wedding planners to restaurants, hotels, and neighborhood walk-ins.</p>
             </div>
           </div>
           <div className="statement-image-wrap">
@@ -42,8 +48,7 @@ export default function Home() {
           <div className="story-image"><img src="/media/story.webp" alt="A wrapped bouquet of pink roses, gerberas and eucalyptus on a dark wood bench" loading="lazy" /></div>
           <div className="story-copy">
             <blockquote>“Flowers are perishable.<br />Trust is what lasts.”</blockquote>
-            <p>For more than three decades, New York Garden Flower Wholesale has imported cut flowers directly and served the people who make New York&apos;s spaces and celebrations bloom, from florists and wedding planners to restaurants, hotels, and neighborhood walk-ins.</p>
-            <p className="signature">— New York Garden Flower Wholesale, Inc.</p>
+            <p>We clear our own shipments, with no broker between grower and shop. Our flowers arrive from Ecuador, Colombia, Costa Rica, Mexico, Holland, and Canada.</p>
           </div>
         </div>
       </StoryScroll>

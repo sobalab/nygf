@@ -24,16 +24,22 @@ type Flower = { name: string; group: string; image?: string };
 // same anchoring side at both sizes; left and right on one card would fight.
 type Spot = { t: string; w: string; ratio: string; depth: number; l?: string; r?: string; mt?: string; ml?: string; mr?: string };
 
+// Left and right offsets are held in step — 2/3 across the top, 1/1 through the
+// middle, 7/9 along the bottom — so neither flank sits nearer its gutter than
+// the other, and the widest card in each row is answered by a comparable one
+// opposite instead of all the weight falling down one side.
 const PLACEMENT: Spot[] = [
-  { t: "11%", l: "3%", w: "clamp(120px,15vw,206px)", ratio: "3/4", depth: 0.6, mt: "17%", ml: "12%" },
-  { t: "11%", l: "24%", w: "clamp(96px,11.5vw,162px)", ratio: "1/1", depth: 1.3 },
-  { t: "8%", l: "49%", w: "clamp(136px,17vw,244px)", ratio: "5/4", depth: 2.1, mt: "3%", ml: "5%" },
-  { t: "13%", r: "4%", w: "clamp(114px,14vw,196px)", ratio: "4/5", depth: 1, mt: "8%", mr: "6%" },
-  { t: "46%", l: "2%", w: "clamp(124px,15vw,216px)", ratio: "1/1", depth: 1.5, mt: "81%", ml: "22%" },
-  { t: "44%", r: "2%", w: "clamp(102px,12vw,172px)", ratio: "3/4", depth: 0.7 },
-  { t: "74%", l: "8%", w: "clamp(146px,18vw,268px)", ratio: "4/3", depth: 3, mt: "67%", ml: "4%" },
-  { t: "70%", l: "43%", w: "clamp(112px,13.5vw,176px)", ratio: "3/4", depth: 1.1 },
-  { t: "72%", r: "10%", w: "clamp(128px,16vw,226px)", ratio: "1/1", depth: 2.2, mt: "65%", mr: "5%" },
+  { t: "10%", l: "2%", w: "clamp(120px,15vw,206px)", ratio: "3/4", depth: 0.6, mt: "7%", ml: "auto", mr: "4%" },
+  { t: "10%", l: "24%", w: "clamp(96px,11.5vw,162px)", ratio: "1/1", depth: 1.3 },
+  { t: "7%", l: "49%", w: "clamp(136px,17vw,244px)", ratio: "5/4", depth: 2.1, mt: "5%", ml: "3%" },
+  { t: "12%", r: "3%", w: "clamp(114px,15vw,216px)", ratio: "4/5", depth: 1, mt: "20%", ml: "6%", mr: "auto" },
+  { t: "45%", l: "1%", w: "clamp(124px,15vw,216px)", ratio: "1/1", depth: 1.5, mt: "83%", ml: "14%" },
+  // Square, not portrait: three tall cards down the right flank left no room
+  // between them once the field took its gutters.
+  { t: "47%", r: "1%", w: "clamp(102px,11.5vw,180px)", ratio: "1/1", depth: 0.7 },
+  { t: "72%", l: "7%", w: "clamp(146px,18vw,254px)", ratio: "4/3", depth: 3, mt: "68%", ml: "4%" },
+  { t: "65%", l: "44%", w: "clamp(112px,13.5vw,176px)", ratio: "3/4", depth: 1.1 },
+  { t: "68%", r: "9%", w: "clamp(128px,15vw,230px)", ratio: "1/1", depth: 2.2, mt: "66%", mr: "5%" },
 ];
 
 export function FlowerField({ flowers }: { flowers: Flower[] }) {

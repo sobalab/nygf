@@ -10,8 +10,8 @@
    from near-black to a pale wash; each one is named for the section it belongs
    to rather than its hue, because the section is what fixes it. --rust is no
    longer a band — it survives only as the form-error red. --field and the
-   rgba()s below are tints, not new hues: --ink is 23 40 46, --paper 238 229 220. */
-:root { --paper:#eee5dc; --ink:#17282e; --band-flowers:#11292f; --band-story:#2a5662; --band-trade:#387f93; --band-contact:#76a4b0; --sage:#999a80; --sage-pale:#cacbb5; --rust:#a7593a; --mist:#b7c2c1; --line:rgba(23,40,46,.22); --field:#f6f1ea; --ease:cubic-bezier(.22,.7,.3,1); --ease-out:cubic-bezier(.16,1,.3,1); --serif:"Baskervville",Georgia,serif; --display:"Baskervville SC",Georgia,serif; --sans:"Uncut Sans",Helvetica,Arial,sans-serif; --btn-radius:6px; }
+   rgba()s below are tints, not new hues: --ink is 23 40 46, --paper 236 235 235. */
+:root { --paper:#ecebeb; --ink:#17282e; --band-flowers:#11292f; --band-story:#2a5662; --band-trade:#387f93; --band-contact:#76a4b0; --sage:#999a80; --sage-pale:#cacbb5; --rust:#a7593a; --mist:#b7c2c1; --line:rgba(23,40,46,.22); --field:#f6f1ea; --ease:cubic-bezier(.22,.7,.3,1); --ease-out:cubic-bezier(.16,1,.3,1); --serif:"Baskervville",Georgia,serif; --display:"Baskervville SC",Georgia,serif; --sans:"Uncut Sans",Helvetica,Arial,sans-serif; --btn-radius:6px; }
 * { box-sizing:border-box; }
 html { scroll-behavior:smooth; }
 body { margin:0; background:var(--paper); color:var(--ink); font-family:var(--sans); }
@@ -62,7 +62,7 @@ section[id] { scroll-margin-top:102px; }
 .section-pad { padding:130px 6vw; }
 /* A shade smaller than the roman was: small caps run about a sixth wider at the
    same size, and these headings carry authored line breaks that have to hold. */
-.story h2,.catalogue h2,.trade h2,.offerings h2,.page-head h1 { font:400 clamp(30px,3.6vw,54px)/1.12 var(--display); letter-spacing:.015em; margin:0; }
+.story-title,.catalogue h2,.trade h2,.offerings h2,.page-head h1 { font:400 clamp(30px,3.6vw,54px)/1.12 var(--display); letter-spacing:.015em; margin:0; }
 .page-head { background:var(--sage); padding-bottom:0; display:grid; grid-template-columns:1.4fr .6fr; gap:8vw; align-items:end; }
 .page-head + .catalogue,.page-head + .enquiry { padding-top:64px; }
 .offerings h2 { margin-bottom:46px; }
@@ -87,7 +87,10 @@ section[id] { scroll-margin-top:102px; }
 .flower-field { background:var(--band-flowers); color:var(--sage-pale); min-height:max(100svh,820px); position:relative; overflow:hidden; display:flex; flex-direction:column; justify-content:center; align-items:center; }
 /* Scoped to the band: the enquiry form's fieldsets are .field too, and a bare
    rule here reaches them and lifts every one out of flow. */
-.flower-field .field { position:absolute; inset:0; }
+/* Inset, not flush: every card is placed as a percentage of this box, so a
+   gutter here is one no card can cross however wide it grows or narrow the
+   window gets. */
+.flower-field .field { position:absolute; inset:clamp(20px,4vh,56px) clamp(16px,3.2vw,48px); }
 /* left OR right, never both — see PLACEMENT. */
 .field-item { position:absolute; top:var(--t); left:var(--l,auto); right:var(--r,auto); width:var(--w); transform:translate3d(calc(var(--px,0)*var(--d)*-16px),calc(var(--py,0)*var(--d)*-12px),0); transition:transform .6s var(--ease-out); }
 .field-item a { display:block; transition:transform .5s var(--ease-out); }
@@ -104,9 +107,9 @@ section[id] { scroll-margin-top:102px; }
    at opposite phases. */
 @keyframes field-float {
   0%,100% { transform:translate3d(0,0,0) }
-  25% { transform:translate3d(calc((1 + var(--d))*.9px),calc((1 + var(--d))*-1.8px),0) }
-  50% { transform:translate3d(calc((1 + var(--d))*1.5px),0,0) }
-  75% { transform:translate3d(calc((1 + var(--d))*.9px),calc((1 + var(--d))*1.8px),0) }
+  25% { transform:translate3d(calc((1 + var(--d))*1.5px),calc((1 + var(--d))*-3.6px),0) }
+  50% { transform:translate3d(calc((1 + var(--d))*2.4px),0,0) }
+  75% { transform:translate3d(calc((1 + var(--d))*1.5px),calc((1 + var(--d))*3.6px),0) }
 }
 /* Proportional, not just capped: a fixed 560px would eat the side margins on a
    1000px window and leave the edge cards nowhere to sit. */
@@ -148,24 +151,26 @@ section[id] { scroll-margin-top:102px; }
    the panels stack in one grid cell and cross-fade. Script writes only --p, the
    progress through the track; every fade and drift below is calc() off it. */
 .story { background:var(--band-story); color:var(--paper); padding:130px 6vw; }
+.story-title { text-align:center; margin:0 0 clamp(38px,5vh,64px); }
 .story-panel { display:grid; align-items:center; gap:10vw; }
 .story-panel + .story-panel { margin-top:110px; }
 .intro-setup { grid-template-columns:1fr 1fr; }
 .story-setup { grid-template-columns:.9fr 1.1fr; }
-.intro-detail { max-width:345px; margin-top:min(88px,9svh); }
+/* Matches the quote panel's column, so the two scenes hold the same measure
+   as they turn over. */
+.intro-detail { max-width:540px; }
 .intro-detail p { font:400 16px/1.6 var(--sans); }
 .statement-image { width:100%; aspect-ratio:4/3; object-fit:cover; filter:saturate(.8); max-height:min(58svh,520px); }
 .story-image img { height:min(56svh,520px); object-fit:cover; filter:grayscale(.15) saturate(.7); }
 /* Roman, not italic: we only ship Baskervville's upright cut, and a synthesised
    slant on a Baskerville reads as a mistake. */
-.story-copy blockquote { font:400 36px/1.3 var(--serif); margin:0 0 55px; }
+.story-copy blockquote,.intro-copy h3 { font:400 36px/1.3 var(--serif); margin:0 0 55px; }
 .story-copy>p { max-width:540px; margin:0 0 20px; }
-.story-copy .signature { margin-top:35px; font-size:14px; font-style:italic; }
 
 .story-armed { height:200svh; padding:0; }
-.story-armed .story-stage { position:sticky; top:0; height:100svh; display:grid; align-content:center; padding:0 6vw; }
+.story-armed .story-stage { position:sticky; top:0; height:100svh; display:grid; grid-template-rows:auto auto; align-content:center; padding:0 6vw; }
 /* Both panels in the one cell, so the pair cross-fades in place. */
-.story-armed .story-panel { grid-area:1/1; margin:0; will-change:opacity,transform; }
+.story-armed .story-panel { grid-row:2; grid-column:1; margin:0; will-change:opacity,transform; }
 /* Out, then in — not a cross-fade. The two panels occupy the same cell with
    their columns mirrored, so overlapping them mid-turn lays the first panel's
    copy over the second's photo. Fading the first away by .44 and holding the
@@ -352,7 +357,7 @@ a:focus-visible,button:focus-visible { outline:2px solid var(--ink); outline-off
      floor is a little over a screen so three fit above the copy and three below
      without either row crowding it — the note runs to four lines on the
      narrowest phones, and the bands have to survive that. */
-  .flower-field { min-height:max(100svh,900px); }
+  .flower-field { min-height:max(100svh,1000px); }
   .field-item { top:var(--mt,var(--t)); left:var(--ml,var(--l,auto)); right:var(--mr,var(--r,auto)); }
   .field-center { max-width:88%; }
   .field-wide { display:none; }
@@ -369,7 +374,7 @@ a:focus-visible,button:focus-visible { outline:2px solid var(--ink); outline-off
   .story { padding:90px 6vw; }
   .story-image img { height:64vw; max-height:340px; }
   .statement-image { max-height:340px; }
-  .story-copy blockquote { font-size:29px; }
+  .story-copy blockquote,.intro-copy h3 { font-size:29px; }
   .enquiry { grid-template-columns:1fr; gap:70px; }
   .field-row { grid-template-columns:1fr; gap:34px; }
   .enquiry-aside { position:static; }
