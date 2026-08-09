@@ -2,11 +2,15 @@ import { previewFlowers } from "./catalogue-data";
 import { SiteFooter, SiteHeader } from "./chrome";
 import { FlowerField } from "./flower-field";
 import { Reveal } from "./reveal";
+import { SectionSettle } from "./section-settle";
 import { StoryScroll } from "./story-scroll";
 
 export default function Home() {
   return (
     <main className="home">
+      {/* Finishes the last of a scroll onto whichever band it was heading for,
+          so each one reads as a stop. Renders nothing. */}
+      <SectionSettle />
       <SiteHeader home />
 
       <section className="hero" id="top">
