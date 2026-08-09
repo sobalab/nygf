@@ -11,7 +11,7 @@
    to rather than its hue, because the section is what fixes it. --rust is no
    longer a band — it survives only as the form-error red. --field and the
    rgba()s below are tints, not new hues: --ink is 23 40 46, --paper 236 235 235. */
-:root { --paper:#ecebeb; --ink:#17282e; --band-flowers:#11292f; --band-story:#2a5662; --band-trade:#387f93; --band-contact:#76a4b0; --sage:#999a80; --sage-pale:#cacbb5; --rust:#a7593a; --mist:#b7c2c1; --line:rgba(23,40,46,.22); --field:#f6f1ea; --ease:cubic-bezier(.22,.7,.3,1); --ease-out:cubic-bezier(.16,1,.3,1); --serif:"Baskervville",Georgia,serif; --display:"Baskervville SC",Georgia,serif; --sans:"Uncut Sans",Helvetica,Arial,sans-serif; --btn-radius:6px; }
+:root { --paper:#ecebeb; --ink:#17282e; --band-flowers:#11292f; --band-story:#2a5662; --band-trade:#387f93; --band-contact:#99bcc5; --sage:#cacbb5; --rust:#a7593a; --mist:#b7c2c1; --line:rgba(23,40,46,.22); --field:#f6f1ea; --ease:cubic-bezier(.22,.7,.3,1); --ease-out:cubic-bezier(.16,1,.3,1); --serif:"Baskervville",Georgia,serif; --display:"Baskervville SC",Georgia,serif; --sans:"Uncut Sans",Helvetica,Arial,sans-serif; --btn-radius:6px; --tile-radius:8px; --card-radius:12px; --content-max:1280px; }
 * { box-sizing:border-box; }
 html { scroll-behavior:smooth; }
 body { margin:0; background:var(--paper); color:var(--ink); font-family:var(--sans); }
@@ -20,7 +20,7 @@ button { color:inherit; font:inherit; }
 img { display:block; width:100%; }
 /* Floating bar: the negative bottom margin cancels its own flow height so the
    section beneath starts at the top of the page and scrolls under it. */
-.site-header { height:74px; display:grid; grid-template-columns:1fr auto 1fr; align-items:center; padding:0 26px; background:var(--paper); position:sticky; top:14px; z-index:20; margin:14px 14px -88px; border-radius:8px; box-shadow:0 2px 14px rgba(23,40,46,.13), 0 0 0 1px rgba(23,40,46,.07); }
+.site-header { height:74px; display:flex; align-items:center; justify-content:space-between; padding:0 26px; background:var(--paper); position:sticky; top:14px; z-index:20; margin:14px 14px -88px; border-radius:8px; box-shadow:0 2px 14px rgba(23,40,46,.13), 0 0 0 1px rgba(23,40,46,.07); }
 section[id] { scroll-margin-top:102px; }
 /* One mark, two forms: the NYGF monogram carries the header, and the name it
    stands for is spelled out in full in the footer and on the splash. All three
@@ -28,12 +28,9 @@ section[id] { scroll-margin-top:102px; }
    the caps beside them in a way a synthesised set never does. */
 .wordmark { font-family:var(--display); font-size:26px; line-height:1; letter-spacing:.02em; }
 .wordmark-full { font-size:21px; letter-spacing:.045em; }
-.site-header .wordmark { grid-area:1/2; justify-self:center; }
-.site-header .nav { grid-area:1/1; justify-self:start; }
-.site-header .header-cta { grid-area:1/3; }
 .nav { display:flex; gap:38px; font-size:12px; text-transform:uppercase; letter-spacing:1.4px; }
 .nav-contact { display:none; }
-.header-cta { justify-self:end; display:flex; align-items:center; justify-content:center; background:var(--ink); color:var(--paper); padding:12px 20px; border-radius:var(--btn-radius); text-transform:uppercase; font-size:11px; letter-spacing:1.2px; }
+.header-cta { display:flex; align-items:center; justify-content:center; background:var(--ink); color:var(--paper); padding:12px 20px; border-radius:var(--btn-radius); text-transform:uppercase; font-size:11px; letter-spacing:1.2px; }
 .menu-toggle { display:none; border:0; background:none; padding:0; width:44px; height:44px; align-items:center; justify-content:flex-end; cursor:pointer; }
 .menu-icon { display:block; position:relative; width:22px; height:13px; }
 .menu-icon span { position:absolute; left:0; right:0; height:1.5px; background:var(--ink); transition:transform .25s, top .25s, opacity .15s; }
@@ -47,9 +44,7 @@ section[id] { scroll-margin-top:102px; }
 .hero-image { position:absolute; inset:0; height:100%; object-fit:cover; object-position:center 46%; }
 .hero-shade { position:absolute; inset:0; background:rgba(23,37,43,.42); }
 .hero-copy { position:relative; z-index:1; padding:15vh 6vw 7vh; min-height:100svh; display:flex; flex-direction:column; justify-content:center; align-items:center; text-align:center; gap:38px; }
-.eyebrow { font-size:11px; line-height:1.5; letter-spacing:2px; text-transform:uppercase; }
-.nav,.header-cta,.menu-toggle,.eyebrow,.hero-button,.text-link,.filter-row button,.solid-button,.contact-button { font-weight:500; }
-.eyebrow.light { color:rgba(255,255,255,.78); }
+.nav,.header-cta,.menu-toggle,.hero-button,.text-link,.filter-row button,.solid-button,.contact-button { font-weight:500; }
 /* Section headings run in the small-caps cut, the same face as the wordmark, so
    the page is headed throughout by the mark's own voice. Small caps are drawn
    on a wider set than lowercase and want opening up rather than closing: the
@@ -57,21 +52,63 @@ section[id] { scroll-margin-top:102px; }
 .hero h1,.contact h2 { font:400 clamp(44px,6.2vw,96px)/1.04 var(--display); letter-spacing:.015em; margin:0; }
 .hero h1 em,.contact h2 em,.trade h2 em { font-weight:400; }
 .hero-bottom { display:flex; flex-direction:column; align-items:center; gap:44px; }
-.hero-bottom>p { max-width:520px; font:300 18px/1.55 var(--sans); margin:0; }
+.hero-bottom>p { max-width:520px; margin:0; }
 .hero-button { display:flex; align-items:center; justify-content:center; background:var(--paper); color:var(--ink); padding:17px 30px; border-radius:var(--btn-radius); font-size:12px; letter-spacing:1.2px; text-transform:uppercase; }
 .section-pad { padding:130px 6vw; }
 /* A shade smaller than the roman was: small caps run about a sixth wider at the
    same size, and these headings carry authored line breaks that have to hold. */
 .story-title,.catalogue h2,.trade h2,.offerings h2,.page-head h1 { font:400 clamp(30px,3.6vw,54px)/1.12 var(--display); letter-spacing:.015em; margin:0; }
-.page-head { background:var(--sage); padding-bottom:0; display:grid; grid-template-columns:1.4fr .6fr; gap:8vw; align-items:end; }
+/* Title, then the note beneath it, at every width — the note used to sit in a
+   second column off to the right, which left the title stranded against a lot
+   of empty band. Compounded with .section-pad so the zeroed bottom padding
+   isn't undone by the mobile .section-pad shorthand further down. */
+.page-head.section-pad { background:var(--sage); padding-bottom:0; display:flex; flex-direction:column; align-items:flex-start; gap:28px; }
+/* Larger than the shared heading floor, which left this one at 30px across the
+   whole phone range. Raising the floor rather than the vw term keeps it
+   monotonic — no jump at the breakpoint — and desktop lands where it did. */
+.page-head h1 { font-size:clamp(38px,3.6vw,54px); }
+.page-head .section-note { max-width:520px; margin:0; }
+/* The head that leads into the catalogue takes the catalogue's ground, so the
+   two read as one band; the contact page's head keeps the sage. */
+.page-head:has(+ .catalogue) { background:var(--band-flowers); color:var(--sage); }
 .page-head + .catalogue,.page-head + .enquiry { padding-top:64px; }
+/* The head's height lands on a fractional pixel (its line boxes decide it), and
+   two bands meeting there each blend their edge with the paper behind, drawing
+   a pale hairline across the seam. They're the same colour here, so the band
+   below can simply cover it. */
+.page-head:has(+ .catalogue) + .catalogue { margin-top:-1px; }
+/* White rather than --paper for the same reason the home services band uses it:
+   the warm off-white only reaches 3.7:1 on this blue. The cards below keep
+   their pale ground, so their own type stays ink. */
+.offerings { background:var(--band-trade); color:#fff; }
 .offerings h2 { margin-bottom:46px; }
 .offerings-list { display:grid; grid-template-columns:repeat(2,1fr); gap:18px; }
-.offering { background:var(--mist); padding:44px 40px 36px; min-height:240px; display:flex; flex-direction:column; justify-content:space-between; align-items:flex-start; gap:28px; }
+.offering { background:var(--mist); color:var(--ink); padding:44px 40px 36px; min-height:240px; display:flex; flex-direction:column; justify-content:space-between; align-items:flex-start; gap:28px; }
 .offering h3 { font:400 30px/1.15 var(--serif); margin:0; }
-.section-note,.story-copy>p { font:400 16px/1.6 var(--sans); }
+/* Body copy, Uncut Sans — two sizes, and 16px is the floor everywhere, mobile
+   included. Anything that reads as prose belongs to one of these two rules
+   rather than carrying its own size; sizes set locally drift apart over time,
+   which is how the 12/13/14/15px strays below got here in the first place.
+     lead  18/1.55 weight 400 — the prose the page stages on its own: the
+           hero lede, the story panels, the service cards and the line under
+           the closing question. One weight, no exceptions; the hero ran this
+           at 300 and read thin beside the rest
+     base  16/1.6  weight 400 — every other run of prose on the site
+   The uppercase, letterspaced labels (nav, buttons, form labels, the
+   detail headings in the footer) are a separate tier at 11-12px. They are
+   pointers to content, not content, and the floor doesn't apply to them. */
+.hero-bottom>p,.story-copy>p,.service-list p,.contact p { font:400 18px/1.55 var(--sans); }
+.section-note,.enquiry-sent>p,
+.enquiry-details p,.footer-details p,.field-hint,.field-error,.flower-meta p,
+.footer-base { font:400 16px/1.6 var(--sans); }
 .text-link { position:relative; display:inline-flex; gap:22px; border-bottom:1px solid var(--line); padding:18px 0 8px; text-transform:uppercase; letter-spacing:1.3px; font-size:12px; }
-.catalogue { background:var(--sage); }
+.catalogue { background:var(--band-flowers); color:var(--sage); }
+/* Past roughly 1440px the 6vw gutters stop holding the page in, and the cards
+   stretch wider than a stem photo wants to be. The gutter grows to whatever it
+   takes to keep the content at --content-max, so the bands stay full-bleed
+   while the heading, filters and grid all stop on the same measure. The home
+   band is exempt — its stems are meant to run the full width. */
+.page-head,.catalogue:not(.flower-field),.offerings { padding-inline:max(6vw,calc((100% - var(--content-max)) / 2)); }
 /* Home catalogue: instead of a grid, the stems are scattered across the whole
    band and drift against the pointer, with the copy holding the middle. Each
    card carries its own position, size, aspect and depth as custom properties
@@ -84,17 +121,29 @@ section[id] { scroll-margin-top:102px; }
 /* The floor keeps the geometry honest on a short window: the cards are sized in
    px and placed in per cent, so on a laptop that isn't tall enough the bottom
    row would run past the band and get cut by the overflow above. */
-.flower-field { background:var(--band-flowers); color:var(--sage-pale); min-height:max(100svh,820px); position:relative; overflow:hidden; display:flex; flex-direction:column; justify-content:center; align-items:center; }
+.flower-field { --band:calc(max(100svh,820px) - 2*clamp(20px,4vh,56px)); background:var(--band-flowers); color:var(--sage); min-height:max(100svh,820px); position:relative; overflow:hidden; display:flex; flex-direction:column; justify-content:center; align-items:center; }
 /* Scoped to the band: the enquiry form's fieldsets are .field too, and a bare
    rule here reaches them and lifts every one out of flow. */
 /* Inset, not flush: every card is placed as a percentage of this box, so a
    gutter here is one no card can cross however wide it grows or narrow the
    window gets. */
 .flower-field .field { position:absolute; inset:clamp(20px,4vh,56px) clamp(16px,3.2vw,48px); }
-/* left OR right, never both — see PLACEMENT. */
-.field-item { position:absolute; top:var(--t); left:var(--l,auto); right:var(--r,auto); width:var(--w); transform:translate3d(calc(var(--px,0)*var(--d)*-16px),calc(var(--py,0)*var(--d)*-12px),0); transition:transform .6s var(--ease-out); }
+/* left OR right, never both, and top OR bottom, never both — see PLACEMENT.
+   The copy sits on the band's centre line, so the cards that share its column
+   are anchored off that same line rather than off the top: whatever the window
+   height or the length the note wraps to, the clearance above the copy and the
+   clearance below it come out of the same number. --h is the card's own height,
+   which is what lets those anchors cap themselves against the far edge.
+
+   A card is sized off the viewport's width, but what it has to fit inside is
+   the band's height — three cards deep down each flank, and on a laptop that
+   is wide and short the two don't agree. So each card also carries --hcap, its
+   largest share of the band, and takes whichever of the two comes out smaller:
+   the widths hold their full size on anything tall and give way on the windows
+   where the flanks would otherwise run into each other. */
+.field-item { --cw:min(var(--w),calc(var(--band) * var(--hcap) / var(--hr))); --h:calc(var(--cw) * var(--hr)); position:absolute; top:var(--t,auto); bottom:var(--bt,auto); left:var(--l,auto); right:var(--r,auto); width:var(--cw); transform:translate3d(calc(var(--px,0)*var(--d)*-16px),calc(var(--py,0)*var(--d)*-12px),0); transition:transform .6s var(--ease-out); }
 .field-item a { display:block; transition:transform .5s var(--ease-out); }
-.field-item img { aspect-ratio:var(--ar); object-fit:cover; filter:saturate(.78); }
+.field-item img { aspect-ratio:var(--ar); object-fit:cover; filter:saturate(.78); border-radius:var(--tile-radius); }
 /* Armed from script so the cards are simply present without JavaScript. */
 .field-armed .field-item a { opacity:0; }
 .field-in .field-item a { animation:field-arrive .7s var(--ease) calc(var(--i)*90ms) forwards; }
@@ -117,32 +166,62 @@ section[id] { scroll-margin-top:102px; }
 .field-center .section-note { max-width:none; margin:22px auto 0; }
 /* The shared solid button is ink-on-paper, which disappears here — it takes the
    swap too. */
-.field-center .solid-button { background:var(--sage-pale); color:var(--ink); margin:34px auto 0; }
+/* On the dark bands the ink button would sink into the ground, so it takes the
+   sage and the type goes dark — the same swap on the home band and the
+   catalogue page. */
+.field-center .solid-button,.catalogue .solid-button { background:var(--sage); color:var(--ink); }
+.field-center .solid-button { margin:34px auto 0; }
 .section-heading { display:flex; justify-content:space-between; align-items:end; gap:6vw; margin-bottom:52px; }
 .section-note { max-width:360px; margin:0 0 5px; }
-.filter-row { margin:70px 0 38px; display:flex; flex-wrap:wrap; gap:14px 28px; padding:18px 0; }
+/* No top margin of its own: the 64px the catalogue band already puts above it
+   is the whole gap between the head's copy and the filters, which is what the
+   70px on top of that was overshooting. */
+.filter-row { margin:0 0 38px; display:flex; flex-wrap:wrap; gap:14px 28px; padding:18px 0; }
 .filter-row button { border:0; background:none; padding:0 0 5px; font-size:12px; letter-spacing:1.4px; text-transform:uppercase; cursor:pointer; opacity:.9; }
 .filter-row button.active { opacity:1; }
-.flower-grid { display:grid; grid-template-columns:repeat(5,1fr); gap:42px 18px; }
-.flower-image-wrap { position:relative; overflow:hidden; background:var(--mist); aspect-ratio:3/4; }
-.flower-image-wrap img { aspect-ratio:3/4; object-fit:cover; filter:saturate(.76); transition:transform .9s var(--ease-out), filter .9s var(--ease-out); }
+.flower-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:42px 18px; }
+.flower-image-wrap { position:relative; overflow:hidden; background:var(--mist); aspect-ratio:3/4; border-radius:var(--tile-radius); }
+/* The wrap already clips, but Safari lets a transformed child bleed past a
+   rounded parent mid-animation, and the image scales on hover. */
+.flower-image-wrap img { aspect-ratio:3/4; object-fit:cover; filter:saturate(.76); border-radius:inherit; transition:transform .9s var(--ease-out), filter .9s var(--ease-out); }
 .flower-card { display:block; }
 .flower-card:hover img,.flower-card:focus-visible img { transform:scale(1.045); filter:saturate(.94); }
 .field-item a:hover { transform:scale(1.05); }
 .field-item a:active { transform:scale(1.01); transition-duration:.1s; }
 .flower-meta { padding-top:13px; margin-top:14px; }
-.flower-meta h3 { display:inline-block; font:400 17px/1.3 var(--serif); margin:0; }
-.flower-meta p { font:400 12px var(--sans); color:rgba(23,40,46,.9); margin:5px 0 0; }
+.flower-meta h3 { display:inline-block; font:400 21px/1.3 var(--serif); margin:0; }
+.flower-meta p { color:inherit; opacity:.72; margin:5px 0 0; }
 .solid-button { display:flex; align-items:center; justify-content:center; width:fit-content; background:var(--ink); color:var(--paper); padding:18px 34px; margin:70px auto 0; border-radius:var(--btn-radius); text-transform:uppercase; font-size:12px; letter-spacing:1.2px; }
 /* White, not --paper: the warm off-white only reaches 3.7:1 on this blue, which
-   the 15px service copy can't carry. White clears AA at 4.6:1, and the hero
+   the service copy can't carry at body size. White clears AA at 4.6:1, and the hero
    already sets its type in white, so the band isn't introducing a value. */
-.trade { display:grid; grid-template-columns:1fr 1fr; gap:8vw; background:var(--band-trade); color:#fff; }
-.service-list { padding-top:70px; }
-.service-list article { padding:32px 0 50px; }
-.service-list h3 { font:26px var(--serif); margin:0 0 15px; }
+.trade { background:var(--band-trade); color:#fff; text-align:center; }
+/* Centred over the row, at the size the story title carries — the two are the
+   only sections that head a full band on their own. */
+.trade-title h2 { font-size:clamp(40px,5vw,72px); }
+.service-list { display:grid; grid-template-columns:repeat(3,1fr); gap:32px; padding-top:clamp(72px,11vh,140px); max-width:var(--content-max); margin-inline:auto; }
+/* The cards are the band lifted, not a new colour: white at 15% over the blue,
+   so the section still reads as one ground with three plates on it. */
+.service-list article { background:rgba(255,255,255,.15); border-radius:var(--card-radius); padding:46px 34px 42px; display:flex; flex-direction:column; }
+/* --paper, where the copy below takes white: the heading is large enough to
+   clear AA on this blue at 3.7:1, and the warmer white sets it apart from the
+   copy without a second size doing the work. */
+.service-list h3 { font:400 clamp(24px,2.2vw,32px)/1.15 var(--display); letter-spacing:.015em; color:var(--paper); margin:0 0 44px; }
+/* Auto margins top and bottom, so a card with a shorter paragraph centres it
+   in the space left under the heading rather than hanging it off the floor —
+   the headings stay on one line across the row either way. */
 /* Full strength, not the old .78 — any alpha here drops it back under AA. */
-.service-list p { max-width:440px; font:400 15px/1.6 var(--sans); margin:0; }
+.service-list p { max-width:none; margin:auto 0; }
+/* The row arrives every time the band is reached: each card rises the last of
+   its own height and fades up, a tenth of a second behind the one to its left.
+   The delay is the only per-card value, so the order is simply the DOM order.
+   Dropping .reveal-in cancels the animation and the armed rule takes the cards
+   back to nothing, which is what re-arms the run. */
+.service-list.reveal-armed article { opacity:0; }
+.service-list.reveal-in article { animation:card-rise .75s var(--ease-out) forwards; }
+.service-list.reveal-in article:nth-child(2) { animation-delay:.11s; }
+.service-list.reveal-in article:nth-child(3) { animation-delay:.22s; }
+@keyframes card-rise { from { opacity:0; transform:translateY(34px); } to { opacity:1; transform:none; } }
 /* Our Story holds the two bands it absorbed as two panels, each with the copy,
    photo and column split it had when it was its own section — sourcing first,
    then the quote. Unarmed they simply follow one another down the page, which
@@ -151,38 +230,51 @@ section[id] { scroll-margin-top:102px; }
    the panels stack in one grid cell and cross-fade. Script writes only --p, the
    progress through the track; every fade and drift below is calc() off it. */
 .story { background:var(--band-story); color:var(--paper); padding:130px 6vw; }
-.story-title { text-align:center; margin:0 0 clamp(38px,5vh,64px); }
-.story-panel { display:grid; align-items:center; gap:10vw; }
+/* The one thing that doesn't move between the scenes, so it carries the band
+   and sits clear of the frame below it. */
+.story-title { text-align:center; font-size:clamp(40px,5vw,72px); margin:0 0 clamp(56px,10vh,110px); }
+/* Both panels, one shape: a portrait plate on the left at its own width, and
+   the copy taking whatever is left. The photo is sized by height so the pair
+   hold the same footprint on any screen — a width-driven plate would grow past
+   the pinned viewport on wide monitors. */
+.story-panel { display:grid; grid-template-columns:auto minmax(0,1fr); align-items:center; gap:9vw; }
 .story-panel + .story-panel { margin-top:110px; }
-.intro-setup { grid-template-columns:1fr 1fr; }
-.story-setup { grid-template-columns:.9fr 1.1fr; }
-/* Matches the quote panel's column, so the two scenes hold the same measure
-   as they turn over. */
-.intro-detail { max-width:540px; }
-.intro-detail p { font:400 16px/1.6 var(--sans); }
-.statement-image { width:100%; aspect-ratio:4/3; object-fit:cover; filter:saturate(.8); max-height:min(58svh,520px); }
-.story-image img { height:min(56svh,520px); object-fit:cover; filter:grayscale(.15) saturate(.7); }
-/* Roman, not italic: we only ship Baskervville's upright cut, and a synthesised
-   slant on a Baskerville reads as a mistake. */
-.story-copy blockquote,.intro-copy h3 { font:400 36px/1.3 var(--serif); margin:0 0 55px; }
-.story-copy>p { max-width:540px; margin:0 0 20px; }
+.story-image img { height:min(60svh,580px); width:auto; aspect-ratio:3/4; object-fit:cover; filter:saturate(.9); }
+/* The display face, a step down in size from the section title above it — the
+   two scenes speak in one voice, and it is the same voice that names the
+   section rather than a sans answering it. */
+.story-copy h3 { font:400 clamp(28px,3.3vw,46px)/1.16 var(--display); margin:0 0 42px; letter-spacing:.015em; }
+/* A step back from the heading without an alpha, which would fade against the
+   band and cost contrast the mix keeps (5:1 on this blue). */
+.story-copy>p { max-width:540px; margin:0; color:color-mix(in srgb, var(--paper) 88%, var(--band-story)); }
 
 .story-armed { height:200svh; padding:0; }
 .story-armed .story-stage { position:sticky; top:0; height:100svh; display:grid; grid-template-rows:auto auto; align-content:center; padding:0 6vw; }
 /* Both panels in the one cell, so the pair cross-fades in place. */
 .story-armed .story-panel { grid-row:2; grid-column:1; margin:0; will-change:opacity,transform; }
-/* Out, then in — not a cross-fade. The two panels occupy the same cell with
-   their columns mirrored, so overlapping them mid-turn lays the first panel's
-   copy over the second's photo. Fading the first away by .44 and holding the
-   stage empty until .54 lets each scene arrive on its own. */
-.story-armed .intro-setup { opacity:clamp(0,calc((.44 - var(--p,0))/.16),1); transform:translateY(calc(var(--p,0)*-26px)); }
-.story-armed .story-setup { opacity:clamp(0,calc((var(--p,0) - .54)/.16),1); transform:translateY(calc((1 - var(--p,0))*26px)); }
+/* Out, then in — not a cross-fade. Both panels now occupy the same cell in the
+   same arrangement, so overlapping them mid-turn would lay one photo over the
+   other. The first is gone by .46 and the second holds off until .54.
+     Each scene also moves in parts rather than as one block: the photo leads,
+   the heading follows, the copy last, on windows offset by .04 of the track.
+   Leaving reverses it, so the copy goes first and the photo is last to clear.
+   Every window reads the same --p, so this is still one style write a frame. */
+.story-armed .story-panel { transform:translateY(calc(var(--p,0)*-26px)); }
+.story-armed .intro-setup .story-image { opacity:clamp(0,calc((.46 - var(--p,0))/.08),1); }
+.story-armed .intro-setup h3 { opacity:clamp(0,calc((.42 - var(--p,0))/.08),1); }
+.story-armed .intro-setup p { opacity:clamp(0,calc((.38 - var(--p,0))/.08),1); }
+.story-armed .story-setup { transform:translateY(calc((1 - var(--p,0))*26px)); }
+.story-armed .story-setup .story-image { opacity:clamp(0,calc((var(--p,0) - .54)/.08),1); }
+.story-armed .story-setup h3 { opacity:clamp(0,calc((var(--p,0) - .58)/.08),1); }
+.story-armed .story-setup p { opacity:clamp(0,calc((var(--p,0) - .62)/.08),1); }
 /* The palest band, and the only one that takes dark type: --paper on this blue
-   is 2.2:1. Ink reads at 5.4:1, so the whole band inverts — including the
+   is 1.6:1. Ink reads at 7.3:1, so the whole band inverts — including the
    button, which was paper-on-rust and would now sink into its own ground. */
 .contact { background:var(--band-contact); color:var(--ink); text-align:center; min-height:85vh; display:flex; flex-direction:column; justify-content:center; align-items:center; }
-.contact h2 { margin:40px 0 60px; }
-.contact .eyebrow.light { color:rgba(23,40,46,.82); }
+/* The band is title, line, button — nothing above the title now, so its top
+   margin goes and the line carries the space down to the button. */
+.contact h2 { margin:0 0 26px; }
+.contact p { max-width:520px; margin:0 0 54px; }
 .contact-button { display:flex; align-items:center; justify-content:center; background:var(--ink); color:var(--paper); padding:18px 34px; border-radius:var(--btn-radius); text-transform:uppercase; font-size:12px; letter-spacing:1.4px; }
 .enquiry { display:grid; grid-template-columns:1.25fr .75fr; gap:8vw; align-items:start; }
 .enquiry form { display:flex; flex-direction:column; gap:34px; }
@@ -196,8 +288,8 @@ section[id] { scroll-margin-top:102px; }
 .field textarea { resize:vertical; min-height:150px; }
 .field input::placeholder,.field textarea::placeholder { color:rgba(23,40,46,.45); }
 .field input:focus,.field textarea:focus { outline:none; border-color:var(--ink); box-shadow:inset 0 0 0 1px var(--ink); }
-.field-hint { font:400 13px/1.5 var(--sans); color:rgba(23,40,46,.66); margin:0; }
-.field-error { font:400 14px/1.5 var(--sans); color:var(--rust); margin:0; }
+.field-hint { color:rgba(23,40,46,.66); margin:0; }
+.field-error { color:var(--rust); margin:0; }
 .field-error a { border-bottom:1px solid currentColor; }
 .choices { display:flex; flex-wrap:wrap; gap:10px; }
 .choice input { position:absolute; width:1px; height:1px; opacity:0; }
@@ -210,7 +302,7 @@ section[id] { scroll-margin-top:102px; }
 .enquiry-submit:disabled { opacity:.5; cursor:default; }
 .enquiry-note { margin-top:-22px; }
 .enquiry-sent h2 { font:400 clamp(30px,3.4vw,46px)/1.16 var(--display); letter-spacing:.015em; margin:0 0 22px; }
-.enquiry-sent>p { max-width:460px; font:400 16px/1.6 var(--sans); margin:0; }
+.enquiry-sent>p { max-width:460px; margin:0; }
 .enquiry-actions { display:flex; flex-wrap:wrap; align-items:center; gap:16px 30px; margin-top:40px; }
 .enquiry-actions .solid-button { margin:0; }
 .enquiry-actions .text-link { padding:0 0 8px; }
@@ -220,7 +312,7 @@ section[id] { scroll-margin-top:102px; }
 .enquiry-aside { position:sticky; top:110px; }
 .enquiry-aside h2 { font:400 clamp(28px,2.8vw,40px)/1.16 var(--display); letter-spacing:.015em; margin:0 0 18px; }
 .enquiry-details { display:flex; flex-direction:column; gap:26px; border-top:1px solid var(--line); margin-top:40px; padding-top:28px; }
-.enquiry-details p { font:400 15px/1.55 var(--sans); margin:0; }
+.enquiry-details p { margin:0; }
 .enquiry-details span { display:block; font:500 11px var(--sans); text-transform:uppercase; letter-spacing:1.5px; margin-bottom:10px; opacity:.55; }
 .enquiry-details a,.footer-details a { border-bottom:1px solid var(--line); }
 .enquiry-details a,.footer-details a { transition:border-color .3s var(--ease); }
@@ -239,12 +331,12 @@ footer { padding:96px 6vw 34px; display:flex; flex-direction:column; }
    230px floor is the email address plus a little air, so the row folds to two
    columns and then one at the width that text actually stops fitting. */
 .footer-details { display:grid; grid-template-columns:repeat(auto-fit,minmax(230px,1fr)); gap:38px 28px; margin:84px 0 68px; }
-.footer-details p { font:400 16px/1.65 var(--sans); margin:0; overflow-wrap:break-word; }
+.footer-details p { margin:0; overflow-wrap:break-word; }
 .footer-details span { display:block; font:500 11px var(--sans); text-transform:uppercase; letter-spacing:1.5px; margin-bottom:14px; opacity:.55; }
 .footer-details a.plain { border-bottom-color:transparent; }
 /* Which line is which, set back so the numbers stay the thing you read. */
 .footer-details i { font-style:normal; opacity:.55; }
-.footer-base { display:flex; justify-content:center; font-size:13px; }
+.footer-base { display:flex; justify-content:center; }
 
 /* ---------------------------------------------------------------------------
    Interaction. Two mechanics, used everywhere: text links grow a rule, solid
@@ -295,7 +387,7 @@ footer { padding:96px 6vw 34px; display:flex; flex-direction:column; }
    dark bands and over the hero photo. */
 a:focus-visible,button:focus-visible { outline:2px solid var(--ink); outline-offset:4px; }
 .hero a:focus-visible,.trade a:focus-visible,.story a:focus-visible { outline-color:var(--paper); }
-.flower-field a:focus-visible { outline-color:var(--sage-pale); }
+.flower-field a:focus-visible,.page-head a:focus-visible,.catalogue a:focus-visible,.catalogue button:focus-visible { outline-color:var(--sage); }
 
 /* Desktop home: one screenful per section, content centred within it. These are
    min-heights, so a short viewport lets a section grow rather than clip. The
@@ -307,15 +399,12 @@ a:focus-visible,button:focus-visible { outline:2px solid var(--ink); outline-off
      viewport too, so a 720px-tall laptop tightens the rhythm instead of pushing
      the catalogue and trade sections past a screenful. */
   .home>section.section-pad { padding-top:min(90px,9svh); padding-bottom:min(90px,9svh); }
-  .home>.trade .service-list { padding-top:min(70px,7svh); }
-  .home>.trade .service-list article { padding:min(32px,3.6svh) 0 min(50px,5.5svh); }
+  .home>.trade .service-list { padding-top:min(clamp(72px,11vh,140px),11svh); }
+  .home>.trade .service-list article { padding:min(46px,5svh) 34px min(42px,4.6svh); }
+  .home>.trade .service-list h3 { margin-bottom:min(44px,4.8svh); }
   /* Beats .home>section's plain 100svh, which would otherwise undo the floor. */
   .home>.flower-field { min-height:max(100svh,820px); }
-  .home>.trade { align-content:center; }
-}
-
-@media (max-width:1200px) {
-  .flower-grid { grid-template-columns:repeat(4,1fr); }
+  .home>.trade { display:flex; flex-direction:column; justify-content:center; }
 }
 
 @media (max-width:1000px) {
@@ -323,13 +412,9 @@ a:focus-visible,button:focus-visible { outline:2px solid var(--ink); outline-off
 }
 
 @media (max-width:800px) {
-  .site-header { height:60px; grid-template-columns:1fr auto; padding:0 18px; top:10px; margin:10px 10px -70px; border-radius:6px; }
+  /* The nav goes absolute below, so the flex row is just wordmark and toggle. */
+  .site-header { height:60px; padding:0 18px; top:10px; margin:10px 10px -70px; border-radius:6px; }
   section[id] { scroll-margin-top:80px; }
-  .site-header .wordmark { grid-area:1/1; justify-self:start; }
-  .site-header .nav { grid-area:auto; justify-self:stretch; }
-  /* The .section-pad shorthand above re-applies all four sides here, so the
-     zeroed bottom padding has to be restated or the band grows a dead gap. */
-  .page-head { grid-template-columns:1fr; gap:28px; padding-bottom:0; }
   .offerings-list { grid-template-columns:1fr; }
   .offering { min-height:0; padding:36px 28px 30px; }
   .site-header .wordmark { font-size:20px; }
@@ -342,23 +427,32 @@ a:focus-visible,button:focus-visible { outline:2px solid var(--ink); outline-off
   .hero-copy { padding:14vh 6vw 6vh; gap:30px; }
   .hero h1 { font-size:12vw; }
   .hero-bottom { gap:32px; }
-  .hero-bottom>p { font-size:15px; max-width:100%; }
+  .hero-bottom>p { max-width:100%; }
   .hero-button { padding:15px 24px; }
   .section-pad { padding:90px 6vw; }
-  .trade,.story-panel { grid-template-columns:1fr; }
+  .service-list,.story-panel { grid-template-columns:1fr; }
+  /* Stacked, the photo and the copy have no column edge left to line up on, so
+     they take the centre instead — a left rag against a full-width photo reads
+     as two things that missed each other. */
+  .story-panel { justify-items:center; }
+  .story-copy { text-align:center; }
+  .story-image img,.story-copy>p { margin-inline:auto; }
   .section-heading { display:block; }
   .section-note { margin-top:30px; }
   .filter-row { overflow:auto; gap:28px; }
   .filter-row button { white-space:nowrap; }
   .flower-grid { grid-template-columns:repeat(2,1fr); gap:40px 14px; }
-  .flower-meta h3 { font-size:18px; }
   /* Nothing fits beside the copy at this width, so six of the nine stems keep
      the band and take their narrow-screen positions; the rest step out. The
      floor is a little over a screen so three fit above the copy and three below
      without either row crowding it — the note runs to four lines on the
      narrowest phones, and the bands have to survive that. */
-  .flower-field { min-height:max(100svh,1000px); }
-  .field-item { top:var(--mt,var(--t)); left:var(--ml,var(--l,auto)); right:var(--mr,var(--r,auto)); }
+  .flower-field { --band:calc(max(100svh,1000px) - 2*clamp(20px,4vh,56px)); min-height:max(100svh,1000px); }
+  /* Narrow sizing is its own set: --mw scales off the phone's width rather
+     than the wide layout's floor, and a card may take a different crop here,
+     so the height and the aspect both come from the narrow pair. */
+  .field-item { --cw:min(var(--mw),calc(var(--band) * var(--hcap) / var(--mhr))); --h:calc(var(--cw) * var(--mhr)); top:var(--mt,var(--t,auto)); bottom:var(--mbt,var(--bt,auto)); left:var(--ml,var(--l,auto)); right:var(--mr,var(--r,auto)); }
+  .field-item img { aspect-ratio:var(--mar); }
   .field-center { max-width:88%; }
   .field-wide { display:none; }
   /* Both animations ride the same element: one owns opacity, the other owns
@@ -369,12 +463,22 @@ a:focus-visible,button:focus-visible { outline:2px solid var(--ink); outline-off
     animation:field-arrive .7s var(--ease) calc(var(--i)*90ms) forwards,
               field-float calc(6.5s + var(--d)*1.4s) ease-in-out calc(var(--i)*-1.9s) infinite;
   }
-  .trade { gap:20px; }
-  .service-list { padding-top:0; }
+  /* Stacked, the cards no longer need the heading pinned to a shared baseline,
+     so the space under it closes up. */
+  .service-list { gap:18px; padding-top:clamp(40px,6vh,64px); }
+  .service-list article { padding:34px 26px 32px; }
+  .service-list h3 { margin-bottom:22px; }
   .story { padding:90px 6vw; }
-  .story-image img { height:64vw; max-height:340px; }
-  .statement-image { max-height:340px; }
-  .story-copy blockquote,.intro-copy h3 { font-size:29px; }
+  /* Stacked, the photo and the copy share one pinned screen instead of sitting
+     side by side, so the plate has to give back the height the copy now needs
+     beneath it — at 60svh the scene ran past the stage and clipped its own
+     heading. */
+  /* Centred in the bare stage the title lands under the floating header, which
+     is 60px tall at 10px down; the padding is what it centres clear of. */
+  .story-armed .story-stage { padding:76px 6vw 0; }
+  .story-title { margin-bottom:clamp(36px,5vh,60px); }
+  .story-image img { height:min(38svh,340px); }
+  .story-copy h3 { font-size:29px; margin-bottom:28px; }
   .enquiry { grid-template-columns:1fr; gap:70px; }
   .field-row { grid-template-columns:1fr; gap:34px; }
   .enquiry-aside { position:static; }
@@ -386,7 +490,6 @@ a:focus-visible,button:focus-visible { outline:2px solid var(--ink); outline-off
 
 @media (max-width:440px) {
   .hero h1 { font-size:13vw; }
-  .hero-bottom>p { font-size:13px; }
   .hero-button { font-size:11px; letter-spacing:.9px; }
   .flower-grid { grid-template-columns:1fr; }
   .contact h2 { font-size:13vw; }
@@ -404,11 +507,15 @@ a:focus-visible,button:focus-visible { outline:2px solid var(--ink); outline-off
    --------------------------------------------------------------------------- */
 html.splash-open { overflow:hidden; }
 html[data-splash="off"] .splash { display:none; }
-.splash { position:fixed; inset:0; z-index:100; display:grid; place-items:center; padding:8vw; background:var(--paper); animation:splash-clear .5s var(--ease) 2.85s forwards; }
+.splash { position:fixed; inset:0; z-index:100; display:grid; place-items:center; padding:6vw; background:var(--paper); animation:splash-clear .5s var(--ease) 2.85s forwards; }
 @keyframes splash-clear { from { opacity:1 } 99% { opacity:0; visibility:visible } to { opacity:0; visibility:hidden } }
 
-.splash-mark { font-family:var(--display); font-size:clamp(30px,7.6vw,68px); line-height:1; letter-spacing:.02em; text-align:center; }
-.splash-line { display:flex; flex-wrap:wrap; justify-content:center; align-items:flex-start; row-gap:.14em; column-gap:0; animation:splash-space .8s var(--ease-out) .95s forwards; }
+/* The name is one line at every width, so the size is fluid the whole way down
+   rather than bottoming out on a floor a phone can't fit — four words that wrap
+   to two lines read as two names, and the second row lands under a monogram
+   that is meant to be read straight across. */
+.splash-mark { font-family:var(--display); font-size:min(6.8vw,68px); line-height:1; letter-spacing:.02em; text-align:center; }
+.splash-line { display:flex; flex-wrap:nowrap; justify-content:center; align-items:flex-start; column-gap:0; animation:splash-space .8s var(--ease-out) .95s forwards; }
 @keyframes splash-space { to { column-gap:.26em } }
 
 /* Beat one. Each letter falls its own height and decelerates into place, a
@@ -452,5 +559,10 @@ html[data-splash="off"] .splash { display:none; }
      stagger — the shorthand here drops the second animation outright. */
   .field-item { transform:none; }
   .field-in .field-item a { animation:field-arrive .3s var(--ease) forwards; }
+  /* The cards still arrive, but together and without the rise. */
+  .service-list.reveal-in article { animation:card-rise .3s linear forwards; }
+  .service-list.reveal-in article:nth-child(2),
+  .service-list.reveal-in article:nth-child(3) { animation-delay:0s; }
+  @keyframes card-rise { from { opacity:0; } to { opacity:1; transform:none; } }
 }
 

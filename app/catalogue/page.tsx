@@ -14,7 +14,7 @@ export default function Catalogue() {
 
       <section className="page-head section-pad">
         <h1>Our Flowers</h1>
-        <p className="section-note">Our full standing selection. Market prices move daily and are never posted. Call or WhatsApp for today&apos;s availability and price.</p>
+        <p className="section-note">Our full standing selection. Market prices move daily and are never posted. Contact us for today&apos;s availability and price.</p>
       </section>
 
       <section className="catalogue section-pad" id="catalogue">
