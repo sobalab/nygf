@@ -60,21 +60,17 @@ section[id] { scroll-margin-top:102px; }
 .hero-bottom>p { max-width:520px; font:300 18px/1.55 var(--sans); margin:0; }
 .hero-button { display:flex; align-items:center; justify-content:center; background:var(--paper); color:var(--ink); padding:17px 30px; border-radius:var(--btn-radius); font-size:12px; letter-spacing:1.2px; text-transform:uppercase; }
 .section-pad { padding:130px 6vw; }
-.intro { display:grid; grid-template-columns:1fr 1fr; gap:6vw; align-items:center; }
 /* A shade smaller than the roman was: small caps run about a sixth wider at the
    same size, and these headings carry authored line breaks that have to hold. */
-.intro h2,.catalogue h2,.trade h2,.offerings h2,.page-head h1 { font:400 clamp(30px,3.6vw,54px)/1.12 var(--display); letter-spacing:.015em; margin:0; }
+.story h2,.catalogue h2,.trade h2,.offerings h2,.page-head h1 { font:400 clamp(30px,3.6vw,54px)/1.12 var(--display); letter-spacing:.015em; margin:0; }
 .page-head { background:var(--sage); padding-bottom:0; display:grid; grid-template-columns:1.4fr .6fr; gap:8vw; align-items:end; }
 .page-head + .catalogue,.page-head + .enquiry { padding-top:64px; }
 .offerings h2 { margin-bottom:46px; }
 .offerings-list { display:grid; grid-template-columns:repeat(2,1fr); gap:18px; }
 .offering { background:var(--mist); padding:44px 40px 36px; min-height:240px; display:flex; flex-direction:column; justify-content:space-between; align-items:flex-start; gap:28px; }
 .offering h3 { font:400 30px/1.15 var(--serif); margin:0; }
-.intro-detail { max-width:345px; margin-top:min(88px,9svh); }
-.intro-detail p,.section-note,.story-copy>p { font:400 16px/1.6 var(--sans); }
+.section-note,.story-copy>p { font:400 16px/1.6 var(--sans); }
 .text-link { position:relative; display:inline-flex; gap:22px; border-bottom:1px solid var(--line); padding:18px 0 8px; text-transform:uppercase; letter-spacing:1.3px; font-size:12px; }
-.statement-image-wrap { position:relative; }
-.statement-image { width:100%; aspect-ratio:4/3; object-fit:cover; filter:saturate(.8); }
 .catalogue { background:var(--sage); }
 /* Home catalogue: instead of a grid, the stems are scattered across the whole
    band and drift against the pointer, with the copy holding the middle. Each
@@ -144,13 +140,38 @@ section[id] { scroll-margin-top:102px; }
 .service-list h3 { font:26px var(--serif); margin:0 0 15px; }
 /* Full strength, not the old .78 — any alpha here drops it back under AA. */
 .service-list p { max-width:440px; font:400 15px/1.6 var(--sans); margin:0; }
-.story { display:grid; grid-template-columns:.9fr 1.1fr; gap:10vw; align-items:center; background:var(--band-story); color:var(--paper); }
-.story-image img { height:560px; object-fit:cover; filter:grayscale(.15) saturate(.7); }
+/* Our Story holds the two bands it absorbed as two panels, each with the copy,
+   photo and column split it had when it was its own section — sourcing first,
+   then the quote. Unarmed they simply follow one another down the page, which
+   is what a reader without JavaScript, or with reduced motion asked for, gets.
+   Armed, the section becomes a tall scroll track, the stage pins inside it, and
+   the panels stack in one grid cell and cross-fade. Script writes only --p, the
+   progress through the track; every fade and drift below is calc() off it. */
+.story { background:var(--band-story); color:var(--paper); padding:130px 6vw; }
+.story-panel { display:grid; align-items:center; gap:10vw; }
+.story-panel + .story-panel { margin-top:110px; }
+.intro-setup { grid-template-columns:1fr 1fr; }
+.story-setup { grid-template-columns:.9fr 1.1fr; }
+.intro-detail { max-width:345px; margin-top:min(88px,9svh); }
+.intro-detail p { font:400 16px/1.6 var(--sans); }
+.statement-image { width:100%; aspect-ratio:4/3; object-fit:cover; filter:saturate(.8); max-height:min(58svh,520px); }
+.story-image img { height:min(56svh,520px); object-fit:cover; filter:grayscale(.15) saturate(.7); }
 /* Roman, not italic: we only ship Baskervville's upright cut, and a synthesised
    slant on a Baskerville reads as a mistake. */
 .story-copy blockquote { font:400 36px/1.3 var(--serif); margin:0 0 55px; }
-.story-copy>p { max-width:540px; }
+.story-copy>p { max-width:540px; margin:0 0 20px; }
 .story-copy .signature { margin-top:35px; font-size:14px; font-style:italic; }
+
+.story-armed { height:200svh; padding:0; }
+.story-armed .story-stage { position:sticky; top:0; height:100svh; display:grid; align-content:center; padding:0 6vw; }
+/* Both panels in the one cell, so the pair cross-fades in place. */
+.story-armed .story-panel { grid-area:1/1; margin:0; will-change:opacity,transform; }
+/* Out, then in — not a cross-fade. The two panels occupy the same cell with
+   their columns mirrored, so overlapping them mid-turn lays the first panel's
+   copy over the second's photo. Fading the first away by .44 and holding the
+   stage empty until .54 lets each scene arrive on its own. */
+.story-armed .intro-setup { opacity:clamp(0,calc((.44 - var(--p,0))/.16),1); transform:translateY(calc(var(--p,0)*-26px)); }
+.story-armed .story-setup { opacity:clamp(0,calc((var(--p,0) - .54)/.16),1); transform:translateY(calc((1 - var(--p,0))*26px)); }
 /* The palest band, and the only one that takes dark type: --paper on this blue
    is 2.2:1. Ink reads at 5.4:1, so the whole band inverts — including the
    button, which was paper-on-rust and would now sink into its own ground. */
@@ -158,11 +179,6 @@ section[id] { scroll-margin-top:102px; }
 .contact h2 { margin:40px 0 60px; }
 .contact .eyebrow.light { color:rgba(23,40,46,.82); }
 .contact-button { display:flex; align-items:center; justify-content:center; background:var(--ink); color:var(--paper); padding:18px 34px; border-radius:var(--btn-radius); text-transform:uppercase; font-size:12px; letter-spacing:1.4px; }
-.contact-details { width:100%; display:grid; grid-template-columns:1.3fr 1fr 1fr; gap:28px 6vw; margin-top:110px; padding-top:24px; text-align:left; }
-.contact-details p { font:400 15px/1.7 var(--sans); margin:0; }
-.contact-details a { display:inline-block; }
-.contact-details i { font-style:normal; font-size:13px; opacity:.8; }
-.contact-details span { display:block; font:500 11px var(--sans); text-transform:uppercase; letter-spacing:1.5px; margin-bottom:12px; opacity:.85; }
 .enquiry { display:grid; grid-template-columns:1.25fr .75fr; gap:8vw; align-items:start; }
 .enquiry form { display:flex; flex-direction:column; gap:34px; }
 .honeypot { position:absolute; left:-9999px; width:1px; height:1px; opacity:0; }
@@ -235,15 +251,14 @@ footer { padding:96px 6vw 34px; display:flex; flex-direction:column; }
 
 /* Underline wipe. Entering, the rule grows from the left; leaving, it retracts
    to the right, so the line travels with the pointer instead of blinking off. */
-.nav a,.contact-details a,.filter-row button,.flower-meta h3,.wordmark { position:relative; }
-.nav a::after,.contact-details a::after,.filter-row button::after,.flower-meta h3::after,.text-link::after {
+.nav a,.filter-row button,.flower-meta h3,.wordmark { position:relative; }
+.nav a::after,.filter-row button::after,.flower-meta h3::after,.text-link::after {
   content:""; position:absolute; left:0; right:0; bottom:-3px; height:1px; background:currentColor;
   transform:scaleX(0); transform-origin:right; transition:transform .5s var(--ease-out);
 }
 .filter-row button::after { bottom:0; }
 .text-link::after { bottom:-1px; }
 .nav a:hover::after,.nav a:focus-visible::after,
-.contact-details a:hover::after,.contact-details a:focus-visible::after,
 .filter-row button:hover::after,.filter-row button:focus-visible::after,.filter-row button.active::after,
 .flower-card:hover .flower-meta h3::after,.flower-card:focus-visible .flower-meta h3::after,
 .text-link:hover::after,.text-link:focus-visible::after { transform:scaleX(1); transform-origin:left; }
@@ -263,18 +278,18 @@ footer { padding:96px 6vw 34px; display:flex; flex-direction:column; }
 .header-cta:hover,.hero-button:hover,.solid-button:hover,.contact-button:hover,.enquiry-submit:hover:not(:disabled) {
   transform:translateY(-2px); box-shadow:0 8px 20px rgba(23,40,46,.18);
 }
-.hero-button:hover,.contact-button:hover { background:var(--field); }
+.hero-button:hover { background:var(--field); }
 .header-cta:active,.hero-button:active,.solid-button:active,.contact-button:active,.enquiry-submit:active:not(:disabled) {
   transform:translateY(0) scale(.982); box-shadow:0 2px 6px rgba(23,40,46,.14); transition-duration:.09s;
 }
 .enquiry-submit:disabled { transform:none; box-shadow:none; }
-.nav a:active,.text-link:active,.contact-details a:active,.footer-details a:active { opacity:.6; transition:opacity .08s; }
+.nav a:active,.text-link:active,.footer-details a:active { opacity:.6; transition:opacity .08s; }
 .flower-card:active img { transform:scale(1.02); transition-duration:.12s; }
 
 /* Keyboard focus gets the same ring everywhere, flipped to paper on the two
    dark bands and over the hero photo. */
 a:focus-visible,button:focus-visible { outline:2px solid var(--ink); outline-offset:4px; }
-.hero a:focus-visible,.trade a:focus-visible,.contact a:focus-visible,.contact button:focus-visible { outline-color:var(--paper); }
+.hero a:focus-visible,.trade a:focus-visible,.story a:focus-visible { outline-color:var(--paper); }
 .flower-field a:focus-visible { outline-color:var(--sage-pale); }
 
 /* Desktop home: one screenful per section, content centred within it. These are
@@ -291,11 +306,7 @@ a:focus-visible,button:focus-visible { outline:2px solid var(--ink); outline-off
   .home>.trade .service-list article { padding:min(32px,3.6svh) 0 min(50px,5.5svh); }
   /* Beats .home>section's plain 100svh, which would otherwise undo the floor. */
   .home>.flower-field { min-height:max(100svh,820px); }
-  .home>.intro { align-content:center; }
-  .home>.trade,.home>.story { align-content:center; }
-  .home>.intro .statement-image { max-height:min(64svh,560px); }
-  .home>.story .story-image img { height:min(58svh,560px); }
-  .home>.contact .contact-details { margin-top:70px; }
+  .home>.trade { align-content:center; }
 }
 
 @media (max-width:1200px) {
@@ -329,9 +340,7 @@ a:focus-visible,button:focus-visible { outline:2px solid var(--ink); outline-off
   .hero-bottom>p { font-size:15px; max-width:100%; }
   .hero-button { padding:15px 24px; }
   .section-pad { padding:90px 6vw; }
-  .intro,.trade,.story { grid-template-columns:1fr; }
-  .intro { gap:46px; }
-  .intro-detail { margin-top:32px; }
+  .trade,.story-panel { grid-template-columns:1fr; }
   .section-heading { display:block; }
   .section-note { margin-top:30px; }
   .filter-row { overflow:auto; gap:28px; }
@@ -357,9 +366,10 @@ a:focus-visible,button:focus-visible { outline:2px solid var(--ink); outline-off
   }
   .trade { gap:20px; }
   .service-list { padding-top:0; }
-  .story-image img { height:90vw; max-height:480px; }
+  .story { padding:90px 6vw; }
+  .story-image img { height:64vw; max-height:340px; }
+  .statement-image { max-height:340px; }
   .story-copy blockquote { font-size:29px; }
-  .contact-details { grid-template-columns:1fr; gap:28px; margin-top:75px; }
   .enquiry { grid-template-columns:1fr; gap:70px; }
   .field-row { grid-template-columns:1fr; gap:34px; }
   .enquiry-aside { position:static; }

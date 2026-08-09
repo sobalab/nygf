@@ -32,7 +32,7 @@ export function SiteHeader({ home = false }: { home?: boolean }) {
       </button>
       <nav className={menuOpen ? "nav open" : "nav"} aria-label="Main navigation">
         <a href="/catalogue" onClick={() => setMenuOpen(false)}>Catalogue</a>
-        <a href={`${prefix}#about`} onClick={() => setMenuOpen(false)}>Our story</a>
+        <a href={`${prefix}#story`} onClick={() => setMenuOpen(false)}>Our story</a>
         <a href={`${prefix}#services`} onClick={() => setMenuOpen(false)}>Our Services</a>
         {/* The header CTA is hidden below 800px, so the menu carries contact there. */}
         <a className="nav-contact" href="/contact" onClick={() => setMenuOpen(false)}>Contact us</a>
@@ -50,17 +50,10 @@ export function SiteFooter({ home = false }: { home?: boolean }) {
         <p className="footer-tagline">Direct-Import Wholesale Cut Flowers</p>
       </div>
 
+      {/* Contact leads: with the home page's own reach/visit/hours columns gone,
+          this is the only place the numbers appear, and the number is what a
+          buyer comes down here for. */}
       <div className="footer-details">
-        <p>
-          {/* The address reads as an address, so it carries no standing rule —
-              the map link is there on hover for anyone who reaches for it. */}
-          <span>Visit &amp; pickup</span>
-          <a className="plain" href={shop.mapsHref} target="_blank" rel="noreferrer"><Lines text={shop.address} /></a>
-        </p>
-        <p>
-          <span>Hours</span>
-          <Lines text={shop.hours} />
-        </p>
         <p>
           <span>Contact</span>
           <a href={`mailto:${shop.email}?subject=Wholesale%20flower%20inquiry`}>{shop.email}</a>
@@ -73,6 +66,16 @@ export function SiteFooter({ home = false }: { home?: boolean }) {
               than set in the column, where it would crowd the number. */}
           <i>Cell: </i>
           <a href={`https://wa.me/${shop.whatsappNumber}`} target="_blank" rel="noreferrer" aria-label={`${shop.ownerPhone} on WhatsApp`}>{shop.ownerPhone}</a>
+        </p>
+        <p>
+          {/* The address reads as an address, so it carries no standing rule —
+              the map link is there on hover for anyone who reaches for it. */}
+          <span>Visit &amp; pickup</span>
+          <a className="plain" href={shop.mapsHref} target="_blank" rel="noreferrer"><Lines text={shop.address} /></a>
+        </p>
+        <p>
+          <span>Hours</span>
+          <Lines text={shop.hours} />
         </p>
       </div>
 

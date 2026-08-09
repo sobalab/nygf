@@ -1,6 +1,7 @@
 import { previewFlowers } from "./catalogue-data";
-import { Arrow, SiteFooter, SiteHeader } from "./chrome";
+import { SiteFooter, SiteHeader } from "./chrome";
 import { FlowerField } from "./flower-field";
+import { StoryScroll } from "./story-scroll";
 
 export default function Home() {
   return (
@@ -20,25 +21,39 @@ export default function Home() {
         </div>
       </section>
 
+      {/* Our Story absorbs the two bands that used to sit apart — the nav
+          pointed at the first while the second, unheaded, carried the actual
+          story. Each keeps its own copy, photo and layout; the section pins and
+          turns from one to the other as you scroll through it. */}
+      <StoryScroll>
+        <div className="story-panel intro-setup">
+          <div className="intro-copy">
+            <h2>Direct From the Farm.<br />Closer to Your Needs.</h2>
+            <div className="intro-detail">
+              <p>We clear our own shipments, with no broker between grower and shop. Our flowers arrive from Ecuador, Colombia, Costa Rica, Mexico, Holland, and Canada.</p>
+            </div>
+          </div>
+          <div className="statement-image-wrap">
+            <img className="statement-image" src="/media/our-story.webp" alt="Wrapped bunches of tulips in red, pink, orange and purple on the market floor" loading="lazy" />
+          </div>
+        </div>
+
+        <div className="story-panel story-setup">
+          <div className="story-image"><img src="/media/story.webp" alt="A wrapped bouquet of pink roses, gerberas and eucalyptus on a dark wood bench" loading="lazy" /></div>
+          <div className="story-copy">
+            <blockquote>“Flowers are perishable.<br />Trust is what lasts.”</blockquote>
+            <p>For more than three decades, New York Garden Flower Wholesale has imported cut flowers directly and served the people who make New York&apos;s spaces and celebrations bloom, from florists and wedding planners to restaurants, hotels, and neighborhood walk-ins.</p>
+            <p className="signature">— New York Garden Flower Wholesale, Inc.</p>
+          </div>
+        </div>
+      </StoryScroll>
+
       <section className="catalogue flower-field section-pad" id="catalogue">
         <FlowerField flowers={previewFlowers} />
         <div className="field-center">
           <h2>Our Flowers</h2>
           <p className="section-note">Market prices move daily and are never posted. Call or WhatsApp for today&apos;s availability and price.</p>
           <a href="/catalogue" className="solid-button">View full catalogue</a>
-        </div>
-      </section>
-
-      <section className="intro section-pad" id="about">
-        <div className="intro-copy">
-          <h2>Direct From the Farm.<br />Closer to Your Needs.</h2>
-          <div className="intro-detail">
-            <p>We clear our own shipments, with no broker between grower and shop. Our flowers arrive from Ecuador, Colombia, Costa Rica, Mexico, Holland, and Canada.</p>
-            <a className="text-link" href="#story">Our story <Arrow /></a>
-          </div>
-        </div>
-        <div className="statement-image-wrap">
-          <img className="statement-image" src="/media/our-story.webp" alt="Wrapped bunches of tulips in red, pink, orange and purple on the market floor" loading="lazy" />
         </div>
       </section>
 
@@ -51,16 +66,13 @@ export default function Home() {
         </div>
       </section>
 
-      <section className="story section-pad" id="story">
-        <div className="story-image"><img src="/media/story.webp" alt="A wrapped bouquet of pink roses, gerberas and eucalyptus on a dark wood bench" loading="lazy" /></div>
-        <div className="story-copy"><blockquote>“Flowers are perishable.<br />Trust is what lasts.”</blockquote><p>For more than three decades, New York Garden Flower Wholesale has imported cut flowers directly and served the people who make New York&apos;s spaces and celebrations bloom, from florists and wedding planners to restaurants, hotels, and neighborhood walk-ins.</p><p className="signature">— New York Garden Flower Wholesale, Inc.</p></div>
-      </section>
-
       <section className="contact section-pad" id="contact">
         <p className="eyebrow light">오늘의 가격과 재고를 문의하세요<br />Ask for today&apos;s price and availability</p>
         <h2>What Are You<br /><em>Celebrating Next?</em></h2>
+        {/* The reach/visit/hours columns that used to sit under this live in the
+            footer, which is directly beneath — they were the same three columns
+            twice in one screenful. */}
         <a className="contact-button" href="https://wa.me/12018151040?text=Hello%2C%20I%27d%20like%20to%20ask%20about%20today%27s%20flowers." target="_blank" rel="noreferrer">Message on WhatsApp</a>
-        <div className="contact-details"><p><span>Reach Us</span><a href="tel:+17188861190">718-886-1190</a> <i>store, voice only</i><br /><a href="https://wa.me/12018151040" target="_blank" rel="noreferrer">201-815-1040</a> <i>WhatsApp or SMS</i><br /><a href="mailto:nyflowergarden@hotmail.com?subject=Wholesale%20flower%20inquiry">nyflowergarden@hotmail.com</a></p><p><span>Visit / Pickup</span><a href="https://maps.google.com/?q=171-10+39th+Ave+Flushing+NY+11358" target="_blank" rel="noreferrer">171-10 39th Ave<br />Flushing, NY 11358</a></p><p><span>Hours</span>Mon–Sat, 6 AM–2 PM<br />Sunday, 6 AM–12 PM</p></div>
       </section>
 
       <SiteFooter home />
