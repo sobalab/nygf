@@ -5,10 +5,13 @@
 @font-face { font-family:"Uncut Sans"; src:url("/fonts/UncutSans-Variable.ttf") format("truetype-variations"); font-weight:300 700; font-style:normal; font-display:swap; }
 @font-face { font-family:"Uncut Sans"; src:url("/fonts/UncutSans-VariableItalic.ttf") format("truetype-variations"); font-weight:300 700; font-style:italic; font-display:swap; }
 
-/* Palette. --ink is the near-black used for all type and dark UI; --slate is
-   the blue the trade band is painted in. --field and the rgba()s below are
-   tints of these, not new hues: --ink is 23 40 46, --paper is 238 229 220. */
-:root { --paper:#eee5dc; --ink:#17282e; --slate:#355561; --sage:#999a80; --sage-pale:#cacbb5; --rust:#a7593a; --mist:#b7c2c1; --line:rgba(23,40,46,.22); --field:#f6f1ea; --ease:cubic-bezier(.22,.7,.3,1); --ease-out:cubic-bezier(.16,1,.3,1); --serif:"Baskervville",Georgia,serif; --display:"Baskervville SC",Georgia,serif; --sans:"Uncut Sans",Helvetica,Arial,sans-serif; --btn-radius:6px; }
+/* Palette. --ink is the near-black used for all type and dark UI. The four
+   --band-* blues paint the four full-bleed sections below the hero, running
+   from near-black to a pale wash; each one is named for the section it belongs
+   to rather than its hue, because the section is what fixes it. --rust is no
+   longer a band — it survives only as the form-error red. --field and the
+   rgba()s below are tints, not new hues: --ink is 23 40 46, --paper 238 229 220. */
+:root { --paper:#eee5dc; --ink:#17282e; --band-flowers:#11292f; --band-story:#2a5662; --band-trade:#387f93; --band-contact:#76a4b0; --sage:#999a80; --sage-pale:#cacbb5; --rust:#a7593a; --mist:#b7c2c1; --line:rgba(23,40,46,.22); --field:#f6f1ea; --ease:cubic-bezier(.22,.7,.3,1); --ease-out:cubic-bezier(.16,1,.3,1); --serif:"Baskervville",Georgia,serif; --display:"Baskervville SC",Georgia,serif; --sans:"Uncut Sans",Helvetica,Arial,sans-serif; --btn-radius:6px; }
 * { box-sizing:border-box; }
 html { scroll-behavior:smooth; }
 body { margin:0; background:var(--paper); color:var(--ink); font-family:var(--sans); }
@@ -85,8 +88,10 @@ section[id] { scroll-margin-top:102px; }
 /* The floor keeps the geometry honest on a short window: the cards are sized in
    px and placed in per cent, so on a laptop that isn't tall enough the bottom
    row would run past the band and get cut by the overflow above. */
-.flower-field { background:var(--ink); color:var(--sage-pale); min-height:max(100svh,820px); position:relative; overflow:hidden; display:flex; flex-direction:column; justify-content:center; align-items:center; }
-.field { position:absolute; inset:0; }
+.flower-field { background:var(--band-flowers); color:var(--sage-pale); min-height:max(100svh,820px); position:relative; overflow:hidden; display:flex; flex-direction:column; justify-content:center; align-items:center; }
+/* Scoped to the band: the enquiry form's fieldsets are .field too, and a bare
+   rule here reaches them and lifts every one out of flow. */
+.flower-field .field { position:absolute; inset:0; }
 /* left OR right, never both — see PLACEMENT. */
 .field-item { position:absolute; top:var(--t); left:var(--l,auto); right:var(--r,auto); width:var(--w); transform:translate3d(calc(var(--px,0)*var(--d)*-16px),calc(var(--py,0)*var(--d)*-12px),0); transition:transform .6s var(--ease-out); }
 .field-item a { display:block; transition:transform .5s var(--ease-out); }
@@ -95,6 +100,18 @@ section[id] { scroll-margin-top:102px; }
 .field-armed .field-item a { opacity:0; }
 .field-in .field-item a { animation:field-arrive .7s var(--ease) calc(var(--i)*90ms) forwards; }
 @keyframes field-arrive { to { opacity:1 } }
+/* A touch screen has no cursor to answer, so the cards carry their own drift
+   instead: a slow ellipse whose reach and period both come off the same --d the
+   pointer parallax uses, so a card that leans hardest into the cursor on a
+   desktop is also the one that swims furthest here. The amplitude is small
+   enough that no two cards can close the gaps the placement leaves them, even
+   at opposite phases. */
+@keyframes field-float {
+  0%,100% { transform:translate3d(0,0,0) }
+  25% { transform:translate3d(calc((1 + var(--d))*.9px),calc((1 + var(--d))*-1.8px),0) }
+  50% { transform:translate3d(calc((1 + var(--d))*1.5px),0,0) }
+  75% { transform:translate3d(calc((1 + var(--d))*.9px),calc((1 + var(--d))*1.8px),0) }
+}
 /* Proportional, not just capped: a fixed 560px would eat the side margins on a
    1000px window and leave the edge cards nowhere to sit. */
 .field-center { position:relative; z-index:1; max-width:min(560px,44%); text-align:center; }
@@ -118,21 +135,29 @@ section[id] { scroll-margin-top:102px; }
 .flower-meta h3 { display:inline-block; font:400 17px/1.3 var(--serif); margin:0; }
 .flower-meta p { font:400 12px var(--sans); color:rgba(23,40,46,.9); margin:5px 0 0; }
 .solid-button { display:flex; align-items:center; justify-content:center; width:fit-content; background:var(--ink); color:var(--paper); padding:18px 34px; margin:70px auto 0; border-radius:var(--btn-radius); text-transform:uppercase; font-size:12px; letter-spacing:1.2px; }
-.trade { display:grid; grid-template-columns:1fr 1fr; gap:8vw; background:var(--slate); color:var(--paper); }
+/* White, not --paper: the warm off-white only reaches 3.7:1 on this blue, which
+   the 15px service copy can't carry. White clears AA at 4.6:1, and the hero
+   already sets its type in white, so the band isn't introducing a value. */
+.trade { display:grid; grid-template-columns:1fr 1fr; gap:8vw; background:var(--band-trade); color:#fff; }
 .service-list { padding-top:70px; }
 .service-list article { padding:32px 0 50px; }
 .service-list h3 { font:26px var(--serif); margin:0 0 15px; }
-.service-list p { max-width:440px; font:400 15px/1.6 var(--sans); color:rgba(238,229,220,.78); margin:0; }
-.story { display:grid; grid-template-columns:.9fr 1.1fr; gap:10vw; align-items:center; }
+/* Full strength, not the old .78 — any alpha here drops it back under AA. */
+.service-list p { max-width:440px; font:400 15px/1.6 var(--sans); margin:0; }
+.story { display:grid; grid-template-columns:.9fr 1.1fr; gap:10vw; align-items:center; background:var(--band-story); color:var(--paper); }
 .story-image img { height:560px; object-fit:cover; filter:grayscale(.15) saturate(.7); }
 /* Roman, not italic: we only ship Baskervville's upright cut, and a synthesised
    slant on a Baskerville reads as a mistake. */
 .story-copy blockquote { font:400 36px/1.3 var(--serif); margin:0 0 55px; }
 .story-copy>p { max-width:540px; }
 .story-copy .signature { margin-top:35px; font-size:14px; font-style:italic; }
-.contact { background:var(--rust); color:var(--paper); text-align:center; min-height:85vh; display:flex; flex-direction:column; justify-content:center; align-items:center; }
+/* The palest band, and the only one that takes dark type: --paper on this blue
+   is 2.2:1. Ink reads at 5.4:1, so the whole band inverts — including the
+   button, which was paper-on-rust and would now sink into its own ground. */
+.contact { background:var(--band-contact); color:var(--ink); text-align:center; min-height:85vh; display:flex; flex-direction:column; justify-content:center; align-items:center; }
 .contact h2 { margin:40px 0 60px; }
-.contact-button { display:flex; align-items:center; justify-content:center; background:var(--paper); color:var(--rust); padding:18px 34px; border-radius:var(--btn-radius); text-transform:uppercase; font-size:12px; letter-spacing:1.4px; }
+.contact .eyebrow.light { color:rgba(23,40,46,.82); }
+.contact-button { display:flex; align-items:center; justify-content:center; background:var(--ink); color:var(--paper); padding:18px 34px; border-radius:var(--btn-radius); text-transform:uppercase; font-size:12px; letter-spacing:1.4px; }
 .contact-details { width:100%; display:grid; grid-template-columns:1.3fr 1fr 1fr; gap:28px 6vw; margin-top:110px; padding-top:24px; text-align:left; }
 .contact-details p { font:400 15px/1.7 var(--sans); margin:0; }
 .contact-details a { display:inline-block; }
@@ -322,6 +347,14 @@ a:focus-visible,button:focus-visible { outline:2px solid var(--ink); outline-off
   .field-item { top:var(--mt,var(--t)); left:var(--ml,var(--l,auto)); right:var(--mr,var(--r,auto)); }
   .field-center { max-width:88%; }
   .field-wide { display:none; }
+  /* Both animations ride the same element: one owns opacity, the other owns
+     transform, so neither treads on the other. The negative delay drops each
+     card in at a different point of its own cycle — without it they would swim
+     in lockstep, which reads as a machine rather than a drift. */
+  .field-in .field-item a {
+    animation:field-arrive .7s var(--ease) calc(var(--i)*90ms) forwards,
+              field-float calc(6.5s + var(--d)*1.4s) ease-in-out calc(var(--i)*-1.9s) infinite;
+  }
   .trade { gap:20px; }
   .service-list { padding-top:0; }
   .story-image img { height:90vw; max-height:480px; }
@@ -400,8 +433,9 @@ html[data-splash="off"] .splash { display:none; }
   .header-cta:hover,.hero-button:hover,.solid-button:hover,.contact-button:hover,.enquiry-submit:hover:not(:disabled),
   .header-cta:active,.hero-button:active,.solid-button:active,.contact-button:active,.enquiry-submit:active,
   .choice span:active,.flower-card:hover img,.flower-card:active img,.text-link:hover span { transform:none; }
-  /* The field is still revealed, just without the drift or the stagger. */
+  /* The field is still revealed, just without the drift, the float or the
+     stagger — the shorthand here drops the second animation outright. */
   .field-item { transform:none; }
-  .field-in .field-item a { animation-delay:0s; animation-duration:.3s; }
+  .field-in .field-item a { animation:field-arrive .3s var(--ease) forwards; }
 }
 
