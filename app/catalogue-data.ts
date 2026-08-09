@@ -1,69 +1,106 @@
-export const groups = [
-  { id: "roses", label: "Roses", items: ["Premium Rose", "Spray Rose", "Garden Rose"] },
-  { id: "carnations", label: "Carnations", items: ["Select-grade Carnation", "Mini Carnation"] },
-  { id: "lilies", label: "Lilies", items: ["Premium Lilies", "Oriental Lily", "Asiatic Lily", "Hybrid Lilies"] },
-  { id: "callas", label: "Callas", items: ["Calla Lilies", "Mini Calla Lilies"] },
-  { id: "orchids", label: "Orchids", items: ["Cymbidium Orchid", "Dendrobium", "Phalaenopsis (Moth Orchid)"] },
-  { id: "hydrangea", label: "Hydrangea", items: ["Premium Hydrangea"] },
-  { id: "seasonal", label: "Seasonal and specialty", items: ["Tulips", "Sunflowers", "Peony", "Ranunculus", "Butterfly Ranunculus", "Anemone", "Sweet Pea", "Lisianthus"] },
-  { id: "daisy", label: "Daisy family", items: ["Chrysanthemum", "Daisy", "Gerbera"] },
-  { id: "line", label: "Line flowers", items: ["Snapdragon", "Molucella", "Lepidium"] },
-  { id: "filler", label: "Filler", items: ["Baby's Breath", "Solidago", "Statice", "Wax Flower", "Queen of Lace"] },
-  { id: "greens", label: "Greens", items: ["Eucalyptus", "Israeli Ruscus"] },
-  { id: "tropical", label: "Tropical", items: ["Bird of Paradise"] },
+// The six filter chips, in the order they render. Six is the whole list: adding
+// a seventh means most chips go back to returning two or three cards, which is
+// what this replaced.
+export const categories = [
+  { id: "roses", label: "Roses" },
+  { id: "carnations", label: "Carnations" },
+  { id: "lilies", label: "Lilies and callas" },
+  { id: "orchids", label: "Orchids and tropicals" },
+  { id: "seasonal", label: "Seasonal and specialty" },
+  { id: "greens", label: "Greens and filler" },
+] as const;
+
+export type CategoryId = (typeof categories)[number]["id"];
+
+export type CatalogueItem = {
+  name: string;
+  // Exactly one category per item, and every item has one — this field is the
+  // only place a flower's chip is decided, so adding a variety is one line here
+  // and nothing in the page component.
+  category: CategoryId;
+  // Photography. To add one: drop the original in public/media, run
+  // `npm run media` to convert it to WebP, then set the path here. An item
+  // without an image falls back to a flat tile rather than breaking the grid.
+  image?: string;
+  // Neither of these is filled in yet, and neither should be guessed — the
+  // Korean names on file were seed-translated and never reviewed, and no
+  // botanical name has been confirmed against what the shop actually buys. The
+  // search box already reads both fields, so a buyer can type either the moment
+  // the owner fills one in.
+  korean?: string;
+  botanical?: string;
+};
+
+const items: CatalogueItem[] = [
+  { name: "Premium Rose", category: "roses", image: "/media/premium-rose.webp" },
+  { name: "Spray Rose", category: "roses", image: "/media/spray-rose.webp" },
+  { name: "Garden Rose", category: "roses", image: "/media/garden-rose.webp" },
+
+  { name: "Select-grade Carnation", category: "carnations", image: "/media/select-carnations.webp" },
+  { name: "Mini Carnation", category: "carnations", image: "/media/mini-carnation.webp" },
+
+  { name: "Premium Lilies", category: "lilies", image: "/media/premium-lilies.webp" },
+  { name: "Oriental Lily", category: "lilies", image: "/media/oriental-lilies.webp" },
+  { name: "Asiatic Lily", category: "lilies", image: "/media/asiatic-lilies.webp" },
+  { name: "Hybrid Lilies", category: "lilies", image: "/media/hybrid-lilies.webp" },
+  { name: "Calla Lilies", category: "lilies", image: "/media/calla-lilies.webp" },
+  { name: "Mini Calla Lilies", category: "lilies", image: "/media/mini-calla-lilies.webp" },
+
+  { name: "Cymbidium Orchid", category: "orchids", image: "/media/cymbidium-orchid.webp" },
+  { name: "Dendrobium", category: "orchids", image: "/media/dendrobium.webp" },
+  { name: "Phalaenopsis (Moth Orchid)", category: "orchids", image: "/media/phalaenopsis.webp" },
+  { name: "Bird of Paradise", category: "orchids", image: "/media/bird-of-paradise.webp" },
+
+  { name: "Premium Hydrangea", category: "seasonal", image: "/media/hydrangea.webp" },
+  { name: "Tulips", category: "seasonal", image: "/media/tulips.webp" },
+  { name: "Sunflowers", category: "seasonal", image: "/media/sunflowers.webp" },
+  { name: "Peony", category: "seasonal", image: "/media/peonies.webp" },
+  { name: "Ranunculus", category: "seasonal", image: "/media/ranunculus.webp" },
+  { name: "Butterfly Ranunculus", category: "seasonal", image: "/media/butterfly-ranunculus.webp" },
+  { name: "Anemone", category: "seasonal", image: "/media/anemone.webp" },
+  { name: "Sweet Pea", category: "seasonal", image: "/media/sweet-pea.webp" },
+  { name: "Lisianthus", category: "seasonal", image: "/media/lisianthus.webp" },
+  { name: "Chrysanthemum", category: "seasonal", image: "/media/chrysanthemum.webp" },
+  { name: "Daisy", category: "seasonal", image: "/media/daisies.webp" },
+  { name: "Gerbera", category: "seasonal", image: "/media/gerbera.webp" },
+  { name: "Snapdragon", category: "seasonal", image: "/media/snapdragon.webp" },
+  { name: "Molucella", category: "seasonal", image: "/media/molucella.webp" },
+
+  { name: "Eucalyptus", category: "greens", image: "/media/eucalyptus.webp" },
+  { name: "Israeli Ruscus", category: "greens", image: "/media/israeli-ruscus.webp" },
+  { name: "Baby's Breath", category: "greens", image: "/media/babys-breath.webp" },
+  { name: "Solidago", category: "greens", image: "/media/solidago.webp" },
+  { name: "Statice", category: "greens", image: "/media/statice.webp" },
+  { name: "Wax Flower", category: "greens", image: "/media/wax-flower.webp" },
+  { name: "Queen of Lace", category: "greens", image: "/media/queen-of-lace.webp" },
+  { name: "Lepidium", category: "greens", image: "/media/lepidium.webp" },
 ];
 
 // Dutch and wedding flowers are offerings, not stems sold by the bunch, so they
 // live in their own section rather than the filterable grid.
 export const services = ["Dutch Flowers", "Wedding Flowers"];
 
-// Photography keyed by item name. Every item is covered right now; anything
-// added to `groups` without an entry here falls back to a flat tile. To add
-// one: drop the original in public/media, run `npm run media` to convert it to
-// WebP, then add a line here.
-const images: Record<string, string> = {
-  "Premium Rose": "/media/premium-rose.webp",
-  "Spray Rose": "/media/spray-rose.webp",
-  "Garden Rose": "/media/garden-rose.webp",
-  "Select-grade Carnation": "/media/select-carnations.webp",
-  "Mini Carnation": "/media/mini-carnation.webp",
-  "Premium Lilies": "/media/premium-lilies.webp",
-  "Oriental Lily": "/media/oriental-lilies.webp",
-  "Asiatic Lily": "/media/asiatic-lilies.webp",
-  "Hybrid Lilies": "/media/hybrid-lilies.webp",
-  "Calla Lilies": "/media/calla-lilies.webp",
-  "Mini Calla Lilies": "/media/mini-calla-lilies.webp",
-  "Cymbidium Orchid": "/media/cymbidium-orchid.webp",
-  "Dendrobium": "/media/dendrobium.webp",
-  "Phalaenopsis (Moth Orchid)": "/media/phalaenopsis.webp",
-  "Premium Hydrangea": "/media/hydrangea.webp",
-  "Tulips": "/media/tulips.webp",
-  "Sunflowers": "/media/sunflowers.webp",
-  "Peony": "/media/peonies.webp",
-  "Ranunculus": "/media/ranunculus.webp",
-  "Butterfly Ranunculus": "/media/butterfly-ranunculus.webp",
-  "Anemone": "/media/anemone.webp",
-  "Sweet Pea": "/media/sweet-pea.webp",
-  "Lisianthus": "/media/lisianthus.webp",
-  "Chrysanthemum": "/media/chrysanthemum.webp",
-  "Daisy": "/media/daisies.webp",
-  "Gerbera": "/media/gerbera.webp",
-  "Snapdragon": "/media/snapdragon.webp",
-  "Molucella": "/media/molucella.webp",
-  "Lepidium": "/media/lepidium.webp",
-  "Baby's Breath": "/media/babys-breath.webp",
-  "Solidago": "/media/solidago.webp",
-  "Statice": "/media/statice.webp",
-  "Wax Flower": "/media/wax-flower.webp",
-  "Queen of Lace": "/media/queen-of-lace.webp",
-  "Eucalyptus": "/media/eucalyptus.webp",
-  "Israeli Ruscus": "/media/israeli-ruscus.webp",
-  "Bird of Paradise": "/media/bird-of-paradise.webp",
-};
+const categoryLabels = new Map<CategoryId, string>(categories.map(({ id, label }) => [id, label]));
 
-export const flowers = groups.flatMap((group) => group.items.map((name) => ({ name, group: group.label, groupId: group.id, image: images[name] })));
+// One spelling for both sides of the search: lower case, and accents pulled off
+// the letters they sit on, so "peonies" finds Peony's neighbours and a typed
+// "e" still reaches an "é". The query runs through the same function, so the two
+// strings are always compared in the same form.
+function normalize(value: string) {
+  return value.normalize("NFD").replace(/\p{Diacritic}/gu, "").toLowerCase();
+}
 
-export const filters = [{ id: "all", label: "All flowers" }, ...groups.map(({ id, label }) => ({ id, label }))];
+export function normalizeQuery(value: string) {
+  return normalize(value.trim());
+}
+
+// The haystack is built once, at module load, rather than per keystroke: name
+// first, then the Korean and botanical names if the record carries them.
+export const flowers = items.map((item) => ({
+  ...item,
+  group: categoryLabels.get(item.category)!,
+  search: normalize([item.name, item.korean, item.botanical].filter(Boolean).join(" ")),
+}));
 
 // The home field leads with photographed stems rather than grey placeholders.
 // Order matters: PLACEMENT in flower-field.tsx scatters them by index.

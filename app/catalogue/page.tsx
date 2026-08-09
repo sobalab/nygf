@@ -1,12 +1,62 @@
 "use client";
 
-import { useState } from "react";
-import { filters, flowers, services } from "../catalogue-data";
+import { useEffect, useId, useMemo, useRef, useState } from "react";
+import { categories, flowers, normalizeQuery, services, type CategoryId } from "../catalogue-data";
 import { Arrow, SiteFooter, SiteHeader } from "../chrome";
+import { shop, whatsappHref } from "../site";
+
+const AVAILABILITY_ASK = "Hello, could you send me today's flower availability and pricing?";
+const SERVICES_ASK = "Hello, I'd like to ask about your services.";
+
+// Decoration, not information: the label and the placeholder both already say
+// what the box is, so this is hidden from a screen reader rather than read out
+// as a third name for it. Drawn on the hairline the menu bars and the section
+// rules are, so it sits in the same hand as the rest of the page.
+function SearchGlass() {
+  return (
+    <svg className="search-glass" width="18" height="18" viewBox="0 0 18 18" fill="none" aria-hidden="true" focusable="false">
+      <circle cx="7.6" cy="7.6" r="5.35" stroke="currentColor" strokeWidth="1.3" />
+      <path d="M11.5 11.5 15.4 15.4" stroke="currentColor" strokeWidth="1.3" strokeLinecap="round" />
+    </svg>
+  );
+}
 
 export default function Catalogue() {
-  const [active, setActive] = useState("all");
-  const visibleFlowers = active === "all" ? flowers : flowers.filter((flower) => flower.groupId === active);
+  const searchId = useId();
+  const searchRef = useRef<HTMLInputElement>(null);
+  // null is the all state: there is no "All" chip, and pressing the chip that
+  // is already down comes back here.
+  const [active, setActive] = useState<CategoryId | null>(null);
+  // Two pieces of state for one field. `query` is what the input shows and has
+  // to update on every keystroke; `term` is what the grid reads, and follows a
+  // beat behind so a buyer typing a name doesn't rebuild 37 cards per letter.
+  const [query, setQuery] = useState("");
+  const [term, setTerm] = useState("");
+
+  useEffect(() => {
+    const timer = setTimeout(() => setTerm(query), 150);
+    return () => clearTimeout(timer);
+  }, [query]);
+
+  const needle = normalizeQuery(term);
+  // Category AND search, not or: a chip narrows the list the query is run
+  // against, so the two compose rather than replacing one another.
+  const visibleFlowers = useMemo(
+    () => flowers.filter((flower) => (active === null || flower.category === active) && (needle === "" || flower.search.includes(needle))),
+    [active, needle],
+  );
+
+  const narrowed = active !== null || query !== "";
+
+  function clearSearch() {
+    setQuery("");
+    setTerm("");
+  }
+
+  function clearAll() {
+    setActive(null);
+    clearSearch();
+  }
 
   return (
     <main>
@@ -14,22 +64,94 @@ export default function Catalogue() {
 
       <section className="page-head section-pad">
         <h1>Our Flowers</h1>
-        <p className="section-note">Our full standing selection. Market prices move daily and are never posted. Contact us for today&apos;s availability and price.</p>
+        <p className="section-note">What we carry regularly. We bring in more than this and the cooler changes week to week, so call for what is in today. Prices move with the market daily and are never posted.</p>
       </section>
 
       <section className="catalogue section-pad" id="catalogue">
-        <div className="filter-row" aria-label="Filter flower catalogue">
-          {filters.map((filter) => <button key={filter.id} className={active === filter.id ? "active" : ""} aria-pressed={active === filter.id} onClick={() => setActive(filter.id)}>{filter.label}</button>)}
+        <div className="catalogue-controls">
+          <search className="catalogue-search">
+            {/* The placeholder says what to type; the label says what the box
+                is, and stays said once there is text in it. */}
+            <label className="visually-hidden" htmlFor={searchId}>Search flowers by name</label>
+            <div className="search-field">
+              <input
+                id={searchId}
+                ref={searchRef}
+                type="search"
+                value={query}
+                placeholder="Search by name"
+                autoComplete="off"
+                spellCheck={false}
+                onChange={(event) => setQuery(event.target.value)}
+                onKeyDown={(event) => {
+                  if (event.key === "Escape") clearSearch();
+                }}
+              />
+              {/* One lane at the right end of the field, holding whichever of
+                  the two the field currently wants: the glass while it is empty,
+                  and the clear once there is something to clear. Focus stays in
+                  the field after a clear, so the next keystroke lands where it
+                  did and the glass comes back under the cursor. */}
+              {query === "" ? (
+                <SearchGlass />
+              ) : (
+                <button type="button" className="search-clear" aria-label="Clear search" onClick={() => { clearSearch(); searchRef.current?.focus(); }}>
+                  <span aria-hidden="true">&times;</span>
+                </button>
+              )}
+            </div>
+          </search>
+
+          <div className="filter-row" role="group" aria-label="Filter flowers by category">
+            {/* The way back to the whole list, and the state the page opens in.
+                It doesn't toggle off the way the six below it do: there is
+                nowhere for it to go, since it is already the resting state. */}
+            <button type="button" aria-pressed={active === null} onClick={() => setActive(null)}>
+              All flowers
+            </button>
+            {categories.map((category) => {
+              const pressed = active === category.id;
+              return (
+                <button key={category.id} type="button" aria-pressed={pressed} onClick={() => setActive(pressed ? null : category.id)}>
+                  {category.label}
+                </button>
+              );
+            })}
+          </div>
+
+          <div className="catalogue-status">
+            {/* Reads itself out as it changes, and holds its width while it does
+                — the figures are tabular, so the line doesn't shuffle sideways
+                between 8 and 11. */}
+            <p className="result-count" role="status">{visibleFlowers.length} of {flowers.length} varieties</p>
+            {narrowed ? <button type="button" className="clear-all" onClick={clearAll}>Clear</button> : null}
+          </div>
         </div>
-        <div className="flower-grid">
-          {visibleFlowers.map((flower) => (
-            <article className="flower-card" key={flower.name}>
-              <div className="flower-image-wrap">{flower.image ? <img src={flower.image} alt={flower.name} loading="lazy" /> : null}</div>
-              <div className="flower-meta"><h3>{flower.name}</h3><p>{flower.group}</p></div>
-            </article>
-          ))}
-        </div>
-        <a href="https://wa.me/12018151040?text=Hello%2C%20could%20you%20send%20me%20today%27s%20flower%20availability%20and%20pricing%3F" target="_blank" rel="noreferrer" className="solid-button">Ask on WhatsApp</a>
+
+        {/* Cards that don't match are dropped from the markup rather than hidden
+            with CSS, so a screen reader and a keyboard both reach exactly what
+            is on screen. */}
+        {visibleFlowers.length === 0 ? (
+          <div className="catalogue-empty">
+            <p>Nothing on this list matches that, and the cooler often holds more than the list does.</p>
+            <p>
+              <button type="button" className="clear-all" onClick={clearAll}>Clear the filter</button> to see the list again, or ask what came in this week: call{" "}
+              <a href={shop.storePhoneHref}>{shop.storePhone}</a> or message{" "}
+              <a href={whatsappHref(AVAILABILITY_ASK)} target="_blank" rel="noreferrer">{shop.ownerPhone} on WhatsApp</a>.
+            </p>
+          </div>
+        ) : (
+          <div className="flower-grid">
+            {visibleFlowers.map((flower) => (
+              <article className="flower-card" key={flower.name}>
+                <div className="flower-image-wrap">{flower.image ? <img src={flower.image} alt={flower.name} loading="lazy" /> : null}</div>
+                <div className="flower-meta"><h3>{flower.name}</h3><p>{flower.group}</p></div>
+              </article>
+            ))}
+          </div>
+        )}
+
+        <a href={whatsappHref(AVAILABILITY_ASK)} target="_blank" rel="noreferrer" className="solid-button">Ask on WhatsApp</a>
       </section>
 
       <section className="offerings section-pad">
@@ -38,7 +160,7 @@ export default function Catalogue() {
           {services.map((service) => (
             <article className="offering" key={service}>
               <h3>{service}</h3>
-              <a href="https://wa.me/12018151040?text=Hello%2C%20I%27d%20like%20to%20ask%20about%20your%20services." target="_blank" rel="noreferrer" className="text-link">Ask about this <Arrow /></a>
+              <a href={whatsappHref(SERVICES_ASK)} target="_blank" rel="noreferrer" className="text-link">Ask about this <Arrow /></a>
             </article>
           ))}
         </div>

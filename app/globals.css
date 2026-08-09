@@ -108,10 +108,10 @@ section[id].story { scroll-margin-top:0; }
    detail headings in the footer) are a separate tier at 11-12px. They are
    pointers to content, not content, and the floor doesn't apply to them. */
 .hero-bottom>p,.story-copy>p,.service-list p,.contact p,
-.page-head .section-note { font:400 18px/1.55 var(--sans); }
+.page-head .section-note,.catalogue-empty p { font:400 18px/1.55 var(--sans); }
 .section-note,.enquiry-sent>p,
 .enquiry-details p,.footer-details p,.field-hint,.field-error,.flower-meta p,
-.footer-base { font:400 16px/1.6 var(--sans); }
+.result-count,.footer-base { font:400 16px/1.6 var(--sans); }
 .text-link { position:relative; display:inline-flex; gap:22px; border-bottom:1px solid var(--line); padding:18px 0 8px; text-transform:uppercase; letter-spacing:1.3px; font-size:12px; }
 .catalogue { background:var(--band-flowers); color:var(--sage); }
 /* Past roughly 1440px the 6vw gutters stop holding the page in, and the cards
@@ -184,12 +184,69 @@ section[id].story { scroll-margin-top:0; }
 .field-center .solid-button { margin:34px auto 0; }
 .section-heading { display:flex; justify-content:space-between; align-items:end; gap:6vw; margin-bottom:52px; }
 .section-note { max-width:360px; margin:0 0 5px; }
-/* No top margin of its own: the 64px the catalogue band already puts above it
-   is the whole gap between the head's copy and the filters, which is what the
-   70px on top of that was overshooting. */
-.filter-row { margin:0 0 38px; display:flex; flex-wrap:wrap; gap:14px 28px; padding:18px 0; }
-.filter-row button { border:0; background:none; padding:0 0 5px; font-size:12px; letter-spacing:1.4px; text-transform:uppercase; cursor:pointer; opacity:.9; }
-.filter-row button.active { opacity:1; }
+/* Search, then the six chips, then the count — the three stacked in the order a
+   buyer uses them. No top margin of its own: the 64px the catalogue band
+   already puts above it is the whole gap between the head's copy and the
+   controls, which is what the 70px on top of that was overshooting. */
+.catalogue-controls { display:flex; flex-direction:column; gap:24px; margin:0 0 42px; }
+/* A measure, not the full band: the field is for one variety name, and an input
+   running the width of a four-card grid reads as a place to write a paragraph. */
+.catalogue-search { display:block; max-width:400px; }
+.search-field { position:relative; }
+/* The field is drawn in the band's own two colours rather than being the cream
+   plate the enquiry form's inputs are: on the blue that plate read as a slab cut
+   out of the section, and the chips sitting under it in sage line and sage type
+   made it look like it had arrived from another page. So the rule, the type and
+   the caret are all sage, and the fill is barely a fill — a sixteenth of the
+   sage, just enough to tell the box from the band behind it.
+     Square, where the chips below take the 6px radius: the same distinction the
+   contact page draws between the boxes you type in and the ones you pick, so the
+   two rows read as different kinds of control rather than one row that lost its
+   corners. 16px is a floor, not a preference — iOS zooms the page in on any
+   input it finds set smaller. The right padding is the clear button's lane. */
+.search-field input { -webkit-appearance:none; appearance:none; width:100%; background:rgba(202,203,181,.06); color:var(--sage); border:1px solid rgba(202,203,181,.5); border-radius:0; padding:15px 46px 15px 16px; font:400 16px/1.45 var(--sans); transition:border-color .3s var(--ease), background-color .3s var(--ease); }
+.search-field input::placeholder { color:rgba(202,203,181,.65); }
+.search-field input:hover { border-color:rgba(202,203,181,.68); }
+/* Full sage on the rule and a touch more ground, so a focused field is lit
+   rather than merely ringed — the outline lands outside it either way. */
+.search-field input:focus { border-color:var(--sage); background:rgba(202,203,181,.1); }
+/* WebKit draws its own clear affordance inside a search input. Ours is the one
+   that carries a label and a hit area, so the native one steps out. */
+.search-field input::-webkit-search-cancel-button,
+.search-field input::-webkit-search-decoration { -webkit-appearance:none; display:none; }
+/* Centred in the 46px lane the input's right padding holds open, and no target
+   of its own — it points at the field, and the field is what you click. */
+.search-glass { position:absolute; top:50%; right:13px; transform:translateY(-50%); display:block; color:rgba(202,203,181,.6); pointer-events:none; }
+/* The clear takes the same lane once there is text, at the full height of the
+   field so its target is the 44px the row is tall. */
+.search-clear { position:absolute; top:0; right:0; bottom:0; width:44px; display:flex; align-items:center; justify-content:center; border:0; background:none; padding:0; font-size:21px; line-height:1; color:rgba(202,203,181,.6); cursor:pointer; transition:color .3s var(--ease); }
+.search-clear:hover { color:var(--sage); }
+.filter-row { display:flex; flex-wrap:wrap; gap:10px; }
+/* Chips carry their own outline rather than the underline the old text row
+   used: with six of them holding a selected state, the box is what makes
+   "pressed" legible at a glance and gives a thumb something to land on. The
+   selected one takes the sage as a fill and hands its type back to the band. */
+.filter-row button { border:1px solid rgba(202,203,181,.5); background:none; border-radius:var(--btn-radius); padding:12px 17px; font:500 15px/1.2 var(--sans); cursor:pointer; transition:border-color .3s var(--ease), background-color .3s var(--ease), color .3s var(--ease), transform .3s var(--ease); }
+.filter-row button:hover { border-color:var(--sage); background:rgba(202,203,181,.11); }
+.filter-row button:active { transform:scale(.98); transition-duration:.09s; }
+.filter-row button[aria-pressed="true"] { background:var(--sage); border-color:var(--sage); color:var(--band-flowers); }
+.catalogue-status { display:flex; flex-wrap:wrap; align-items:baseline; gap:6px 22px; }
+/* Tabular figures: the count changes on every keystroke, and proportional ones
+   would shift the word after them each time it did. */
+.result-count { font-variant-numeric:tabular-nums; opacity:.72; margin:0; }
+/* Only on screen when there is something to clear, so it reads as an action
+   rather than a permanent piece of furniture. */
+.clear-all { border:0; background:none; padding:0; font:500 16px/1.6 var(--sans); text-decoration:underline; text-underline-offset:5px; cursor:pointer; transition:opacity .3s var(--ease); }
+.clear-all:hover { opacity:.7; }
+/* Where the grid would have been. A buyer who searched for something we don't
+   stock is the one most worth catching, so the way to ask lives here rather
+   than being left to the button under the band. */
+.catalogue-empty { max-width:540px; padding:6px 0 4px; display:flex; flex-direction:column; gap:14px; }
+.catalogue-empty p { margin:0; }
+.catalogue-empty a { border-bottom:1px solid rgba(202,203,181,.5); transition:border-color .3s var(--ease); }
+.catalogue-empty a:hover { border-bottom-color:var(--sage); }
+/* Set in the sentence it sits in rather than at the status row's size. */
+.catalogue-empty .clear-all { font-size:inherit; line-height:inherit; }
 .flower-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:42px 18px; }
 .flower-image-wrap { position:relative; overflow:hidden; background:var(--mist); aspect-ratio:3/4; border-radius:var(--tile-radius); }
 /* The wrap already clips, but Safari lets a transformed child bleed past a
@@ -412,20 +469,18 @@ footer { padding:96px 6vw 34px; display:flex; flex-direction:column; }
 
 /* Underline wipe. Entering, the rule grows from the left; leaving, it retracts
    to the right, so the line travels with the pointer instead of blinking off. */
-.nav a,.filter-row button,.flower-meta h3,.wordmark { position:relative; }
-.nav a::after,.filter-row button::after,.flower-meta h3::after,.text-link::after {
+/* The catalogue chips used to run this mechanic too. They carry a border and a
+   fill now, because a selected state reads better as a resting shape than as a
+   rule that has to stay drawn to mean something. */
+.nav a,.flower-meta h3,.wordmark { position:relative; }
+.nav a::after,.flower-meta h3::after,.text-link::after {
   content:""; position:absolute; left:0; right:0; bottom:-3px; height:1px; background:currentColor;
   transform:scaleX(0); transform-origin:right; transition:transform .5s var(--ease-out);
 }
-.filter-row button::after { bottom:0; }
 .text-link::after { bottom:-1px; }
 .nav a:hover::after,.nav a:focus-visible::after,
-.filter-row button:hover::after,.filter-row button:focus-visible::after,.filter-row button.active::after,
 .flower-card:hover .flower-meta h3::after,.flower-card:focus-visible .flower-meta h3::after,
 .text-link:hover::after,.text-link:focus-visible::after { transform:scaleX(1); transform-origin:left; }
-/* The selected filter is a resting state, not a gesture — it shouldn't retract
-   under the pointer on the way out. */
-.filter-row button.active::after { transform-origin:left; }
 .text-link span { transition:transform .45s var(--ease-out); }
 .text-link:hover span { transform:translate(3px,-3px); }
 .wordmark { transition:opacity .3s var(--ease); }
@@ -449,9 +504,21 @@ footer { padding:96px 6vw 34px; display:flex; flex-direction:column; }
 
 /* Keyboard focus gets the same ring everywhere, flipped to paper on the two
    dark bands and over the hero photo. */
-a:focus-visible,button:focus-visible { outline:2px solid var(--ink); outline-offset:4px; }
+a:focus-visible,button:focus-visible,input:focus-visible { outline:2px solid var(--ink); outline-offset:4px; }
 .hero a:focus-visible,.trade a:focus-visible,.story a:focus-visible { outline-color:var(--paper); }
-.flower-field a:focus-visible,.page-head a:focus-visible,.catalogue a:focus-visible,.catalogue button:focus-visible { outline-color:var(--sage); }
+.flower-field a:focus-visible,.page-head a:focus-visible,.catalogue a:focus-visible,.catalogue button:focus-visible,.catalogue input:focus-visible { outline-color:var(--sage); }
+/* The chip's own border already sits where a 4px offset would put the ring, and
+   the two together read as a double outline — the selected chip's fill is what
+   it lands on, so the ring comes in tight against it. */
+.filter-row button:focus-visible { outline-offset:2px; }
+.search-field input:focus-visible { outline-offset:3px; }
+/* This one stands inside the field it clears, so its ring turns inward rather
+   than drawing a second box across the rule. */
+.catalogue .search-clear:focus-visible { outline-offset:-3px; }
+
+/* For labels a screen reader needs and the eye doesn't: clipped to nothing
+   rather than display:none, which would take it out of the tree as well. */
+.visually-hidden { position:absolute; width:1px; height:1px; margin:-1px; padding:0; border:0; overflow:hidden; clip-path:inset(50%); white-space:nowrap; }
 
 /* Desktop home: one screenful per section, content centred within it. These are
    min-heights, so a short viewport lets a section grow rather than clip. The
@@ -502,7 +569,11 @@ a:focus-visible,button:focus-visible { outline:2px solid var(--ink); outline-off
   .story-image img,.story-copy>p { margin-inline:auto; }
   .section-heading { display:block; }
   .section-note { margin-top:30px; }
-  .filter-row { overflow:auto; gap:28px; }
+  /* Six chips wrap to two or three rows on a phone, which is a shape a thumb
+     can read — the old row scrolled sideways because twelve of them couldn't.
+     Each chip stays whole on its own line rather than breaking mid-label. */
+  .catalogue-search { max-width:none; }
+  .filter-row { gap:8px; }
   .filter-row button { white-space:nowrap; }
   .flower-grid { grid-template-columns:repeat(2,1fr); gap:40px 14px; }
   /* Nothing fits beside the copy at this width, so six of the nine stems keep
