@@ -12,6 +12,10 @@ const EMPTY = {
   email: "",
   business: "",
   fulfilment: "",
+  address: "",
+  city: "",
+  state: "",
+  zip: "",
   service: "General order",
   needBy: "",
   needs: "",
@@ -37,6 +41,7 @@ function summarise(form: typeof EMPTY) {
     form.email && `Email: ${form.email}`,
     `Service: ${form.service}`,
     form.fulfilment && `Pickup or delivery: ${form.fulfilment}`,
+    form.address && `Delivery address: ${[form.address, form.city, [form.state, form.zip].filter(Boolean).join(" ")].filter(Boolean).join(", ")}`,
     form.needBy && `Needed by: ${readableDate(form.needBy)}`,
   ].filter(Boolean);
 
@@ -54,6 +59,12 @@ export default function Contact() {
 
   function set(key: keyof typeof EMPTY, value: string) {
     setForm((current) => ({ ...current, [key]: value }));
+  }
+
+  // Picking pickup takes the delivery answers back out rather than leaving them
+  // in state, where they would still reach the message.
+  function setFulfilment(value: string) {
+    setForm((current) => ({ ...current, fulfilment: value, ...(value === "Delivery" ? {} : { address: "", city: "", state: "", zip: "" }) }));
   }
 
   // The confirmation panel is much shorter than the form it replaces, so without
@@ -92,6 +103,7 @@ export default function Contact() {
           business: form.business,
           service: form.service,
           pickup_or_delivery: form.fulfilment,
+          delivery_address: [form.address, form.city, [form.state, form.zip].filter(Boolean).join(" ")].filter(Boolean).join(", "),
           needed_by: readableDate(form.needBy),
           message: form.needs,
         }),
@@ -111,8 +123,8 @@ export default function Contact() {
       <section className="page-head section-pad">
         <h1>Tell Us What You Need</h1>
         <p className="section-note">
-          Prices move with the market daily and are never posted, so we answer by phone or WhatsApp. Send the list and
-          we will come back with what is in the cooler and what it costs today.
+          Prices move with the market daily and are never posted, so we can answer any questions by email, phone or
+          WhatsApp. Send your list and we will come back with what is in the cooler and what it costs.
         </p>
       </section>
 
@@ -146,15 +158,14 @@ export default function Contact() {
               <input ref={honeypot} className="honeypot" type="text" name="botcheck" tabIndex={-1} autoComplete="off" aria-hidden="true" />
 
               <div className="field">
-                <label htmlFor="name">Name</label>
+                <label htmlFor="name">Name<span className="req" aria-hidden="true">*</span></label>
                 <input id="name" name="name" type="text" required autoComplete="name" value={form.name} onChange={(e) => set("name", e.target.value)} />
               </div>
 
               <div className="field-row">
                 <div className="field">
-                  <label htmlFor="phone">Phone or WhatsApp</label>
-                  <input id="phone" name="phone" type="tel" required autoComplete="tel" placeholder="201-815-1040" value={form.phone} onChange={(e) => set("phone", e.target.value)} />
-                  <p className="field-hint">How we reply. Prices are quoted on the call.</p>
+                  <label htmlFor="phone">Phone or WhatsApp<span className="req" aria-hidden="true">*</span></label>
+                  <input id="phone" name="phone" type="tel" required autoComplete="tel" placeholder="212-555-0123" value={form.phone} onChange={(e) => set("phone", e.target.value)} />
                 </div>
                 <div className="field">
                   <label htmlFor="email">Email <em>optional</em></label>
@@ -162,13 +173,19 @@ export default function Contact() {
                 </div>
               </div>
 
-              <div className="field">
-                <label htmlFor="business">Business name <em>optional</em></label>
-                <input id="business" name="business" type="text" autoComplete="organization" value={form.business} onChange={(e) => set("business", e.target.value)} />
-              </div>
+              {/* Business name belongs to any order, so it sits here by default.
+                  Delivery asks for it again beside the address it labels, and
+                  it moves rather than doubling up — one input either way, and
+                  the value carries across because it lives in form state. */}
+              {form.fulfilment === "Delivery" ? null : (
+                <div className="field">
+                  <label htmlFor="business">Business Name <em>optional</em></label>
+                  <input id="business" name="business" type="text" autoComplete="organization" value={form.business} onChange={(e) => set("business", e.target.value)} />
+                </div>
+              )}
 
               <fieldset className="field">
-                <legend>What kind of order</legend>
+                <legend>What Kind of Order</legend>
                 <div className="choices">
                   {SERVICES.map((service) => (
                     <label className="choice" key={service}>
@@ -181,36 +198,72 @@ export default function Contact() {
 
               <div className="field-row">
                 <fieldset className="field">
-                  <legend>Pickup or delivery</legend>
-                  <div className="choices">
+                  <legend>Pickup or Delivery</legend>
+                  <p className="field-hint" id="fulfilment-hint">We deliver across the New York metro area and nearby Connecticut.</p>
+                  <div className="choices" aria-describedby="fulfilment-hint">
                     {["Pickup", "Delivery"].map((option) => (
                       <label className="choice" key={option}>
-                        <input type="radio" name="fulfilment" value={option} checked={form.fulfilment === option} onChange={(e) => set("fulfilment", e.target.value)} />
+                        <input type="radio" name="fulfilment" value={option} checked={form.fulfilment === option} onChange={(e) => setFulfilment(e.target.value)} />
                         <span>{option}</span>
                       </label>
                     ))}
                   </div>
-                  <p className="field-hint">We deliver across the New York metro area and nearby Connecticut.</p>
                 </fieldset>
                 <div className="field">
-                  <label htmlFor="needBy">When you need it</label>
-                  <input id="needBy" name="needBy" type="date" value={form.needBy} onChange={(e) => set("needBy", e.target.value)} />
-                  <p className="field-hint">A rough date is fine. It changes what we can source.</p>
+                  <label htmlFor="needBy">When You Need It</label>
+                  <p className="field-hint" id="needBy-hint">A rough date is fine. It changes what we can source.</p>
+                  <input id="needBy" name="needBy" type="date" aria-describedby="needBy-hint" value={form.needBy} onChange={(e) => set("needBy", e.target.value)} />
                 </div>
               </div>
 
+              {/* Only delivery needs somewhere to arrive, so the questions that
+                  go with it are asked only when it is chosen. The address is
+                  split into its four parts rather than kept on one line: given
+                  the autocomplete tokens below, a browser holding a saved
+                  address fills all four from the first one the reader touches,
+                  where a single free-text line only ever gets the street. */}
+              {form.fulfilment === "Delivery" ? (
+                <>
+                  <div className="field">
+                    <label htmlFor="address">Delivery Address<span className="req" aria-hidden="true">*</span></label>
+                    <input id="address" name="address" type="text" required autoComplete="address-line1" placeholder="171-10 39th Ave" value={form.address} onChange={(e) => set("address", e.target.value)} />
+                  </div>
+
+                  <div className="field-row field-row-address">
+                    <div className="field">
+                      <label htmlFor="city">City<span className="req" aria-hidden="true">*</span></label>
+                      <input id="city" name="city" type="text" required autoComplete="address-level2" placeholder="Flushing" value={form.city} onChange={(e) => set("city", e.target.value)} />
+                    </div>
+                    <div className="field">
+                      <label htmlFor="state">State<span className="req" aria-hidden="true">*</span></label>
+                      <input id="state" name="state" type="text" required autoComplete="address-level1" placeholder="NY" value={form.state} onChange={(e) => set("state", e.target.value)} />
+                    </div>
+                    <div className="field">
+                      <label htmlFor="zip">ZIP<span className="req" aria-hidden="true">*</span></label>
+                      <input id="zip" name="zip" type="text" required autoComplete="postal-code" inputMode="numeric" pattern="[0-9]{5}(-[0-9]{4})?" placeholder="11358" value={form.zip} onChange={(e) => set("zip", e.target.value)} />
+                    </div>
+                  </div>
+
+                  <div className="field">
+                    <label htmlFor="business">Business Name <em>optional</em></label>
+                    <input id="business" name="business" type="text" autoComplete="organization" value={form.business} onChange={(e) => set("business", e.target.value)} />
+                  </div>
+                </>
+              ) : null}
+
               <div className="field">
-                <label htmlFor="needs">What you need</label>
+                <label htmlFor="needs">What You Need<span className="req" aria-hidden="true">*</span></label>
+                <p className="field-hint" id="needs-hint">Please include flower type variety and bunch count. Colors and substitutions can be discussed further on call or message.</p>
                 <textarea
                   id="needs"
                   name="needs"
                   required
                   rows={7}
                   placeholder="20 bunches Premium Rose, 10 Eucalyptus, 5 Hydrangea."
+                  aria-describedby="needs-hint"
                   value={form.needs}
                   onChange={(e) => set("needs", e.target.value)}
                 />
-                <p className="field-hint">Variety and bunch count is all we need. Colours and substitutions can wait for the call.</p>
               </div>
 
               {status === "error" ? (
@@ -219,10 +272,13 @@ export default function Contact() {
                 </p>
               ) : null}
 
-              <button type="submit" className="enquiry-submit" disabled={status === "sending"}>
-                {status === "sending" ? "Sending" : "Send this list"}
-              </button>
+              {/* Above the button for the same reason every hint above sits above
+                  its input: it says what the control will do, so it is read
+                  before the control rather than after it. */}
               <p className="field-hint enquiry-note">Submitting also opens a WhatsApp draft so you have a thread with the owner.</p>
+              <button type="submit" className="enquiry-submit" disabled={status === "sending"}>
+                {status === "sending" ? "Sending" : "Send inquiry"}
+              </button>
             </form>
           )}
         </div>
