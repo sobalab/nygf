@@ -19,9 +19,13 @@ const FALL_STEP = 100;
 const OPEN_FIRST = 950;
 const OPEN_STEP = 60;
 
-// Long enough for the second line to land, the hold, and the fade — after which
-// the overlay is only an invisible node, so take it out.
-const TEARDOWN = 3500;
+// Long enough for the second line to land, the second it holds there, and the
+// fade — after which the overlay is only an invisible node, so take it out.
+// The reduced-motion cut runs a much shorter clear (see globals.css) and gets
+// its own figure; the scroll lock lives on this timer, so a shared one would
+// pin the page for three seconds after that version had already finished.
+const TEARDOWN = 4150;
+const TEARDOWN_STILL = 1450;
 
 const KEY = "nygf-splash";
 
@@ -48,7 +52,8 @@ export function Splash() {
     // only needs taking out of the DOM; a first visit holds it for the run.
     const playing = shouldPlay();
     if (playing) document.documentElement.classList.add("splash-open");
-    const timer = setTimeout(() => setShown(false), playing ? TEARDOWN : 0);
+    const still = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    const timer = setTimeout(() => setShown(false), playing ? (still ? TEARDOWN_STILL : TEARDOWN) : 0);
     return () => clearTimeout(timer);
   }, []);
 

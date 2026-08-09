@@ -538,7 +538,10 @@ a:focus-visible,button:focus-visible { outline:2px solid var(--ink); outline-off
    --------------------------------------------------------------------------- */
 html.splash-open { overflow:hidden; }
 html[data-splash="off"] .splash { display:none; }
-.splash { position:fixed; inset:0; z-index:100; display:grid; place-items:center; padding:6vw; background:var(--paper); animation:splash-clear .5s var(--ease) 2.85s forwards; }
+/* The last beat lands at 2.5s, and the clear waits a full second past it: the
+   assembled name is the thing the splash exists to show, so it holds long
+   enough to be read rather than being wiped as it arrives. */
+.splash { position:fixed; inset:0; z-index:100; display:grid; place-items:center; padding:6vw; background:var(--paper); animation:splash-clear .5s var(--ease) 3.5s forwards; }
 @keyframes splash-clear { from { opacity:1 } 99% { opacity:0; visibility:visible } to { opacity:0; visibility:hidden } }
 
 /* The name is one line at every width, so the size is fluid the whole way down
