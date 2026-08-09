@@ -44,7 +44,7 @@ old README also states hours and delivery zones are confirmed values.
 
 **Sourcing countries (6)**
 
-Ecuador, Colombia, Costa Rica, Mexico, Poland, Canada. Importing direct since
+Ecuador, Colombia, Costa Rica, Mexico, Holland, Canada. Importing direct since
 1990.
 
 **Who they supply**

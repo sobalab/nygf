@@ -1,5 +1,6 @@
 import { previewFlowers } from "./catalogue-data";
 import { Arrow, SiteFooter, SiteHeader } from "./chrome";
+import { FlowerField } from "./flower-field";
 
 export default function Home() {
   return (
@@ -19,11 +20,20 @@ export default function Home() {
         </div>
       </section>
 
+      <section className="catalogue flower-field section-pad" id="catalogue">
+        <FlowerField flowers={previewFlowers} />
+        <div className="field-center">
+          <h2>Our Flowers</h2>
+          <p className="section-note">Market prices move daily and are never posted. Call or WhatsApp for today&apos;s availability and price.</p>
+          <a href="/catalogue" className="solid-button">View full catalogue</a>
+        </div>
+      </section>
+
       <section className="intro section-pad" id="about">
         <div className="intro-copy">
           <h2>Direct From the Farm.<br />Closer to Your Needs.</h2>
           <div className="intro-detail">
-            <p>We clear our own shipments, with no broker between grower and shop. Our flowers arrive from Ecuador, Colombia, Costa Rica, Mexico, Poland, and Canada.</p>
+            <p>We clear our own shipments, with no broker between grower and shop. Our flowers arrive from Ecuador, Colombia, Costa Rica, Mexico, Holland, and Canada.</p>
             <a className="text-link" href="#story">Our story <Arrow /></a>
           </div>
         </div>
@@ -32,24 +42,8 @@ export default function Home() {
         </div>
       </section>
 
-      <section className="catalogue section-pad" id="catalogue">
-        <div className="section-heading">
-          <h2>Our Flowers</h2>
-          <p className="section-note">Market prices move daily and are never posted. Call or WhatsApp for today&apos;s availability and price.</p>
-        </div>
-        <div className="flower-grid">
-          {previewFlowers.map((flower) => (
-            <a className="flower-card" key={flower.name} href="/catalogue">
-              <div className="flower-image-wrap">{flower.image ? <img src={flower.image} alt={flower.name} /> : null}</div>
-              <div className="flower-meta"><h3>{flower.name}</h3><p>{flower.group}</p></div>
-            </a>
-          ))}
-        </div>
-        <a href="/catalogue" className="solid-button">View full catalogue</a>
-      </section>
-
       <section className="trade section-pad" id="services">
-        <div className="trade-title"><h2>Built for the Way<br /><em>You Work.</em></h2></div>
+        <div className="trade-title"><h2>Our Services</h2></div>
         <div className="service-list">
           <article><h3>Direct Importing</h3><p>We import and clear our own shipments, removing the broker between farm and shop.</p></article>
           <article><h3>Refrigerated Delivery</h3><p>Cold-chain delivery across the New York metropolitan area and nearby Connecticut, plus pickup in Flushing.</p></article>

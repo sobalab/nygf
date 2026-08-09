@@ -65,6 +65,7 @@ export const flowers = groups.flatMap((group) => group.items.map((name) => ({ na
 
 export const filters = [{ id: "all", label: "All flowers" }, ...groups.map(({ id, label }) => ({ id, label }))];
 
-// The home strip leads with photographed stems rather than grey placeholders.
-const previewNames = ["Premium Rose", "Premium Hydrangea", "Premium Lilies", "Peony", "Tulips"];
+// The home field leads with photographed stems rather than grey placeholders.
+// Order matters: PLACEMENT in flower-field.tsx scatters them by index.
+const previewNames = ["Premium Rose", "Premium Hydrangea", "Premium Lilies", "Peony", "Tulips", "Ranunculus", "Sunflowers", "Calla Lilies", "Anemone"];
 export const previewFlowers = previewNames.map((name) => flowers.find((flower) => flower.name === name)!);

@@ -1,13 +1,14 @@
 @import "tailwindcss";
 
-@font-face { font-family:"Flaviotte"; src:url("/fonts/Flaviotte.otf") format("opentype"); font-weight:400; font-style:normal; font-display:swap; }
+@font-face { font-family:"Baskervville"; src:url("/fonts/Baskervville%5Bwght%5D.ttf") format("truetype-variations"); font-weight:400 700; font-style:normal; font-display:swap; }
+@font-face { font-family:"Baskervville SC"; src:url("/fonts/BaskervvilleSC%5Bwght%5D.ttf") format("truetype-variations"); font-weight:400 700; font-style:normal; font-display:swap; }
 @font-face { font-family:"Uncut Sans"; src:url("/fonts/UncutSans-Variable.ttf") format("truetype-variations"); font-weight:300 700; font-style:normal; font-display:swap; }
 @font-face { font-family:"Uncut Sans"; src:url("/fonts/UncutSans-VariableItalic.ttf") format("truetype-variations"); font-weight:300 700; font-style:italic; font-display:swap; }
 
 /* Palette. --ink is the near-black used for all type and dark UI; --slate is
    the blue the trade band is painted in. --field and the rgba()s below are
    tints of these, not new hues: --ink is 23 40 46, --paper is 238 229 220. */
-:root { --paper:#eee5dc; --ink:#17282e; --slate:#355561; --sage:#999a80; --rust:#a7593a; --mist:#b7c2c1; --line:rgba(23,40,46,.22); --field:#f6f1ea; --ease:cubic-bezier(.22,.7,.3,1); --ease-out:cubic-bezier(.16,1,.3,1); --serif:"Flaviotte",Georgia,serif; --sans:"Uncut Sans",Helvetica,Arial,sans-serif; --btn-radius:6px; }
+:root { --paper:#eee5dc; --ink:#17282e; --slate:#355561; --sage:#999a80; --sage-pale:#cacbb5; --rust:#a7593a; --mist:#b7c2c1; --line:rgba(23,40,46,.22); --field:#f6f1ea; --ease:cubic-bezier(.22,.7,.3,1); --ease-out:cubic-bezier(.16,1,.3,1); --serif:"Baskervville",Georgia,serif; --display:"Baskervville SC",Georgia,serif; --sans:"Uncut Sans",Helvetica,Arial,sans-serif; --btn-radius:6px; }
 * { box-sizing:border-box; }
 html { scroll-behavior:smooth; }
 body { margin:0; background:var(--paper); color:var(--ink); font-family:var(--sans); }
@@ -18,12 +19,15 @@ img { display:block; width:100%; }
    section beneath starts at the top of the page and scrolls under it. */
 .site-header { height:74px; display:grid; grid-template-columns:1fr auto 1fr; align-items:center; padding:0 26px; background:var(--paper); position:sticky; top:14px; z-index:20; margin:14px 14px -88px; border-radius:8px; box-shadow:0 2px 14px rgba(23,40,46,.13), 0 0 0 1px rgba(23,40,46,.07); }
 section[id] { scroll-margin-top:102px; }
-.wordmark { font-family:var(--serif); font-size:20px; letter-spacing:-.7px; display:flex; align-items:baseline; gap:6px; flex-wrap:wrap; }
-.site-header .wordmark { grid-area:1/2; justify-self:center; align-items:center; gap:10px; }
-.wordmark-mark { width:auto; height:32px; flex:0 0 auto; }
+/* One mark, two forms: the NYGF monogram carries the header, and the name it
+   stands for is spelled out in full in the footer and on the splash. All three
+   are set in Baskervville SC, whose drawn small caps hold their weight against
+   the caps beside them in a way a synthesised set never does. */
+.wordmark { font-family:var(--display); font-size:26px; line-height:1; letter-spacing:.02em; }
+.wordmark-full { font-size:21px; letter-spacing:.045em; }
+.site-header .wordmark { grid-area:1/2; justify-self:center; }
 .site-header .nav { grid-area:1/1; justify-self:start; }
 .site-header .header-cta { grid-area:1/3; }
-.wordmark small { font:500 11px var(--sans); letter-spacing:1.3px; margin-left:5px; }
 .nav { display:flex; gap:38px; font-size:12px; text-transform:uppercase; letter-spacing:1.4px; }
 .nav-contact { display:none; }
 .header-cta { justify-self:end; display:flex; align-items:center; justify-content:center; background:var(--ink); color:var(--paper); padding:12px 20px; border-radius:var(--btn-radius); text-transform:uppercase; font-size:11px; letter-spacing:1.2px; }
@@ -41,16 +45,22 @@ section[id] { scroll-margin-top:102px; }
 .hero-shade { position:absolute; inset:0; background:rgba(23,37,43,.42); }
 .hero-copy { position:relative; z-index:1; padding:15vh 6vw 7vh; min-height:100svh; display:flex; flex-direction:column; justify-content:center; align-items:center; text-align:center; gap:38px; }
 .eyebrow { font-size:11px; line-height:1.5; letter-spacing:2px; text-transform:uppercase; }
-.nav,.header-cta,.menu-toggle,.eyebrow,.hero-button,.text-link,.filter-row button,.solid-button,.contact-button,footer>div { font-weight:500; }
+.nav,.header-cta,.menu-toggle,.eyebrow,.hero-button,.text-link,.filter-row button,.solid-button,.contact-button { font-weight:500; }
 .eyebrow.light { color:rgba(255,255,255,.78); }
-.hero h1,.contact h2 { font:400 clamp(44px,6.2vw,96px)/.9 var(--serif); letter-spacing:-.045em; margin:0; }
+/* Section headings run in the small-caps cut, the same face as the wordmark, so
+   the page is headed throughout by the mark's own voice. Small caps are drawn
+   on a wider set than lowercase and want opening up rather than closing: the
+   tracking here is positive where the roman's was negative. */
+.hero h1,.contact h2 { font:400 clamp(44px,6.2vw,96px)/1.04 var(--display); letter-spacing:.015em; margin:0; }
 .hero h1 em,.contact h2 em,.trade h2 em { font-weight:400; }
 .hero-bottom { display:flex; flex-direction:column; align-items:center; gap:44px; }
 .hero-bottom>p { max-width:520px; font:300 18px/1.55 var(--sans); margin:0; }
 .hero-button { display:flex; align-items:center; justify-content:center; background:var(--paper); color:var(--ink); padding:17px 30px; border-radius:var(--btn-radius); font-size:12px; letter-spacing:1.2px; text-transform:uppercase; }
 .section-pad { padding:130px 6vw; }
 .intro { display:grid; grid-template-columns:1fr 1fr; gap:6vw; align-items:center; }
-.intro h2,.catalogue h2,.trade h2,.offerings h2,.page-head h1 { font:400 clamp(34px,4.4vw,66px)/1.02 var(--serif); letter-spacing:-.035em; margin:0; }
+/* A shade smaller than the roman was: small caps run about a sixth wider at the
+   same size, and these headings carry authored line breaks that have to hold. */
+.intro h2,.catalogue h2,.trade h2,.offerings h2,.page-head h1 { font:400 clamp(30px,3.6vw,54px)/1.12 var(--display); letter-spacing:.015em; margin:0; }
 .page-head { background:var(--sage); padding-bottom:0; display:grid; grid-template-columns:1.4fr .6fr; gap:8vw; align-items:end; }
 .page-head + .catalogue,.page-head + .enquiry { padding-top:64px; }
 .offerings h2 { margin-bottom:46px; }
@@ -63,6 +73,35 @@ section[id] { scroll-margin-top:102px; }
 .statement-image-wrap { position:relative; }
 .statement-image { width:100%; aspect-ratio:4/3; object-fit:cover; filter:saturate(.8); }
 .catalogue { background:var(--sage); }
+/* Home catalogue: instead of a grid, the stems are scattered across the whole
+   band and drift against the pointer, with the copy holding the middle. Each
+   card carries its own position, size, aspect and depth as custom properties
+   (set in flower-field.tsx); the only thing script writes is the cursor, once
+   per frame, as --px/--py on the field. The lag is the transition below, not a
+   loop — so the whole effect costs one style write a frame. */
+/* The home band runs the two colours the other way round from /catalogue: ink
+   ground, sage type. The stems are all shot on pale backgrounds, so they lift
+   off the dark far harder than they did off the sage. */
+/* The floor keeps the geometry honest on a short window: the cards are sized in
+   px and placed in per cent, so on a laptop that isn't tall enough the bottom
+   row would run past the band and get cut by the overflow above. */
+.flower-field { background:var(--ink); color:var(--sage-pale); min-height:max(100svh,820px); position:relative; overflow:hidden; display:flex; flex-direction:column; justify-content:center; align-items:center; }
+.field { position:absolute; inset:0; }
+/* left OR right, never both — see PLACEMENT. */
+.field-item { position:absolute; top:var(--t); left:var(--l,auto); right:var(--r,auto); width:var(--w); transform:translate3d(calc(var(--px,0)*var(--d)*-16px),calc(var(--py,0)*var(--d)*-12px),0); transition:transform .6s var(--ease-out); }
+.field-item a { display:block; transition:transform .5s var(--ease-out); }
+.field-item img { aspect-ratio:var(--ar); object-fit:cover; filter:saturate(.78); }
+/* Armed from script so the cards are simply present without JavaScript. */
+.field-armed .field-item a { opacity:0; }
+.field-in .field-item a { animation:field-arrive .7s var(--ease) calc(var(--i)*90ms) forwards; }
+@keyframes field-arrive { to { opacity:1 } }
+/* Proportional, not just capped: a fixed 560px would eat the side margins on a
+   1000px window and leave the edge cards nowhere to sit. */
+.field-center { position:relative; z-index:1; max-width:min(560px,44%); text-align:center; }
+.field-center .section-note { max-width:none; margin:22px auto 0; }
+/* The shared solid button is ink-on-paper, which disappears here — it takes the
+   swap too. */
+.field-center .solid-button { background:var(--sage-pale); color:var(--ink); margin:34px auto 0; }
 .section-heading { display:flex; justify-content:space-between; align-items:end; gap:6vw; margin-bottom:52px; }
 .section-note { max-width:360px; margin:0 0 5px; }
 .filter-row { margin:70px 0 38px; display:flex; flex-wrap:wrap; gap:14px 28px; padding:18px 0; }
@@ -73,6 +112,8 @@ section[id] { scroll-margin-top:102px; }
 .flower-image-wrap img { aspect-ratio:3/4; object-fit:cover; filter:saturate(.76); transition:transform .9s var(--ease-out), filter .9s var(--ease-out); }
 .flower-card { display:block; }
 .flower-card:hover img,.flower-card:focus-visible img { transform:scale(1.045); filter:saturate(.94); }
+.field-item a:hover { transform:scale(1.05); }
+.field-item a:active { transform:scale(1.01); transition-duration:.1s; }
 .flower-meta { padding-top:13px; margin-top:14px; }
 .flower-meta h3 { display:inline-block; font:400 17px/1.3 var(--serif); margin:0; }
 .flower-meta p { font:400 12px var(--sans); color:rgba(23,40,46,.9); margin:5px 0 0; }
@@ -84,7 +125,9 @@ section[id] { scroll-margin-top:102px; }
 .service-list p { max-width:440px; font:400 15px/1.6 var(--sans); color:rgba(238,229,220,.78); margin:0; }
 .story { display:grid; grid-template-columns:.9fr 1.1fr; gap:10vw; align-items:center; }
 .story-image img { height:560px; object-fit:cover; filter:grayscale(.15) saturate(.7); }
-.story-copy blockquote { font:italic 36px/1.2 var(--serif); margin:0 0 55px; }
+/* Roman, not italic: we only ship Baskervville's upright cut, and a synthesised
+   slant on a Baskerville reads as a mistake. */
+.story-copy blockquote { font:400 36px/1.3 var(--serif); margin:0 0 55px; }
 .story-copy>p { max-width:540px; }
 .story-copy .signature { margin-top:35px; font-size:14px; font-style:italic; }
 .contact { background:var(--rust); color:var(--paper); text-align:center; min-height:85vh; display:flex; flex-direction:column; justify-content:center; align-items:center; }
@@ -120,7 +163,7 @@ section[id] { scroll-margin-top:102px; }
 .enquiry-submit { width:fit-content; background:var(--ink); color:var(--paper); border:0; padding:18px 34px; border-radius:var(--btn-radius); font:500 12px var(--sans); text-transform:uppercase; letter-spacing:1.2px; cursor:pointer; }
 .enquiry-submit:disabled { opacity:.5; cursor:default; }
 .enquiry-note { margin-top:-22px; }
-.enquiry-sent h2 { font:400 clamp(30px,3.4vw,46px)/1.05 var(--serif); letter-spacing:-.03em; margin:0 0 22px; }
+.enquiry-sent h2 { font:400 clamp(30px,3.4vw,46px)/1.16 var(--display); letter-spacing:.015em; margin:0 0 22px; }
 .enquiry-sent>p { max-width:460px; font:400 16px/1.6 var(--sans); margin:0; }
 .enquiry-actions { display:flex; flex-wrap:wrap; align-items:center; gap:16px 30px; margin-top:40px; }
 .enquiry-actions .solid-button { margin:0; }
@@ -129,16 +172,33 @@ section[id] { scroll-margin-top:102px; }
 .enquiry-reset { transition:opacity .3s var(--ease); }
 .enquiry-reset:hover { opacity:1; }
 .enquiry-aside { position:sticky; top:110px; }
-.enquiry-aside h2 { font:400 clamp(28px,2.8vw,40px)/1.05 var(--serif); letter-spacing:-.03em; margin:0 0 18px; }
+.enquiry-aside h2 { font:400 clamp(28px,2.8vw,40px)/1.16 var(--display); letter-spacing:.015em; margin:0 0 18px; }
 .enquiry-details { display:flex; flex-direction:column; gap:26px; border-top:1px solid var(--line); margin-top:40px; padding-top:28px; }
 .enquiry-details p { font:400 15px/1.55 var(--sans); margin:0; }
 .enquiry-details span { display:block; font:500 11px var(--sans); text-transform:uppercase; letter-spacing:1.5px; margin-bottom:10px; opacity:.55; }
-.enquiry-details a { border-bottom:1px solid var(--line); }
-.enquiry-details a { transition:border-color .3s var(--ease); }
-.enquiry-details a:hover { border-color:var(--ink); }
-footer { padding:60px 3.5vw 28px; display:grid; grid-template-columns:1fr 1fr; gap:70px 20px; align-items:start; }
-footer>p { font:400 16px var(--sans); margin:4px 0 0; }
-footer>div { grid-column:1/-1; display:flex; justify-content:space-between; padding-top:18px; font-size:11px; text-transform:uppercase; letter-spacing:1.2px; }
+.enquiry-details a,.footer-details a { border-bottom:1px solid var(--line); }
+.enquiry-details a,.footer-details a { transition:border-color .3s var(--ease); }
+.enquiry-details a:hover,.footer-details a:hover { border-color:var(--ink); }
+/* Three full-width bands stacked — the mark and its line, the directory, then
+   the notice — so every column starts under the N of the wordmark. The two
+   gaps differ on purpose: the directory sits nearer the notice than the mark. */
+footer { padding:96px 6vw 34px; display:flex; flex-direction:column; }
+/* Held to a measure so the name always turns before "Wholesale Inc.". The
+   max-width is in em, so the break holds wherever the clamp lands. */
+.footer-brand .wordmark-full { display:block; max-width:14em; font-size:clamp(26px,3.7vw,54px); line-height:1.14; }
+/* A sheared roman rather than a drawn italic — the same slant the hero puts on
+   its second line, which is all the upright cut can give us. */
+.footer-tagline { font:italic 400 clamp(18px,2.05vw,29px)/1.3 var(--serif); margin:30px 0 0; }
+/* Same shape as the contact page aside, laid out across instead of down. The
+   230px floor is the email address plus a little air, so the row folds to two
+   columns and then one at the width that text actually stops fitting. */
+.footer-details { display:grid; grid-template-columns:repeat(auto-fit,minmax(230px,1fr)); gap:38px 28px; margin:84px 0 68px; }
+.footer-details p { font:400 16px/1.65 var(--sans); margin:0; overflow-wrap:break-word; }
+.footer-details span { display:block; font:500 11px var(--sans); text-transform:uppercase; letter-spacing:1.5px; margin-bottom:14px; opacity:.55; }
+.footer-details a.plain { border-bottom-color:transparent; }
+/* Which line is which, set back so the numbers stay the thing you read. */
+.footer-details i { font-style:normal; opacity:.55; }
+.footer-base { display:flex; justify-content:center; font-size:13px; }
 
 /* ---------------------------------------------------------------------------
    Interaction. Two mechanics, used everywhere: text links grow a rule, solid
@@ -150,8 +210,8 @@ footer>div { grid-column:1/-1; display:flex; justify-content:space-between; padd
 
 /* Underline wipe. Entering, the rule grows from the left; leaving, it retracts
    to the right, so the line travels with the pointer instead of blinking off. */
-.nav a,.contact-details a,footer>div a,.filter-row button,.flower-meta h3,.wordmark { position:relative; }
-.nav a::after,.contact-details a::after,footer>div a::after,.filter-row button::after,.flower-meta h3::after,.text-link::after {
+.nav a,.contact-details a,.filter-row button,.flower-meta h3,.wordmark { position:relative; }
+.nav a::after,.contact-details a::after,.filter-row button::after,.flower-meta h3::after,.text-link::after {
   content:""; position:absolute; left:0; right:0; bottom:-3px; height:1px; background:currentColor;
   transform:scaleX(0); transform-origin:right; transition:transform .5s var(--ease-out);
 }
@@ -159,7 +219,6 @@ footer>div { grid-column:1/-1; display:flex; justify-content:space-between; padd
 .text-link::after { bottom:-1px; }
 .nav a:hover::after,.nav a:focus-visible::after,
 .contact-details a:hover::after,.contact-details a:focus-visible::after,
-footer>div a:hover::after,footer>div a:focus-visible::after,
 .filter-row button:hover::after,.filter-row button:focus-visible::after,.filter-row button.active::after,
 .flower-card:hover .flower-meta h3::after,.flower-card:focus-visible .flower-meta h3::after,
 .text-link:hover::after,.text-link:focus-visible::after { transform:scaleX(1); transform-origin:left; }
@@ -184,13 +243,14 @@ footer>div a:hover::after,footer>div a:focus-visible::after,
   transform:translateY(0) scale(.982); box-shadow:0 2px 6px rgba(23,40,46,.14); transition-duration:.09s;
 }
 .enquiry-submit:disabled { transform:none; box-shadow:none; }
-.nav a:active,.text-link:active,.contact-details a:active,footer>div a:active { opacity:.6; transition:opacity .08s; }
+.nav a:active,.text-link:active,.contact-details a:active,.footer-details a:active { opacity:.6; transition:opacity .08s; }
 .flower-card:active img { transform:scale(1.02); transition-duration:.12s; }
 
 /* Keyboard focus gets the same ring everywhere, flipped to paper on the two
    dark bands and over the hero photo. */
 a:focus-visible,button:focus-visible { outline:2px solid var(--ink); outline-offset:4px; }
 .hero a:focus-visible,.trade a:focus-visible,.contact a:focus-visible,.contact button:focus-visible { outline-color:var(--paper); }
+.flower-field a:focus-visible { outline-color:var(--sage-pale); }
 
 /* Desktop home: one screenful per section, content centred within it. These are
    min-heights, so a short viewport lets a section grow rather than clip. The
@@ -202,11 +262,10 @@ a:focus-visible,button:focus-visible { outline:2px solid var(--ink); outline-off
      viewport too, so a 720px-tall laptop tightens the rhythm instead of pushing
      the catalogue and trade sections past a screenful. */
   .home>section.section-pad { padding-top:min(90px,9svh); padding-bottom:min(90px,9svh); }
-  .home>.catalogue .section-heading { margin-bottom:min(52px,6svh); }
-  .home>.catalogue .solid-button { margin-top:min(70px,7svh); }
   .home>.trade .service-list { padding-top:min(70px,7svh); }
   .home>.trade .service-list article { padding:min(32px,3.6svh) 0 min(50px,5.5svh); }
-  .home>.catalogue { display:flex; flex-direction:column; justify-content:center; }
+  /* Beats .home>section's plain 100svh, which would otherwise undo the floor. */
+  .home>.flower-field { min-height:max(100svh,820px); }
   .home>.intro { align-content:center; }
   .home>.trade,.home>.story { align-content:center; }
   .home>.intro .statement-image { max-height:min(64svh,560px); }
@@ -232,8 +291,7 @@ a:focus-visible,button:focus-visible { outline:2px solid var(--ink); outline-off
   .page-head { grid-template-columns:1fr; gap:28px; padding-bottom:0; }
   .offerings-list { grid-template-columns:1fr; }
   .offering { min-height:0; padding:36px 28px 30px; }
-  .site-header .wordmark { font-size:14px; letter-spacing:-.3px; gap:8px; line-height:1.15; }
-  .wordmark-mark { height:26px; }
+  .site-header .wordmark { font-size:20px; }
   .header-cta { display:none; }
   .nav-contact { display:block; }
   .menu-toggle { display:flex; }
@@ -255,6 +313,15 @@ a:focus-visible,button:focus-visible { outline:2px solid var(--ink); outline-off
   .filter-row button { white-space:nowrap; }
   .flower-grid { grid-template-columns:repeat(2,1fr); gap:40px 14px; }
   .flower-meta h3 { font-size:18px; }
+  /* Nothing fits beside the copy at this width, so six of the nine stems keep
+     the band and take their narrow-screen positions; the rest step out. The
+     floor is a little over a screen so three fit above the copy and three below
+     without either row crowding it — the note runs to four lines on the
+     narrowest phones, and the bands have to survive that. */
+  .flower-field { min-height:max(100svh,900px); }
+  .field-item { top:var(--mt,var(--t)); left:var(--ml,var(--l,auto)); right:var(--mr,var(--r,auto)); }
+  .field-center { max-width:88%; }
+  .field-wide { display:none; }
   .trade { gap:20px; }
   .service-list { padding-top:0; }
   .story-image img { height:90vw; max-height:480px; }
@@ -263,8 +330,10 @@ a:focus-visible,button:focus-visible { outline:2px solid var(--ink); outline-off
   .enquiry { grid-template-columns:1fr; gap:70px; }
   .field-row { grid-template-columns:1fr; gap:34px; }
   .enquiry-aside { position:static; }
-  footer { grid-template-columns:1fr; gap:25px; }
-  footer>div { grid-column:auto; margin-top:25px; }
+  footer { padding:70px 6vw 30px; }
+  .footer-tagline { margin-top:22px; }
+  /* Columns fold on their own from the base rule; only the rhythm tightens. */
+  .footer-details { gap:32px 24px; margin:56px 0 48px; }
 }
 
 @media (max-width:440px) {
@@ -275,11 +344,64 @@ a:focus-visible,button:focus-visible { outline:2px solid var(--ink); outline-off
   .contact h2 { font-size:13vw; }
 }
 
+/* ---------------------------------------------------------------------------
+   Splash. Three beats: N, Y, G and F drop in one after another and settle into
+   the monogram; each letter then grows the rest of its word out to the right;
+   last, "Wholesale INC." rises into the space opening beneath the first line.
+   Both of the growth moves are the same mechanic — a grid track going 0fr → 1fr
+   — which animates to the text's own intrinsic size, so no width or height is
+   ever measured or hard-coded. It is all CSS and it all fills forwards, so the
+   overlay still clears itself if the page's JavaScript never arrives; JS only
+   decides whether to play it at all and takes the node out afterwards.
+   --------------------------------------------------------------------------- */
+html.splash-open { overflow:hidden; }
+html[data-splash="off"] .splash { display:none; }
+.splash { position:fixed; inset:0; z-index:100; display:grid; place-items:center; padding:8vw; background:var(--paper); animation:splash-clear .5s var(--ease) 2.85s forwards; }
+@keyframes splash-clear { from { opacity:1 } 99% { opacity:0; visibility:visible } to { opacity:0; visibility:hidden } }
+
+.splash-mark { font-family:var(--display); font-size:clamp(30px,7.6vw,68px); line-height:1; letter-spacing:.02em; text-align:center; }
+.splash-line { display:flex; flex-wrap:wrap; justify-content:center; align-items:flex-start; row-gap:.14em; column-gap:0; animation:splash-space .8s var(--ease-out) .95s forwards; }
+@keyframes splash-space { to { column-gap:.26em } }
+
+/* Beat one. Each letter falls its own height and decelerates into place, a
+   tenth of a second behind the one before it. */
+.splash-word { display:flex; align-items:flex-start; animation:splash-fall .5s var(--ease-out) var(--fall) both; }
+@keyframes splash-fall { from { opacity:0; transform:translateY(-.7em) } }
+
+/* Beat two. Every word is its initial plus a tail that starts at zero width.
+   The tail's inner span carries min-width:0 so the 0fr track can actually reach
+   zero, and clip-path (not overflow) hides the overhang, which leaves the
+   baseline alone. */
+.splash-tail { display:grid; grid-template-columns:0fr; animation:splash-unfurl .8s var(--ease-out) var(--delay) forwards; }
+.splash-tail > span { min-width:0; clip-path:inset(-.35em 0); }
+@keyframes splash-unfurl { to { grid-template-columns:1fr } }
+
+/* Beat three. The row opens downward while the words inside travel up through
+   it from below, so the line arrives rather than simply appearing. */
+.splash-second { display:grid; grid-template-rows:0fr; justify-content:center; animation:splash-open-row .75s var(--ease-out) 1.75s forwards; }
+.splash-second > span { min-height:0; clip-path:inset(0 -.4em); }
+.splash-lift { display:block; padding-top:.16em; animation:splash-lift .75s var(--ease-out) 1.75s both; }
+@keyframes splash-open-row { to { grid-template-rows:1fr } }
+@keyframes splash-lift { from { opacity:0; transform:translateY(1em) } }
+
+.splash-fade { opacity:0; animation:splash-ink .7s var(--ease) var(--delay) forwards; }
+@keyframes splash-ink { to { opacity:1 } }
+
 @media (prefers-reduced-motion:reduce) {
   html { scroll-behavior:auto; }
+  /* No fall and no unfurl: the name is simply there, and the overlay clears on
+     a short fade. */
+  .splash { animation:splash-clear .4s linear .9s forwards; }
+  .splash-word,.splash-fade,.splash-lift { animation:none; opacity:1; transform:none; }
+  .splash-line { animation:none; column-gap:.26em; }
+  .splash-tail { animation:none; grid-template-columns:1fr; }
+  .splash-second { animation:none; grid-template-rows:1fr; }
   * { transition:none!important; }
   .header-cta:hover,.hero-button:hover,.solid-button:hover,.contact-button:hover,.enquiry-submit:hover:not(:disabled),
   .header-cta:active,.hero-button:active,.solid-button:active,.contact-button:active,.enquiry-submit:active,
   .choice span:active,.flower-card:hover img,.flower-card:active img,.text-link:hover span { transform:none; }
+  /* The field is still revealed, just without the drift or the stagger. */
+  .field-item { transform:none; }
+  .field-in .field-item a { animation-delay:0s; animation-duration:.3s; }
 }
 
