@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useId, useMemo, useRef, useState } from "react";
+import { Fragment, useEffect, useId, useMemo, useRef, useState } from "react";
 import { categories, flowers, normalizeQuery, services, type CategoryId } from "../catalogue-data";
 import { Arrow, SiteFooter, SiteHeader } from "../chrome";
 import { shop, whatsappHref } from "../site";
@@ -142,12 +142,27 @@ export default function Catalogue() {
           </div>
         ) : (
           <div className="flower-grid">
-            {visibleFlowers.map((flower) => (
-              <article className="flower-card" key={flower.name}>
-                <div className="flower-image-wrap">{flower.image ? <img src={flower.image} alt={flower.name} loading="lazy" /> : null}</div>
-                <div className="flower-meta"><h3>{flower.name}</h3><p>{flower.group}</p></div>
-              </article>
-            ))}
+            {visibleFlowers.map((flower, index) => {
+              // Bouquets close the list, so the rule falls once, where the stems
+              // stop. Drawn only when there is something above it to divide from:
+              // pressing the Bouquets chip, or searching a word only they match,
+              // leaves them first on the grid and there is nothing to separate.
+              const opensBouquets =
+                flower.category === "bouquets" && index > 0 && visibleFlowers[index - 1].category !== "bouquets";
+              return (
+                <Fragment key={flower.name}>
+                  {opensBouquets ? <hr className="grid-break" /> : null}
+                  <article className="flower-card">
+                    <div className="flower-image-wrap">{flower.image ? <img src={flower.image} alt={flower.name} loading="lazy" /> : null}</div>
+                    {/* The chip's own label, then the colour group where the
+                        record carries one. The category stays said either way: a
+                        search crosses the chips, so a card found by name has to
+                        place itself without one being pressed. */}
+                    <div className="flower-meta"><h3>{flower.name}</h3><p>{flower.colour ? `${flower.group}, ${flower.colour}` : flower.group}</p></div>
+                  </article>
+                </Fragment>
+              );
+            })}
           </div>
         )}
 

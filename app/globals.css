@@ -96,7 +96,10 @@ section[id].story { scroll-margin-top:0; }
    their pale ground, so their own type stays ink. */
 .offerings { background:var(--band-trade); color:#fff; }
 .offerings h2 { margin-bottom:46px; }
-.offerings-list { display:grid; grid-template-columns:repeat(2,1fr); gap:32px; }
+/* Three across, the same row the home band's service cards take — these are the
+   same object on the same blue, and at two columns the third offering was left
+   sitting on a row of its own. */
+.offerings-list { display:grid; grid-template-columns:repeat(3,1fr); gap:32px; }
 /* The link stands where the home card's paragraph does — centred in whatever
    the heading leaves — and takes a light rule under it, since the dark --line
    it used to carry was drawn for the pale plate this card no longer is. */
@@ -254,6 +257,13 @@ section[id].story { scroll-margin-top:0; }
 /* Set in the sentence it sits in rather than at the status row's size. */
 .catalogue-empty .clear-all { font-size:inherit; line-height:inherit; }
 .flower-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:42px 18px; }
+/* Where the stems stop and the made-up bouquets start. It takes a whole row of
+   the grid rather than sitting inside a column, so the break runs the full
+   measure the cards do, and the row gap above and below is the same 42px that
+   separates any two rows — the rule is the only new thing, not the spacing.
+   Sage at a fifth, the weight the search field's own rule carries: enough to
+   read as a deliberate line on this band without drawing more than the cards. */
+.grid-break { grid-column:1 / -1; height:0; border:0; border-top:1px solid rgba(202,203,181,.22); margin:6px 0 0; }
 .flower-image-wrap { position:relative; overflow:hidden; background:var(--mist); aspect-ratio:3/4; border-radius:var(--tile-radius); }
 /* The wrap already clips, but Safari lets a transformed child bleed past a
    rounded parent mid-animation, and the image scales on hover. */

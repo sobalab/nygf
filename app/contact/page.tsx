@@ -21,7 +21,10 @@ const EMPTY = {
   needs: "",
 };
 
-const SERVICES = ["General order", "Wedding flowers", "Dutch flowers"];
+// The offerings named on the catalogue page, plus the general case that covers
+// everything sold by the bunch. Adding one there means adding it here, or a
+// buyer reads about a service and then has nowhere to say they want it.
+const SERVICES = ["General order", "Wedding flowers", "Dutch flowers", "Tropical flowers"];
 
 // A date input hands back 2026-08-20. Read it back as a plain local date so the
 // message says "Thu, Aug 20" rather than shifting a day across the timezone.
