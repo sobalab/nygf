@@ -146,7 +146,15 @@ const items: CatalogueItem[] = [
 // bunch, so they live in their own section rather than the filterable grid.
 // Kept in step with the order kinds the contact form offers: a buyer who reads
 // about one here has to be able to pick it there.
-export const services = ["Dutch Flowers", "Wedding Flowers", "Tropical Flowers"];
+// The photograph is the card's ground rather than a picture sitting on it, so
+// it is decorative: the heading over it already names the offering, and the
+// card carries no alt text for that reason. Same pipeline as the catalogue
+// stems — drop the original in public/media, run `npm run media`, point here.
+export const services = [
+  { name: "Dutch Flowers", image: "/media/dutch-flowers.webp" },
+  { name: "Wedding Flowers", image: "/media/wedding-flowers.webp" },
+  { name: "Tropical Flowers", image: "/media/tropical-flowers.webp" },
+];
 
 const categoryLabels = new Map<CategoryId, string>(categories.map(({ id, label }) => [id, label]));
 

@@ -100,10 +100,45 @@ section[id].story { scroll-margin-top:0; }
    same object on the same blue, and at two columns the third offering was left
    sitting on a row of its own. */
 .offerings-list { display:grid; grid-template-columns:repeat(3,1fr); gap:32px; }
-/* The link stands where the home card's paragraph does — centred in whatever
-   the heading leaves — and takes a light rule under it, since the dark --line
-   it used to carry was drawn for the pale plate this card no longer is. */
-.offering .text-link { align-self:center; margin:auto 0 0; border-bottom-color:rgba(255,255,255,.4); }
+/* The link sits directly under the heading rather than being pushed to the foot
+   of the card, and the pair are centred in the card as one block. On a plate
+   with a paragraph in it — which is what the home band's cards are — the auto
+   margin that held the link down had copy to hold it against. Here there is
+   nothing between the two, so the same margin only opened a gap the photograph
+   showed through, and the card read as a caption at the top and a link at the
+   bottom rather than as one thing. It keeps its light rule, since the dark
+   --line it used to carry was drawn for the pale plate this card no longer is. */
+.offering .text-link { align-self:center; margin:0; border-bottom-color:rgba(255,255,255,.4); }
+/* Each offering stands on its own photograph. The home band's three service
+   cards share every other rule with these and carry no photography of their
+   own, so all of this is scoped to .offering and they are left as the plain
+   plates they were.
+     A floor, because the card is a picture now as well as a heading: the copy
+   alone left them barely taller than the two lines in them, which is not enough
+   of a photograph to read as one. */
+.offering { position:relative; overflow:hidden; min-height:330px; justify-content:center; }
+/* Beats the 44px the shared rule sets and the 22px the narrow one does — both
+   are spacing a heading off a paragraph, and there is no paragraph here. What
+   is left is the gap the link's own top padding holds open for its rule. */
+.offerings .offering h3 { margin-bottom:10px; }
+/* Saturation pulled back the same touch the catalogue tiles take, so three loud
+   photographs sit together as a row rather than as three posters. */
+.offering-photo { position:absolute; inset:0; height:100%; object-fit:cover; filter:saturate(.8); transition:transform .9s var(--ease-out); }
+/* The scrim, and it has to be a heavy one: all three photographs are high-key
+   and the wedding bouquet is very nearly white, so type over the bare image
+   would fail at any size. Same tone the hero shades with.
+     The figures are measured against the brightest pixel each photograph
+   actually puts behind its own type, not against an average: .6 at the head
+   carries the heading where large type needs 3:1, and .74 at the foot carries
+   the 12px link where it needs 4.5:1. The heading takes the wider margin of the
+   two on purpose — it is the line that can wrap, and a second line drops into
+   whatever the crop happens to hold further down. */
+.offering::after { content:""; position:absolute; inset:0; background:linear-gradient(rgba(23,37,43,.6),rgba(23,37,43,.74)); }
+/* The photo and the scrim are positioned, so without this they would paint over
+   in-flow content however early they appear in the markup. */
+.offering>h3,.offering>.text-link { position:relative; z-index:1; }
+/* The same lift the catalogue tiles take under the pointer. */
+.offering:hover .offering-photo { transform:scale(1.045); }
 /* Body copy, Uncut Sans — two sizes, and 16px is the floor everywhere, mobile
    included. Anything that reads as prose belongs to one of these two rules
    rather than carrying its own size; sizes set locally drift apart over time,
@@ -118,6 +153,15 @@ section[id].story { scroll-margin-top:0; }
    pointers to content, not content, and the floor doesn't apply to them. */
 .hero-bottom>p,.story-copy>p,.service-list p,.contact p,
 .page-head .section-note,.catalogue-empty p { font:400 18px/1.55 var(--sans); }
+/* The one lede that steps out of the tier above, and it is context that earns
+   it rather than preference: this line is set over a photograph, centred, under
+   a heading that runs to 96px, and it is the first sentence the site says. At
+   the shared 18px it read as a caption to the h1 rather than the claim the page
+   opens on. Fluid, so it holds that distance at every width.
+     The measure grows with it. 520px at this size turns two lines into four,
+   and a four-line stack under a two-line heading is a paragraph, not an
+   opening. */
+.hero-bottom>p { font-size:clamp(20px,1.7vw,26px); line-height:1.5; max-width:680px; }
 .section-note,.enquiry-sent>p,
 .enquiry-details p,.footer-details p,.field-hint,.field-error,.flower-meta p,
 .result-count,.footer-base { font:400 16px/1.6 var(--sans); }
@@ -792,7 +836,8 @@ html[data-splash="off"] .splash { display:none; }
   * { transition:none!important; }
   .header-cta:hover,.hero-button:hover,.solid-button:hover,.contact-button:hover,.enquiry-submit:hover:not(:disabled),
   .header-cta:active,.hero-button:active,.solid-button:active,.contact-button:active,.enquiry-submit:active,
-  .choice span:active,.flower-card:hover img,.flower-card:active img,.text-link:hover span { transform:none; }
+  .choice span:active,.flower-card:hover img,.flower-card:active img,.text-link:hover span,
+  .offering:hover .offering-photo { transform:none; }
   /* The set stops turning over and the card keeps the first frame. Hiding the
      rest explicitly is the whole of it: with the animation gone they would all
      sit at full opacity in the one plate and the last one would win. */

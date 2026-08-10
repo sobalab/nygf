@@ -197,8 +197,13 @@ export default function Catalogue() {
         <h2>Services</h2>
         <div className="offerings-list">
           {services.map((service) => (
-            <article className="offering" key={service}>
-              <h3>{service}</h3>
+            <article className="offering" key={service.name}>
+              {/* The card's ground, not a picture in it: empty alt, because the
+                  heading sitting on top of it is already the card's name and a
+                  screen reader announcing the backdrop as well would say the
+                  same thing twice. */}
+              <img className="offering-photo" src={service.image} alt="" loading="lazy" />
+              <h3>{service.name}</h3>
               <a href={whatsappHref(SERVICES_ASK)} target="_blank" rel="noreferrer" className="text-link">Ask about this <Arrow /></a>
             </article>
           ))}
