@@ -1,8 +1,9 @@
 "use client";
 
-import { Fragment, useEffect, useId, useMemo, useRef, useState, type CSSProperties } from "react";
+import { Fragment, useEffect, useId, useMemo, useRef, useState, useSyncExternalStore } from "react";
 import { categories, flowers, normalizeQuery, services, type CategoryId } from "../catalogue-data";
 import { Arrow, SiteFooter, SiteHeader } from "../chrome";
+import { FlowerCard } from "../flower-card";
 import { shop, whatsappHref } from "../site";
 
 const AVAILABILITY_ASK = "Hello, could you send me today's flower availability and pricing?";
@@ -21,12 +22,42 @@ function SearchGlass() {
   );
 }
 
+// A variety page's back link carries the category it belongs to, and this pair
+// is what makes that link honest: /catalogue#roses opens with the Roses chip
+// already down rather than dropping a reader into the whole list to find their
+// place in it again.
+//   The hash is the browser's value, not this component's, so it is subscribed
+// to rather than copied into state on mount — a copy is a second version of
+// somebody else's fact, and it has to be kept in step for as long as it exists.
+// A hash naming no category reads as no category: it may be #catalogue, which is
+// a real anchor on this page.
+function subscribeToHash(onChange: () => void) {
+  window.addEventListener("hashchange", onChange);
+  return () => window.removeEventListener("hashchange", onChange);
+}
+
+function readHashCategory(): CategoryId | null {
+  const hash = window.location.hash.slice(1);
+  return categories.some((category) => category.id === hash) ? (hash as CategoryId) : null;
+}
+
+// Prerendering has no location to read, so the build makes the same page it
+// always did — the whole grid — and the hash is applied once React takes over.
+function noHashCategory() {
+  return null;
+}
+
 export default function Catalogue() {
   const searchId = useId();
   const searchRef = useRef<HTMLInputElement>(null);
-  // null is the all state: there is no "All" chip, and pressing the chip that
-  // is already down comes back here.
-  const [active, setActive] = useState<CategoryId | null>(null);
+  const hashCategory = useSyncExternalStore(subscribeToHash, readHashCategory, noHashCategory);
+  // Three states rather than two, and the third is the point: `undefined` is a
+  // reader who hasn't touched a chip yet, and only then does the hash get to
+  // say which one is down. Once they have, their choice holds — including the
+  // deliberate null, which is the all state. There is no "All" chip, and
+  // pressing the chip that is already down comes back here.
+  const [chosen, setChosen] = useState<CategoryId | null | undefined>(undefined);
+  const active = chosen === undefined ? hashCategory : chosen;
   // Two pieces of state for one field. `query` is what the input shows and has
   // to update on every keystroke; `term` is what the grid reads, and follows a
   // beat behind so a buyer typing a name doesn't rebuild 37 cards per letter.
@@ -54,7 +85,7 @@ export default function Catalogue() {
   }
 
   function clearAll() {
-    setActive(null);
+    setChosen(null);
     clearSearch();
   }
 
@@ -106,13 +137,13 @@ export default function Catalogue() {
             {/* The way back to the whole list, and the state the page opens in.
                 It doesn't toggle off the way the six below it do: there is
                 nowhere for it to go, since it is already the resting state. */}
-            <button type="button" aria-pressed={active === null} onClick={() => setActive(null)}>
+            <button type="button" aria-pressed={active === null} onClick={() => setChosen(null)}>
               All Flowers
             </button>
             {categories.map((category) => {
               const pressed = active === category.id;
               return (
-                <button key={category.id} type="button" aria-pressed={pressed} onClick={() => setActive(pressed ? null : category.id)}>
+                <button key={category.id} type="button" aria-pressed={pressed} onClick={() => setChosen(pressed ? null : category.id)}>
                   {category.label}
                 </button>
               );
@@ -151,39 +182,14 @@ export default function Catalogue() {
               // rule it carries is what steps aside in that case, in CSS.
               const opensBouquets =
                 flower.category === "bouquets" && (index === 0 || visibleFlowers[index - 1].category !== "bouquets");
-              // One field for both cases, so the markup below doesn't branch:
-              // a record with a set of frames hands over all of them, a record
-              // with one hands over the one, and a record with neither hands
-              // over nothing and keeps its flat tile.
-              const frames = flower.images ?? (flower.image ? [flower.image] : []);
               return (
-                <Fragment key={flower.name}>
-                  {opensBouquets ? <h2 className="grid-break">Seasonal</h2> : null}
-                  <article className="flower-card">
-                    {/* Every frame after the first is the same subject again, so
-                        only the first is described — three identical alts would
-                        have a screen reader read the bouquet's name three times
-                        over for one card. The cycling is decoration either way:
-                        nothing is said in a later frame that the first doesn't
-                        already say. */}
-                    <div className="flower-image-wrap">
-                      {frames.map((src, frame) => (
-                        <img
-                          key={src}
-                          src={src}
-                          alt={frame === 0 ? flower.name : ""}
-                          loading="lazy"
-                          className={frames.length > 1 ? "flower-slide" : undefined}
-                          style={frames.length > 1 ? ({ "--i": frame } as CSSProperties) : undefined}
-                        />
-                      ))}
-                    </div>
-                    {/* The chip's own label, then the colour group where the
-                        record carries one. The category stays said either way: a
-                        search crosses the chips, so a card found by name has to
-                        place itself without one being pressed. */}
-                    <div className="flower-meta"><h3>{flower.name}</h3><p>{flower.colour ? `${flower.group}, ${flower.colour}` : flower.group}</p></div>
-                  </article>
+                <Fragment key={flower.slug}>
+                  {/* The break names what follows it, and what follows it is the
+                      bouquets — it read "Seasonal" for a while, which is the
+                      name of a different chip two rows up and left it looking
+                      like a section label nobody had cleared out. */}
+                  {opensBouquets ? <h2 className="grid-break">Bouquets</h2> : null}
+                  <FlowerCard flower={flower} />
                 </Fragment>
               );
             })}

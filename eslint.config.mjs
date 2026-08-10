@@ -35,6 +35,17 @@ const eslintConfig = defineConfig([
         version: "detect",
       },
     },
+    rules: {
+      // This site navigates with plain anchors on purpose: there is no
+      // next/link anywhere in it, and the entrances are the reason — the
+      // splash, the hero's three beats and every scroll-armed section are
+      // staged on a document actually loading, which a client-side transition
+      // doesn't do. The rule stayed quiet while /catalogue was a leaf; adding
+      // /catalogue/[slug] under it turned four deliberate anchors into errors
+      // without any of them changing, so it is turned off rather than worked
+      // around four times.
+      "@next/next/no-html-link-for-pages": "off",
+    },
   },
 ]);
 

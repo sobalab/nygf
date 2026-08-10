@@ -236,7 +236,7 @@ html[data-splash="off"] { --hero-start:.15s; }
    takes to keep the content at --content-max, so the bands stay full-bleed
    while the heading, filters and grid all stop on the same measure. The home
    band is exempt — its stems are meant to run the full width. */
-.page-head,.catalogue:not(.flower-field),.offerings { padding-inline:max(6vw,calc((100% - var(--content-max)) / 2)); }
+.page-head,.catalogue:not(.flower-field),.offerings,.item,.item-related { padding-inline:max(6vw,calc((100% - var(--content-max)) / 2)); }
 /* Home catalogue: instead of a grid, the stems are scattered across the whole
    band and drift against the pointer, with the copy holding the middle. Each
    card carries its own position, size, aspect and depth as custom properties
@@ -670,6 +670,77 @@ footer { padding:96px 6vw 34px; display:flex; flex-direction:column; }
 .footer-base { display:flex; justify-content:center; }
 
 /* ---------------------------------------------------------------------------
+   The variety page, /catalogue/<slug>. Two columns above the fold: the
+   photograph on the left, everything the shop knows about the stem on the right,
+   ending in the two ways to ask about it. The neighbours and the walk through
+   the category sit below, on the catalogue's own dark band, so the page reads as
+   one item lifted out of that grid rather than as a page of its own somewhere
+   else on the site.
+     Nothing here is uppercased in CSS. The tier of letterspaced caps the nav and
+   the older buttons run is not extended onto this page: hierarchy comes off the
+   size, the weight and the two greys, and every string renders in the case it
+   was written in.
+   --------------------------------------------------------------------------- */
+.item { display:grid; grid-template-columns:minmax(0,1fr) minmax(0,1fr); gap:clamp(38px,5vw,88px); align-items:start; }
+/* The lead frame at the proportion every stem on the site is shot at, so a
+   variety page and its card are the same photograph at two sizes rather than
+   two crops. Sticky, because the right column is the long one: on a record with
+   care notes and a full set of counts the photograph would otherwise scroll away
+   from the copy describing it. */
+.item-photo { position:sticky; top:110px; display:grid; gap:12px; }
+.item-photo img { aspect-ratio:3/4; object-fit:cover; background:var(--mist); filter:saturate(.82); border-radius:var(--tile-radius); }
+/* Bouquets carry three frames rather than one, and unlike the card, which turns
+   them over on a timer, the page lays the rest out under the lead: a reader who
+   opened this page came to look at the thing, and made-up work is different
+   every time it is tied, so all of it should be there at once. */
+.item-gallery { display:grid; grid-template-columns:1fr 1fr; gap:12px; }
+.item-gallery img { aspect-ratio:1/1; }
+.item-info { display:flex; flex-direction:column; align-items:flex-start; }
+/* Back to the grid with this category already narrowed to. Small and grey: it is
+   the way out, not the first thing on the page. */
+.item-back { display:inline-flex; gap:9px; font:500 15px/1.4 var(--sans); opacity:.62; transition:opacity .3s var(--ease); }
+.item-back:hover { opacity:1; }
+.item h1 { font:400 clamp(34px,4.2vw,60px)/1.06 var(--display); letter-spacing:.015em; margin:20px 0 0; }
+.item-lede { font:400 18px/1.55 var(--sans); max-width:46ch; margin:26px 0 0; }
+/* The facts. A row exists only where the record has the value — see the Fact
+   component, which returns nothing rather than an empty cell. The labels are
+   the quieter half of the pair on purpose: a buyer scanning this block is
+   looking for the number, and the word beside it is only there to say which
+   number it is. */
+.item-facts { width:100%; max-width:540px; margin-top:40px; }
+.item-facts dl { display:grid; grid-template-columns:minmax(0,auto) minmax(0,1fr); gap:15px 30px; margin:0; }
+.item-facts dt { font:500 15px/1.5 var(--sans); opacity:.6; margin:0; }
+.item-facts dd { font:400 16px/1.5 var(--sans); margin:0; }
+/* What stands where the bunch and box counts would be on everything the Colombia
+   office hasn't confirmed. It reads as a sentence rather than as a row, because
+   it is an answer the shop gives on the phone rather than a figure with a gap
+   in it. */
+.item-packing { font:400 16px/1.6 var(--sans); opacity:.78; margin:16px 0 0; }
+.item-note { max-width:46ch; margin-top:36px; }
+.item-note h2 { font:400 21px/1.3 var(--serif); margin:0 0 9px; }
+.item-note p { font:400 16px/1.6 var(--sans); margin:0; }
+/* The point of the page. Prices move daily and are never posted, so there is
+   nothing to add to an order here: both controls end in a person. The WhatsApp
+   draft leads and the store line follows it as an outline of the same shape. */
+.item-actions { display:flex; flex-wrap:wrap; gap:14px; margin-top:48px; }
+.item-action { display:inline-flex; align-items:center; justify-content:center; background:var(--ink); color:var(--paper); border:1px solid var(--ink); padding:16px 28px; border-radius:var(--btn-radius); font:500 15px/1.2 var(--sans); }
+.item-action-quiet { background:none; color:var(--ink); border-color:rgba(23,40,46,.32); }
+.item-action-quiet:hover { border-color:var(--ink); }
+/* The band the catalogue itself runs on, so the four cards under a variety land
+   on the ground they came off. */
+.item-related { background:var(--band-flowers); color:var(--sage); }
+.item-related h2 { font:400 clamp(26px,2.6vw,38px)/1.15 var(--display); letter-spacing:.015em; margin:0 0 44px; }
+/* Straight on through the category. Previous pulls left and next pulls right, so
+   the pair reads as a direction rather than as two more links. */
+.item-steps { display:flex; justify-content:space-between; gap:30px; margin-top:76px; }
+.item-step { display:flex; flex-direction:column; gap:7px; max-width:46%; }
+.item-step-next { margin-left:auto; text-align:right; }
+.item-step-label { font:500 14px/1.4 var(--sans); opacity:.6; }
+.item-step-name { font:400 clamp(20px,2vw,27px)/1.2 var(--serif); }
+.item-step { transition:opacity .3s var(--ease); }
+.item-step:hover { opacity:.72; }
+
+/* ---------------------------------------------------------------------------
    Interaction. Two mechanics, used everywhere: text links grow a rule, solid
    buttons lift. Both settle on --ease-out (a long decelerating tail) so the
    hover reads as the element easing toward you; both snap back on :active with
@@ -697,15 +768,15 @@ footer { padding:96px 6vw 34px; display:flex; flex-direction:column; }
 .wordmark:hover { opacity:.62; }
 
 /* Solid buttons lift into a soft shadow, then take the press. */
-.header-cta,.hero-button,.solid-button,.contact-button,.enquiry-submit {
+.header-cta,.hero-button,.solid-button,.contact-button,.enquiry-submit,.item-action {
   transition:transform .4s var(--ease-out), box-shadow .4s var(--ease-out), background-color .4s var(--ease-out);
   will-change:transform;
 }
-.header-cta:hover,.hero-button:hover,.solid-button:hover,.contact-button:hover,.enquiry-submit:hover:not(:disabled) {
+.header-cta:hover,.hero-button:hover,.solid-button:hover,.contact-button:hover,.enquiry-submit:hover:not(:disabled),.item-action:hover {
   transform:translateY(-2px); box-shadow:0 8px 20px rgba(23,40,46,.18);
 }
 .hero-button:hover { background:var(--cream); }
-.header-cta:active,.hero-button:active,.solid-button:active,.contact-button:active,.enquiry-submit:active:not(:disabled) {
+.header-cta:active,.hero-button:active,.solid-button:active,.contact-button:active,.enquiry-submit:active:not(:disabled),.item-action:active {
   transform:translateY(0) scale(.982); box-shadow:0 2px 6px rgba(23,40,46,.14); transition-duration:.09s;
 }
 .enquiry-submit:disabled { transform:none; box-shadow:none; }
@@ -716,7 +787,7 @@ footer { padding:96px 6vw 34px; display:flex; flex-direction:column; }
    dark bands and over the hero photo. */
 a:focus-visible,button:focus-visible,input:focus-visible { outline:2px solid var(--ink); outline-offset:4px; }
 .hero a:focus-visible,.trade a:focus-visible,.story a:focus-visible { outline-color:var(--paper); }
-.flower-field a:focus-visible,.page-head a:focus-visible,.catalogue a:focus-visible,.catalogue button:focus-visible,.catalogue input:focus-visible { outline-color:var(--sage); }
+.flower-field a:focus-visible,.page-head a:focus-visible,.catalogue a:focus-visible,.catalogue button:focus-visible,.catalogue input:focus-visible,.item-related a:focus-visible { outline-color:var(--sage); }
 /* The chip's own border already sits where a 4px offset would put the ring, and
    the two together read as a double outline — the selected chip's fill is what
    it lands on, so the ring comes in tight against it. */
@@ -832,6 +903,20 @@ a:focus-visible,button:focus-visible,input:focus-visible { outline:2px solid var
      finished about 20px off the foot of a phone. */
   .story-image img { height:min(33svh,300px); }
   .story-copy h3 { font-size:29px; margin-bottom:28px; }
+  /* Stacked: the photograph, then everything about the stem. It is first in the
+     source too, so this is the column collapsing rather than an order being
+     rewritten. Nothing pins down here — a sticky plate on a phone would hold
+     the top half of the screen for the whole length of the copy. */
+  .item { grid-template-columns:1fr; gap:38px; }
+  .item-photo { position:static; }
+  .item-facts { max-width:none; }
+  .item-actions { gap:12px; }
+  .item-action { width:100%; }
+  /* Side by side the two steps have the measure to sit at opposite ends of the
+     band; stacked they don't, and a right-ragged block under a left-ragged one
+     reads as a mistake rather than as a direction. */
+  .item-steps { flex-direction:column; gap:34px; margin-top:56px; }
+  .item-step,.item-step-next { max-width:none; margin-left:0; text-align:left; }
   .enquiry { grid-template-columns:1fr; gap:70px; }
   .field-row { grid-template-columns:1fr; gap:34px; }
   /* State and ZIP are short enough to keep sharing a line down here. */

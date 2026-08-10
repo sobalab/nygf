@@ -1,16 +1,7 @@
 import type { Metadata } from "next";
 import "./globals.css";
+import { siteUrl } from "./site";
 import { Splash, splashScript } from "./splash";
-
-// Resolved at build time so every route stays static. Vercel sets
-// VERCEL_PROJECT_PRODUCTION_URL to the production domain (no protocol) on every
-// deployment, so preview builds still point OG tags at the live site. Set
-// NEXT_PUBLIC_SITE_URL once a custom domain is attached.
-const siteUrl =
-  process.env.NEXT_PUBLIC_SITE_URL ??
-  (process.env.VERCEL_PROJECT_PRODUCTION_URL
-    ? `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}`
-    : "http://localhost:3000");
 
 const title = "New York Garden Flower Wholesale — Direct Importer Since 1990";
 const description = "Direct-import wholesale cut flowers in Flushing, NY, with refrigerated delivery across the New York metropolitan area and nearby Connecticut.";

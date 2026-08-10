@@ -1,3 +1,17 @@
+// Where the site lives, resolved at build time so every route stays static.
+// Vercel sets VERCEL_PROJECT_PRODUCTION_URL to the production domain (no
+// protocol) on every deployment, so preview builds still point their OG tags,
+// canonicals and sitemap at the live site. Set NEXT_PUBLIC_SITE_URL once a
+// custom domain is attached.
+//   It sits here rather than in the root layout because the sitemap needs the
+// same answer, and two copies of this expression is how a preview build ends up
+// publishing localhost.
+export const siteUrl =
+  process.env.NEXT_PUBLIC_SITE_URL ??
+  (process.env.VERCEL_PROJECT_PRODUCTION_URL
+    ? `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}`
+    : "http://localhost:3000");
+
 // Shop contact details in one place, so the phone number only has to be
 // corrected once. The links elsewhere on the site still hardcode these; move
 // them over as those files get touched.
