@@ -64,7 +64,7 @@ export default function Catalogue() {
 
       <section className="page-head section-pad">
         <h1>Our Flowers</h1>
-        <p className="section-note">What we carry regularly. We bring in more than this and the cooler changes week to week, so call for what is in today. Prices move with the market daily and are never posted.</p>
+        <p className="section-note">What we carry regularly. We bring in more than this and the cooler changes week to week, so call for what you need. Prices move with the market daily and are never posted.</p>
       </section>
 
       <section className="catalogue section-pad" id="catalogue">

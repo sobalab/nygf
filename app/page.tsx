@@ -97,7 +97,7 @@ export default function Home() {
             <CutReveal text={"What Are You\nCelebrating Next?"} splitBy="characters" emphasizeFrom={1} />
           </h2>
         </Reveal>
-        <p>Ask for today&apos;s price and availability</p>
+        <p>Ask for today&apos;s price and availability.</p>
         {/* The reach/visit/hours columns that used to sit under this live in the
             footer, which is directly beneath — they were the same three columns
             twice in one screenful. */}
