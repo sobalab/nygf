@@ -1,6 +1,6 @@
 "use client";
 
-import { Fragment, useEffect, useId, useMemo, useRef, useState } from "react";
+import { Fragment, useEffect, useId, useMemo, useRef, useState, type CSSProperties } from "react";
 import { categories, flowers, normalizeQuery, services, type CategoryId } from "../catalogue-data";
 import { Arrow, SiteFooter, SiteHeader } from "../chrome";
 import { shop, whatsappHref } from "../site";
@@ -107,7 +107,7 @@ export default function Catalogue() {
                 It doesn't toggle off the way the six below it do: there is
                 nowhere for it to go, since it is already the resting state. */}
             <button type="button" aria-pressed={active === null} onClick={() => setActive(null)}>
-              All flowers
+              All Flowers
             </button>
             {categories.map((category) => {
               const pressed = active === category.id;
@@ -143,17 +143,41 @@ export default function Catalogue() {
         ) : (
           <div className="flower-grid">
             {visibleFlowers.map((flower, index) => {
-              // Bouquets close the list, so the rule falls once, where the stems
-              // stop. Drawn only when there is something above it to divide from:
-              // pressing the Bouquets chip, or searching a word only they match,
-              // leaves them first on the grid and there is nothing to separate.
+              // Bouquets close the list, and the break that opens them names them
+              // rather than only parting them from the stems. It falls once, on
+              // the first of them, however the grid has been narrowed — where a
+              // bare rule needed something above it to divide from, a heading is
+              // worth having even when the section is all that is on screen. The
+              // rule it carries is what steps aside in that case, in CSS.
               const opensBouquets =
-                flower.category === "bouquets" && index > 0 && visibleFlowers[index - 1].category !== "bouquets";
+                flower.category === "bouquets" && (index === 0 || visibleFlowers[index - 1].category !== "bouquets");
+              // One field for both cases, so the markup below doesn't branch:
+              // a record with a set of frames hands over all of them, a record
+              // with one hands over the one, and a record with neither hands
+              // over nothing and keeps its flat tile.
+              const frames = flower.images ?? (flower.image ? [flower.image] : []);
               return (
                 <Fragment key={flower.name}>
-                  {opensBouquets ? <hr className="grid-break" /> : null}
+                  {opensBouquets ? <h2 className="grid-break">Seasonal</h2> : null}
                   <article className="flower-card">
-                    <div className="flower-image-wrap">{flower.image ? <img src={flower.image} alt={flower.name} loading="lazy" /> : null}</div>
+                    {/* Every frame after the first is the same subject again, so
+                        only the first is described — three identical alts would
+                        have a screen reader read the bouquet's name three times
+                        over for one card. The cycling is decoration either way:
+                        nothing is said in a later frame that the first doesn't
+                        already say. */}
+                    <div className="flower-image-wrap">
+                      {frames.map((src, frame) => (
+                        <img
+                          key={src}
+                          src={src}
+                          alt={frame === 0 ? flower.name : ""}
+                          loading="lazy"
+                          className={frames.length > 1 ? "flower-slide" : undefined}
+                          style={frames.length > 1 ? ({ "--i": frame } as CSSProperties) : undefined}
+                        />
+                      ))}
+                    </div>
                     {/* The chip's own label, then the colour group where the
                         record carries one. The category stays said either way: a
                         search crosses the chips, so a card found by name has to

@@ -262,7 +262,7 @@ export default function Contact() {
                   name="needs"
                   required
                   rows={7}
-                  placeholder="20 bunches Premium Rose, 10 Eucalyptus, 5 Hydrangea."
+                  placeholder="20 bunches Red Rose, 10 Eucalyptus, 5 Hydrangea."
                   aria-describedby="needs-hint"
                   value={form.needs}
                   onChange={(e) => set("needs", e.target.value)}

@@ -4,13 +4,17 @@
 // earns one. Bouquets is the exception and sits last on purpose: it is the one
 // chip that isn't stems by the bunch at all, so a short list under it reads as
 // the whole of what is made up rather than as a category that fell short.
+//   A label is display copy in two places, not one: it is the chip, and it is
+// the group line printed under every card in that category. Title Case, as
+// every heading on the site is — the lower-case colour that some cards add
+// after it is the only part of that line set as running text.
 export const categories = [
   { id: "roses", label: "Roses" },
   { id: "carnations", label: "Carnations" },
-  { id: "lilies", label: "Lilies and callas" },
-  { id: "orchids", label: "Orchids and tropicals" },
-  { id: "seasonal", label: "Seasonal and specialty" },
-  { id: "greens", label: "Greens and filler" },
+  { id: "lilies", label: "Lilies and Callas" },
+  { id: "orchids", label: "Orchids and Tropicals" },
+  { id: "seasonal", label: "Seasonal and Specialty" },
+  { id: "greens", label: "Greens and Filler" },
   { id: "bouquets", label: "Bouquets" },
 ] as const;
 
@@ -26,6 +30,14 @@ export type CatalogueItem = {
   // `npm run media` to convert it to WebP, then set the path here. An item
   // without an image falls back to a flat tile rather than breaking the grid.
   image?: string;
+  // A set of frames, for a record photographed more than once. Where `image` is
+  // one picture of a stem that is always the same stem, this is for the ones
+  // made up to order: a bouquet is a different object every time it is tied, so
+  // one frame of it is a claim the next delivery has to live up to and three is
+  // closer to the truth. The card cycles them where this is set and falls back
+  // to `image` where it isn't, so it stays opt-in — nothing else on the list
+  // wants it.
+  images?: string[];
   // Neither of these is filled in yet, and neither should be guessed — the
   // Korean names on file were seed-translated and never reviewed, and no
   // botanical name has been confirmed against what the shop actually buys. The
@@ -44,23 +56,28 @@ export type CatalogueItem = {
 };
 
 const items: CatalogueItem[] = [
-  { name: "Premium Rose", category: "roses", image: "/media/premium-rose.webp" },
+  { name: "Red Rose", category: "roses", image: "/media/red-rose.webp" },
   { name: "Spray Rose", category: "roses", image: "/media/spray-rose.webp" },
   { name: "Garden Rose", category: "roses", image: "/media/garden-rose.webp" },
   // The three above are grades; these are the varieties bought by name, so they
-  // sit under the same chip rather than taking one of their own. Photographs to
-  // come — an item without an image falls back to a flat tile, so the grid holds
-  // its shape until they arrive and each one is a single `image:` away.
-  // Tinted Roses is the one with no colour of its own: it is a treatment rather
-  // than a group, and the name has already said so by the time the meta line
-  // would repeat it.
-  { name: "Vendela", category: "roses", colour: "white and cream" },
-  { name: "Mondial", category: "roses", colour: "white and cream" },
-  { name: "Mandala", category: "roses", colour: "pink" },
-  { name: "Momentum", category: "roses", colour: "red" },
-  { name: "High & Magic", category: "roses", colour: "bicolor" },
-  { name: "Pink Floyd", category: "roses", colour: "hot pink" },
-  { name: "Tinted Roses", category: "roses" },
+  // sit under the same chip rather than taking one of their own.
+  //   Every colour here is read off the photograph beside it rather than off a
+  // variety's reputation: Mondial and Momentum are a white and a red in the
+  // trade at large, and the shop's own stems are the blush and the yellow the
+  // pictures show. The photograph is what a buyer is choosing from, so it wins.
+  //   Which makes the three pinks a scale rather than three guesses at one word:
+  // light pink, pink, hot pink, palest first. They are the only colours on the
+  // list a reader has to tell apart from each other.
+  //   Tinted Rose is the one with no colour of its own: it is a treatment
+  // rather than a group, and the name has already said so by the time the meta
+  // line would repeat it.
+  { name: "Vendela", category: "roses", colour: "white and cream", image: "/media/vendela.webp" },
+  { name: "Mondial", category: "roses", colour: "light pink", image: "/media/mondial.webp" },
+  { name: "Mandala", category: "roses", colour: "pink", image: "/media/mandala.webp" },
+  { name: "Momentum", category: "roses", colour: "yellow", image: "/media/momentum.webp" },
+  { name: "High & Magic", category: "roses", colour: "bicolor", image: "/media/high-and-magic.webp" },
+  { name: "Pink Floyd", category: "roses", colour: "hot pink", image: "/media/pink-floyd.webp" },
+  { name: "Tinted Rose", category: "roses", image: "/media/tinted-rose.webp" },
 
   { name: "Select-grade Carnation", category: "carnations", image: "/media/select-carnations.webp" },
   { name: "Mini Carnation", category: "carnations", image: "/media/mini-carnation.webp" },
@@ -114,9 +131,15 @@ const items: CatalogueItem[] = [
 
   // Made up rather than sold by the stem, so they close the list: everything
   // above is what goes into one.
-  { name: "Rose Bouquet", category: "bouquets" },
-  { name: "Mixed Bouquet", category: "bouquets" },
-  { name: "Tropical Bouquet", category: "bouquets" },
+  //   Each of these takes three photographs rather than one, on `images` — see
+  // the field's note above for why, and .flower-slide in globals.css for the
+  // turn itself. The order here is the order they are shown in, so the frame
+  // that best answers "what is this" belongs first: it is the one a card is
+  // holding when a reader arrives, and the only one described to a screen
+  // reader.
+  { name: "Rose Bouquet", category: "bouquets", images: ["/media/rose-bouquet1.webp", "/media/rose-bouquet2.webp", "/media/rose-bouquet3.webp"] },
+  { name: "Mixed Bouquet", category: "bouquets", images: ["/media/mixed-bouquet1.webp", "/media/mixed-bouquet2.webp", "/media/mixed-bouquet3.webp"] },
+  { name: "Tropical Bouquet", category: "bouquets", images: ["/media/tropical-bouquet1.webp", "/media/tropical-bouquet2.webp", "/media/tropical-bouquet3.webp"] },
 ];
 
 // Dutch, wedding and tropical flowers are offerings, not stems sold by the
@@ -150,5 +173,8 @@ export const flowers = items.map((item) => ({
 
 // The home field leads with photographed stems rather than grey placeholders.
 // Order matters: PLACEMENT in flower-field.tsx scatters them by index.
-const previewNames = ["Premium Rose", "Premium Hydrangea", "Premium Lilies", "Peony", "Tulips", "Ranunculus", "Sunflowers", "Calla Lilies", "Anemone"];
+// These are names, so renaming an item above means renaming it here too — the
+// lookup below asserts the match rather than checking it, and a miss would take
+// the home page down rather than dropping one stem out of the field.
+const previewNames = ["Red Rose", "Premium Hydrangea", "Premium Lilies", "Peony", "Tulips", "Ranunculus", "Sunflowers", "Calla Lilies", "Anemone"];
 export const previewFlowers = previewNames.map((name) => flowers.find((flower) => flower.name === name)!);

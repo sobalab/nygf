@@ -260,14 +260,45 @@ section[id].story { scroll-margin-top:0; }
 /* Where the stems stop and the made-up bouquets start. It takes a whole row of
    the grid rather than sitting inside a column, so the break runs the full
    measure the cards do, and the row gap above and below is the same 42px that
-   separates any two rows — the rule is the only new thing, not the spacing.
-   Sage at a fifth, the weight the search field's own rule carries: enough to
-   read as a deliberate line on this band without drawing more than the cards. */
-.grid-break { grid-column:1 / -1; height:0; border:0; border-top:1px solid rgba(202,203,181,.22); margin:6px 0 0; }
+   separates any two rows — the rule and its heading are the only new things,
+   not the spacing. Sage at a fifth, the weight the search field's own rule
+   carries: enough to read as a deliberate line on this band without drawing
+   more than the cards.
+     The word sits under the rule rather than on it, so the line reads as the
+   end of what came before and the name as the start of what follows. Small
+   caps, a step down from the page's own title — it heads a part of one list,
+   not a section of the site.
+     Scoped to the band rather than left on the bare class: this is an h2 inside
+   .catalogue, and the section-heading rule further up the file reaches it on
+   `.catalogue h2` — one class and one element to this one's single class, so
+   without the extra step it wins and the break comes out at the size of the
+   page's own title. */
+.catalogue .grid-break { grid-column:1 / -1; margin:6px 0 0; padding-top:30px; border-top:1px solid rgba(202,203,181,.22); font:400 clamp(24px,2.3vw,34px)/1.15 var(--display); letter-spacing:.015em; }
+/* Filtered to the bouquets alone, or searched for by a word only they match,
+   the heading is the first thing in the grid and there is nothing above it for
+   a rule to close off. The name still belongs; the line doesn't. */
+.catalogue .grid-break:first-child { border-top:0; padding-top:0; margin-top:0; }
 .flower-image-wrap { position:relative; overflow:hidden; background:var(--mist); aspect-ratio:3/4; border-radius:var(--tile-radius); }
 /* The wrap already clips, but Safari lets a transformed child bleed past a
    rounded parent mid-animation, and the image scales on hover. */
 .flower-image-wrap img { aspect-ratio:3/4; object-fit:cover; filter:saturate(.76); border-radius:inherit; transition:transform .9s var(--ease-out), filter .9s var(--ease-out); }
+/* A card with a set of frames stacks them in the one plate and turns them over
+   on its own. The frames sit on top of each other rather than in a row that
+   travels: the plate is rounded and clips, and Safari lets a transformed child
+   bleed past a rounded parent — the note on the image rule above is that same
+   bug, which is why the photograph carries the radius itself. Opacity is the
+   one property that can't reopen it, and it is the turn the story panels take
+   between scenes, so the page already moves this way.
+     One animation, three phases, no script: each frame runs the same twelve
+   second cycle a third of the way behind the one before it, so it holds for
+   four seconds and hands over across .6 of one. The negative delay is what
+   starts them mid-cycle rather than all at once. */
+.flower-slide { position:absolute; inset:0; width:100%; height:100%; aspect-ratio:auto; animation:flower-frames 12s var(--ease) infinite; animation-delay:calc(var(--i) * -4s); }
+@keyframes flower-frames {
+  0%,28% { opacity:1 }
+  33.33%,95% { opacity:0 }
+  100% { opacity:1 }
+}
 .flower-card { display:block; }
 .flower-card:hover img,.flower-card:focus-visible img { transform:scale(1.045); filter:saturate(.94); }
 .field-item a:hover { transform:scale(1.05); }
@@ -762,6 +793,11 @@ html[data-splash="off"] .splash { display:none; }
   .header-cta:hover,.hero-button:hover,.solid-button:hover,.contact-button:hover,.enquiry-submit:hover:not(:disabled),
   .header-cta:active,.hero-button:active,.solid-button:active,.contact-button:active,.enquiry-submit:active,
   .choice span:active,.flower-card:hover img,.flower-card:active img,.text-link:hover span { transform:none; }
+  /* The set stops turning over and the card keeps the first frame. Hiding the
+     rest explicitly is the whole of it: with the animation gone they would all
+     sit at full opacity in the one plate and the last one would win. */
+  .flower-slide { animation:none; }
+  .flower-slide:not(:first-child) { opacity:0; }
   /* The field is still revealed, just without the drift, the float or the
      stagger — the shorthand here drops the second animation outright. */
   .field-item { transform:none; }
