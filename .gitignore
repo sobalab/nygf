@@ -35,3 +35,7 @@ yarn-error.log*
 
 /outputs/
 /work/
+
+# Playwright MCP browser artifacts (screenshots, page snapshots, console logs).
+# Throwaway debugging output, written into the repo root by any browser run.
+.playwright-mcp/
