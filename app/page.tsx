@@ -1,4 +1,5 @@
 import { previewFlowers } from "./catalogue-data";
+import { CutReveal } from "./cut-reveal";
 import { SiteFooter, SiteHeader } from "./chrome";
 import { FlowerField } from "./flower-field";
 import { Reveal } from "./reveal";
@@ -17,7 +18,19 @@ export default function Home() {
         <img className="hero-image" src="/media/hero.webp" alt="Buckets of freshly cut roses, lilies, tulips and chrysanthemums on the wholesale floor" fetchPriority="high" />
         <div className="hero-shade" />
         <div className="hero-copy">
-          <h1>Exceptional Flowers,<br /><em>Sourced With Care.</em></h1>
+          {/* One string, not two lines and a <br>: the stagger is numbered
+              across the whole heading, so carrying the break inside the text is
+              what keeps the second line queueing behind the first instead of
+              starting its own run. The italic survives the cut through
+              emphasizeFrom, which sets that line in <em> as the markup did. */}
+          <h1>
+            <CutReveal
+              text={"Exceptional Flowers,\nSourced With Care."}
+              splitBy="characters"
+              emphasizeFrom={1}
+              delay="var(--hero-start)"
+            />
+          </h1>
           <div className="hero-bottom">
             <p>Wholesale cut flowers, imported directly from farm to shop for florists, planners, hospitality, and walk-in buyers.</p>
             <a href="/catalogue" className="hero-button">View our catalogue</a>
@@ -75,7 +88,15 @@ export default function Home() {
       </section>
 
       <section className="contact section-pad" id="contact">
-        <h2>What Are You<br /><em>Celebrating Next?</em></h2>
+        {/* The same cut as the hero, but this one is below the fold, so it
+            waits for the band to be reached rather than for the clock — the
+            reveal mark is what releases it, and dropping the mark on the way
+            out is what lets it play again next time. */}
+        <Reveal className="contact-title">
+          <h2>
+            <CutReveal text={"What Are You\nCelebrating Next?"} splitBy="characters" emphasizeFrom={1} />
+          </h2>
+        </Reveal>
         <p>Ask for today&apos;s price and availability</p>
         {/* The reach/visit/hours columns that used to sit under this live in the
             footer, which is directly beneath — they were the same three columns

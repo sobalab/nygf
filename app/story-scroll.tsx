@@ -2,7 +2,6 @@
 
 import type { ReactNode } from "react";
 import { useEffect, useRef } from "react";
-import { Reveal } from "./reveal";
 
 // The section is a tall scroll track and the stage pins inside it; the panels
 // handed in as children stack in one cell and cross-fade as you travel. All
@@ -58,13 +57,53 @@ export function StoryScroll({ children }: { children: ReactNode }) {
     };
 
     measure();
+
+    // The entrance, which the generic Reveal used to drive and can't: it marks
+    // a block whenever the block is on screen, and drops the mark on the way out
+    // so the run can replay. That is right for a row of cards and wrong for this
+    // track, because the track can be entered from either end. Coming back up
+    // into it from Our Services lands the reader at --p 1, where scene one is
+    // meant to be long gone — and replaying the entrance there faded scene one
+    // back in over scene two, two headings and two paragraphs stacked in the one
+    // grid cell they share.
+    //
+    // So it is decided here, where --p is already known, and it is decided once:
+    //   reveal-in     releases the hold that keeps scene one at nothing before
+    //                 the track is ever reached. Wanted from either end, since
+    //                 without it the title is held at nothing too.
+    //   story-entrance runs the staggered rise, and is only added when the
+    //                 reader is arriving at the top, which is the only place the
+    //                 scene it stages in is the scene that belongs on screen.
+    // Neither is ever removed. Nothing to cancel mid-run, and no second visit
+    // that plays a scene the track has already turned past.
+    const stage = section.querySelector<HTMLElement>(".story-stage");
+    const watch = stage && new IntersectionObserver(
+      (entries) => {
+        for (const entry of entries) {
+          if (entry.intersectionRatio < 0.2) continue;
+          const progress = Number.parseFloat(section.style.getPropertyValue("--p")) || 0;
+          stage.classList.add("reveal-in");
+          if (progress <= 0.02) stage.classList.add("story-entrance");
+          watch!.disconnect();
+          return;
+        }
+      },
+      { threshold: [0, 0.2] },
+    );
+    if (stage && watch) {
+      stage.classList.add("reveal-armed");
+      watch.observe(stage);
+    }
+
     window.addEventListener("scroll", onScroll, { passive: true });
     window.addEventListener("resize", onScroll, { passive: true });
     return () => {
       window.removeEventListener("scroll", onScroll);
       window.removeEventListener("resize", onScroll);
       if (frame) cancelAnimationFrame(frame);
+      watch?.disconnect();
       section.classList.remove("story-armed");
+      stage?.classList.remove("reveal-armed", "reveal-in", "story-entrance");
     };
   }, []);
 
@@ -73,13 +112,14 @@ export function StoryScroll({ children }: { children: ReactNode }) {
     // rule the armed reset below can't outweigh, and the armed section has to
     // measure exactly its own track.
     <section className="story" id="story" ref={ref}>
-      {/* The stage carries the reveal mark as well as the pin: the first scene
+      {/* The stage carries the entrance as well as the pin: the first scene
           stages itself in when the band is reached, where --p only starts
           moving once the section has pinned and so has nothing to say about
           arriving. The two do not collide — the entrance is an animation with
           a backwards fill, which hands opacity back to the --p rule the moment
-          it finishes, in time for that rule to fade the scene out again. */}
-      <Reveal className="story-stage">{children}</Reveal>
+          it finishes, in time for that rule to fade the scene out again. Its
+          marks are put on above rather than by Reveal; the reason is there. */}
+      <div className="story-stage">{children}</div>
     </section>
   );
 }

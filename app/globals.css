@@ -68,9 +68,14 @@ section[id].story { scroll-margin-top:0; }
 .hero-bottom>p { margin:0; }
 .hero-button { display:flex; align-items:center; justify-content:center; background:var(--paper); color:var(--ink); padding:17px 30px; border-radius:var(--btn-radius); font-size:12px; letter-spacing:1.2px; text-transform:uppercase; }
 
-/* The hero arrives in three beats rather than being there: the heading, then
-   the line under it, then the button travelling further than either so it reads
-   as arriving rather than fading up in place.
+/* The hero arrives in three beats rather than being there: the heading cutting
+   in a character at a time, then the line under it, then the button travelling
+   further than either so it reads as arriving rather than fading up in place.
+     The two later beats are timed off the first rather than off each other. The
+   heading's run is its own length — thirty-five pieces at 28ms is most of a
+   second before the last one even starts — so the copy comes in over the tail
+   of it and the button after it has landed. Change the stagger and these two
+   want moving with it.
      The delay is the whole problem. On a first visit the splash holds the
    window for four seconds, and an entrance played under it is an entrance
    nobody sees — so the run waits for the overlay to clear. `--hero-start` is
@@ -83,11 +88,47 @@ section[id].story { scroll-margin-top:0; }
    drawn until their animation started, which is the opposite of the point. */
 :root { --hero-start:4s; }
 html[data-splash="off"] { --hero-start:.15s; }
-.hero-copy h1 { animation:hero-rise .9s var(--ease-out) var(--hero-start) backwards; }
-.hero-bottom>p { animation:hero-rise .8s var(--ease-out) calc(var(--hero-start) + .35s) backwards; }
+/* The cut reveal — see cut-reveal.tsx for how a string is taken apart. Four
+   elements, each with one job: .cut carries the run's timing, .cut-line is a
+   line of it, .cut-box is a run of text that may not break, and .cut-mask is
+   the window a .cut-piece rises through.
+     The mask is the whole trick: it clips, and the piece inside it starts a
+   little over its own height below, so there is nothing to see until it moves.
+     It clips ONE edge, and that is the point of the clip-path. A piece only
+   ever waits below and rises, so the bottom is the only side that has to hide
+   anything — and overflow:hidden, which was here first, cuts all four. On a
+   heading in this face that showed: the italic leans past its own advance
+   width and its ascenders stand above the line box, so overflow sheared the
+   top off a tall letter and the overhang off a slanted one. The three negative
+   insets push those edges out of the way and leave the bottom on nothing.
+     The .12em below is descender room — a comma's tail lives under the line
+   box, and the clip closes at the padding edge, so without it the tail would
+   be cut at rest. It is also why a piece starts at 118% rather than 100%: the
+   window it has to clear is that much taller than the piece itself. The
+   negative margin hands the space back, so none of this moves the line. */
+.cut { display:inline-block; }
+.cut-line { display:block; }
+/* nowrap is what keeps a word whole once it has been cut into characters. */
+.cut-box { display:inline-block; white-space:nowrap; }
+.cut-mask { display:inline-block; clip-path:inset(-100% -100% 0); vertical-align:top; padding-bottom:.12em; margin-bottom:-.12em; }
+/* One keyframe, one delay expression, however many pieces there are: the queue
+   number the component wrote is multiplied by the step and added to the start.
+   `backwards` holds a piece under the mask through its own wait — without it
+   every piece would sit fully drawn until its turn came, which is the whole
+   effect inverted. */
+.cut-piece { display:inline-block; animation:cut-rise var(--cut-duration,.7s) var(--ease-out) calc(var(--cut-delay,0ms) + var(--i,0) * var(--cut-stagger,28ms)) backwards; }
+@keyframes cut-rise { from { transform:translateY(var(--cut-from,118%)) } }
+/* A cut inside a reveal waits for the band instead of the clock. Armed, the
+   animation is taken off and the piece simply held under its mask; marked as
+   reached, it is handed back and runs its stagger from there. The mark comes
+   off again when the band has fully left, so the run replays on the way back —
+   which is the reason for holding it this way rather than pausing it. */
+.reveal-armed .cut-piece { animation-name:none; transform:translateY(var(--cut-from,118%)); }
+.reveal-in .cut-piece { animation-name:cut-rise; transform:none; }
+.hero-bottom>p { animation:hero-rise .8s var(--ease-out) calc(var(--hero-start) + 1.05s) backwards; }
 /* Further to travel and a touch quicker over it, which is the difference
    between a thing that fades in and a thing that slides in. */
-.hero-button { animation:hero-slide .75s var(--ease-out) calc(var(--hero-start) + .7s) backwards; }
+.hero-button { animation:hero-slide .75s var(--ease-out) calc(var(--hero-start) + 1.45s) backwards; }
 @keyframes hero-rise { from { opacity:0; transform:translateY(16px) } }
 @keyframes hero-slide { from { opacity:0; transform:translateY(30px) } }
 .section-pad { padding:130px 6vw; }
@@ -495,10 +536,10 @@ html[data-splash="off"] { --hero-start:.15s; }
 .story-armed .story-stage.reveal-armed:not(.reveal-in) .intro-setup .story-image,
 .story-armed .story-stage.reveal-armed:not(.reveal-in) .intro-setup h3,
 .story-armed .story-stage.reveal-armed:not(.reveal-in) .intro-setup p { opacity:0; }
-.story-armed .reveal-in .story-title { animation:story-in .8s var(--ease-out) backwards; }
-.story-armed .reveal-in .intro-setup .story-image { animation:story-in .8s var(--ease-out) .16s backwards; }
-.story-armed .reveal-in .intro-setup h3 { animation:story-in .8s var(--ease-out) .32s backwards; }
-.story-armed .reveal-in .intro-setup p { animation:story-in .8s var(--ease-out) .48s backwards; }
+.story-armed .story-entrance .story-title { animation:story-in .8s var(--ease-out) backwards; }
+.story-armed .story-entrance .intro-setup .story-image { animation:story-in .8s var(--ease-out) .16s backwards; }
+.story-armed .story-entrance .intro-setup h3 { animation:story-in .8s var(--ease-out) .32s backwards; }
+.story-armed .story-entrance .intro-setup p { animation:story-in .8s var(--ease-out) .48s backwards; }
 @keyframes story-in { from { opacity:0; transform:translateY(30px); } to { opacity:1; transform:none; } }
 /* The palest band, and the only one that takes dark type: --paper on this blue
    is 1.6:1. Ink reads at 7.3:1, so the whole band inverts — including the
@@ -866,6 +907,9 @@ html[data-splash="off"] .splash { display:none; }
      were held at nothing by a backwards fill, and with no animation to fill
      from, each element renders as itself. */
   .hero-copy h1,.hero-bottom>p,.hero-button { animation:none; }
+  /* The heading is set, not scraped in. Dropping the animation is enough on its
+     own — the pieces were only held under their masks by a backwards fill. */
+  .cut-piece { animation:none; }
   /* The set stops turning over and the card keeps the first frame. Hiding the
      rest explicitly is the whole of it: with the animation gone they would all
      sit at full opacity in the one plate and the last one would win. */
@@ -883,9 +927,9 @@ html[data-splash="off"] .splash { display:none; }
   /* The story stage is unarmed under this setting, so its scene never hides
      itself and never needs staging in — but the reveal mark is still added by
      script, so the run is called off explicitly. */
-  .reveal-in .story-title,
-  .reveal-in .intro-setup .story-image,
-  .reveal-in .intro-setup h3,
-  .reveal-in .intro-setup p { animation:none; }
+  .story-entrance .story-title,
+  .story-entrance .intro-setup .story-image,
+  .story-entrance .intro-setup h3,
+  .story-entrance .intro-setup p { animation:none; }
 }
 
