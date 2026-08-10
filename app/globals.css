@@ -65,8 +65,31 @@ section[id].story { scroll-margin-top:0; }
 .hero h1,.contact h2 { font:400 clamp(44px,6.2vw,96px)/1.04 var(--display); letter-spacing:.015em; margin:0; }
 .hero h1 em,.contact h2 em,.trade h2 em { font-weight:400; }
 .hero-bottom { display:flex; flex-direction:column; align-items:center; gap:44px; }
-.hero-bottom>p { max-width:520px; margin:0; }
+.hero-bottom>p { margin:0; }
 .hero-button { display:flex; align-items:center; justify-content:center; background:var(--paper); color:var(--ink); padding:17px 30px; border-radius:var(--btn-radius); font-size:12px; letter-spacing:1.2px; text-transform:uppercase; }
+
+/* The hero arrives in three beats rather than being there: the heading, then
+   the line under it, then the button travelling further than either so it reads
+   as arriving rather than fading up in place.
+     The delay is the whole problem. On a first visit the splash holds the
+   window for four seconds, and an entrance played under it is an entrance
+   nobody sees — so the run waits for the overlay to clear. `--hero-start` is
+   that wait, and the same attribute the splash itself is gated on flips it: the
+   head script writes data-splash="off" for a repeat visit or a #hash landing,
+   where there is no overlay to wait for and the hero should simply begin.
+   Nothing new is measured or listened for; the flag already existed.
+     `backwards` is what holds each beat at nothing through its own delay — the
+   same reason the story stage uses it. Without it all three would sit fully
+   drawn until their animation started, which is the opposite of the point. */
+:root { --hero-start:4s; }
+html[data-splash="off"] { --hero-start:.15s; }
+.hero-copy h1 { animation:hero-rise .9s var(--ease-out) var(--hero-start) backwards; }
+.hero-bottom>p { animation:hero-rise .8s var(--ease-out) calc(var(--hero-start) + .35s) backwards; }
+/* Further to travel and a touch quicker over it, which is the difference
+   between a thing that fades in and a thing that slides in. */
+.hero-button { animation:hero-slide .75s var(--ease-out) calc(var(--hero-start) + .7s) backwards; }
+@keyframes hero-rise { from { opacity:0; transform:translateY(16px) } }
+@keyframes hero-slide { from { opacity:0; transform:translateY(30px) } }
 .section-pad { padding:130px 6vw; }
 /* A shade smaller than the roman was: small caps run about a sixth wider at the
    same size, and these headings carry authored line breaks that have to hold. */
@@ -838,6 +861,11 @@ html[data-splash="off"] .splash { display:none; }
   .header-cta:active,.hero-button:active,.solid-button:active,.contact-button:active,.enquiry-submit:active,
   .choice span:active,.flower-card:hover img,.flower-card:active img,.text-link:hover span,
   .offering:hover .offering-photo { transform:none; }
+  /* The hero is simply there when the overlay clears — which under this setting
+     is a second in, not four. Dropping the animation is all it takes: the beats
+     were held at nothing by a backwards fill, and with no animation to fill
+     from, each element renders as itself. */
+  .hero-copy h1,.hero-bottom>p,.hero-button { animation:none; }
   /* The set stops turning over and the card keeps the first frame. Hiding the
      rest explicitly is the whole of it: with the animation gone they would all
      sit at full opacity in the one plate and the last one would win. */
