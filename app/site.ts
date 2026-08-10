@@ -19,7 +19,7 @@ export const shop = {
 // paste the access key it emails you here, and redeploy. Until then the form
 // still works — it opens the WhatsApp draft and offers a one-tap email copy
 // instead of sending one automatically.
-export const web3formsAccessKey = "YOUR_WEB3FORMS_ACCESS_KEY";
+export const web3formsAccessKey = "f6e3c1b7-6a30-4046-9b9b-77706f80f1cb";
 
 export const formServiceConfigured =
   web3formsAccessKey.length > 0 && !web3formsAccessKey.startsWith("YOUR_");
