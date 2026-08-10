@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useState, type FormEvent } from "react";
+import { useEffect, useRef, useState, type FormEvent } from "react";
 import { SiteFooter, SiteHeader } from "../chrome";
 import { formServiceConfigured, shop, web3formsAccessKey, whatsappHref } from "../site";
 
@@ -56,6 +56,25 @@ export default function Contact() {
   const [status, setStatus] = useState<Status>("idle");
   const honeypot = useRef<HTMLInputElement>(null);
 
+  // /contact?sent — the confirmation without sending anything, so the panel can
+  // be looked at and styled without a real inquiry landing in the shop's inbox
+  // every time. ?sent=Jane fills the name the heading greets.
+  //   Development only: NODE_ENV is inlined at build time, so the whole block
+  // is dropped from a production bundle rather than shipped behind a flag a
+  // visitor could find and trip.
+  //   In an effect rather than in the initial state, because this component is
+  // rendered on the server first: reading the query string during that first
+  // render would hand back "idle" there and "sent" here, and React would be
+  // hydrating a confirmation over a form.
+  useEffect(() => {
+    if (process.env.NODE_ENV === "production") return;
+    const preview = new URLSearchParams(window.location.search).get("sent");
+    if (preview === null) return;
+    if (preview) setForm((current) => ({ ...current, name: preview }));
+    setStatus("sent");
+  }, []);
+
+  const sent = status === "sent";
   const message = summarise(form);
   const waUrl = whatsappHref(message);
   const mailtoUrl = `mailto:${shop.email}?subject=${encodeURIComponent(`Wholesale flower inquiry — ${form.name}`)}&body=${encodeURIComponent(message)}`;
@@ -123,22 +142,29 @@ export default function Contact() {
     <main>
       <SiteHeader />
 
-      <section className="page-head section-pad">
-        <h1>Tell Us What You Need</h1>
-        <p className="section-note">
-          Prices move with the market daily and are never posted, so we can answer any questions by email, phone or
-          WhatsApp. Send your list and we will come back with what is in the cooler and what it costs.
-        </p>
-      </section>
+      {/* Everything on this page asks for the list, so once the list is sent
+          there is nothing left for the head to introduce or the aside to offer
+          as an alternative to — both would be answering a question the reader
+          has already finished with. What is left is the confirmation, and it
+          takes the page on its own. */}
+      {sent ? null : (
+        <section className="page-head section-pad">
+          <h1>Tell Us What You Need</h1>
+          <p className="section-note">
+            Prices move with the market daily and are never posted, so we can answer any questions by email, phone or
+            WhatsApp. Send your list and we will come back with what is in the cooler and what it costs.
+          </p>
+        </section>
+      )}
 
-      <section className="enquiry section-pad">
+      <section className={sent ? "enquiry enquiry-done section-pad" : "enquiry section-pad"}>
         <div className="enquiry-form">
-          {status === "sent" ? (
+          {sent ? (
             <div className="enquiry-sent" role="status" aria-live="polite">
               <h2>Thank You, {form.name.split(" ")[0] || "we have it"}.</h2>
               <p>
                 {formServiceConfigured
-                  ? "Your list is on its way to the shop, and a WhatsApp draft is open in another tab. Send it and you will have a thread with the owner directly."
+                  ? "Your list is on its way to the shop, and a WhatsApp draft is open in another tab. Recommended to send it, and you will have a thread with the owner directly."
                   : "A WhatsApp draft is open in another tab with your list already written out. Send it, or email the same copy instead."}
               </p>
               <div className="enquiry-actions">
@@ -286,6 +312,7 @@ export default function Contact() {
           )}
         </div>
 
+        {sent ? null : (
         <aside className="enquiry-aside">
           <h2>Or Just Call.</h2>
           <p className="section-note">Most orders are settled in a two minute phone call. We answer in English and Korean.</p>
@@ -314,6 +341,7 @@ export default function Contact() {
             </p>
           </div>
         </aside>
+        )}
       </section>
 
       <SiteFooter />

@@ -556,6 +556,19 @@ html[data-splash="off"] { --hero-start:.15s; }
    arrived from the paper they no longer sit on, and against this blue it read
    as a stack of slabs cut out of the section. */
 .enquiry { background:var(--band-contact); display:grid; grid-template-columns:1.25fr .75fr; gap:8vw; align-items:start; }
+/* Sent, the band holds one thing, so the two-column split collapses and the
+   message takes the middle. Everything inside it is centred from here rather
+   than in the markup: the panel is the same element either way, and it is only
+   its surroundings that changed.
+     A screenful exactly, with the message centred in it: the confirmation is
+   the whole page now, so it takes the whole window and the footer waits below
+   the fold rather than crowding four lines of type. The box-sizing is global,
+   so the 130px of section padding is counted inside the 100svh rather than
+   added to it — the band is a screen tall, not a screen plus its padding. */
+.enquiry-done { grid-template-columns:1fr; justify-items:center; text-align:center; align-content:center; min-height:100svh; }
+.enquiry-done .enquiry-sent>p { margin-inline:auto; }
+.enquiry-done .enquiry-actions { justify-content:center; }
+.enquiry-done .enquiry-reset { margin-inline:auto; }
 .enquiry form { display:flex; flex-direction:column; gap:34px; }
 .honeypot { position:absolute; left:-9999px; width:1px; height:1px; opacity:0; }
 .field { display:flex; flex-direction:column; gap:10px; border:0; padding:0; margin:0; min-width:0; }
