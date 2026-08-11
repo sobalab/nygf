@@ -92,7 +92,7 @@ export default function Home() {
         <Reveal className="service-list">
           <article><h3>Direct Importing</h3><p>We import and clear our own shipments, removing the broker between farm and shop. Our own procurement staff work in Fusagasugá, Colombia.</p></article>
           <article><h3>Delivery</h3><p>We deliver across the New York metropolitan area and nearby Connecticut, with pickup options in our Flushing warehouse.</p></article>
-          <article><h3>Every Occasion</h3><p>Flowers are not limited to any type of occasions, events, and needs. Inform us and we will take care of supplying for your needs.</p></article>
+          <article><h3>Every Occasion</h3><p>Flowers are not limited to any type of occasions, events, and needs. Inform us and we will take care of supplying for you.</p></article>
         </Reveal>
       </section>
 
