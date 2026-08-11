@@ -54,6 +54,10 @@ function summarise(form: typeof EMPTY) {
 export default function Contact() {
   const [form, setForm] = useState(EMPTY);
   const [status, setStatus] = useState<Status>("idle");
+  // Whether the WhatsApp tab actually opened on submit. An inquiry is meant to
+  // land in both of the shop's inboxes, and this is the half that a browser can
+  // refuse without telling anyone.
+  const [drafted, setDrafted] = useState(true);
   const honeypot = useRef<HTMLInputElement>(null);
 
   // /contact?sent — the confirmation without sending anything, so the panel can
@@ -72,6 +76,26 @@ export default function Contact() {
     if (preview === null) return;
     if (preview) setForm((current) => ({ ...current, name: preview }));
     setStatus("sent");
+  }, []);
+
+  // What the reader was looking at when they asked. The catalogue's offerings
+  // send ?service, which lands on one of the radios; a variety page sends
+  // ?about, which opens the list with the flower already written on it so the
+  // buyer adds a count rather than retyping the name they just read.
+  //   Read here rather than through the router's hook for the same reason the
+  // preview above is: this page renders on the server first, and a query string
+  // read during that render is a hydration mismatch waiting to happen.
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    const service = params.get("service");
+    const about = params.get("about");
+    const matched = service && SERVICES.find((name) => name.toLowerCase() === service.toLowerCase());
+    if (!matched && !about) return;
+    setForm((current) => ({
+      ...current,
+      ...(matched ? { service: matched } : {}),
+      ...(about ? { needs: about } : {}),
+    }));
   }, []);
 
   const sent = status === "sent";
@@ -102,7 +126,15 @@ export default function Contact() {
 
     // Open the WhatsApp draft inside the click gesture, before any await, or the
     // browser treats it as an unrequested popup and blocks it.
-    window.open(waUrl, "_blank", "noopener,noreferrer");
+    //   The handle is what says whether it opened: a blocked popup hands back
+    // null, and the confirmation below has to be able to tell, because promising
+    // a tab that was never allowed is how the WhatsApp half of an inquiry gets
+    // quietly dropped. Which is also why the window is opened bare and its
+    // opener cut afterwards rather than being asked for with "noopener" — that
+    // feature makes the call return null whether it worked or not.
+    const draft = window.open(waUrl, "_blank");
+    if (draft) draft.opener = null;
+    setDrafted(Boolean(draft));
 
     if (!formServiceConfigured) {
       confirm();
@@ -162,14 +194,23 @@ export default function Contact() {
           {sent ? (
             <div className="enquiry-sent" role="status" aria-live="polite">
               <h2>Thank You, {form.name.split(" ")[0] || "we have it"}.</h2>
+              {/* Three things can be true here and the reader is owed the right
+                  one: the email either went or there is no service to send it
+                  with, and the WhatsApp draft either opened or the browser held
+                  the tab back. The second half is a step still to take either
+                  way, so it keeps the solid button under whichever line runs. */}
               <p>
                 {formServiceConfigured
-                  ? "Your list is on its way to the shop, and a WhatsApp draft is open in another tab. Recommended to send it, and you will have a thread with the owner directly."
-                  : "A WhatsApp draft is open in another tab with your list already written out. Send it, or email the same copy instead."}
+                  ? drafted
+                    ? "Your list is on its way to the shop by email, and a WhatsApp draft is open in another tab. Send that too and the owner has the thread as well as the inbox copy."
+                    : "Your list is on its way to the shop by email. Your browser held back the WhatsApp tab, so open the draft below and send it to reach the owner directly as well."
+                  : drafted
+                    ? "A WhatsApp draft is open in another tab with your list already written out. Send it, and email the same copy so the shop has it both ways."
+                    : "Your browser held back the WhatsApp tab. Open the draft below and send it, and email the same copy so the shop has it both ways."}
               </p>
               <div className="enquiry-actions">
                 <a className="solid-button" href={waUrl} target="_blank" rel="noreferrer">
-                  Open WhatsApp again
+                  {drafted ? "Open WhatsApp again" : "Open the WhatsApp draft"}
                 </a>
                 {formServiceConfigured ? null : (
                   <a className="text-link" href={mailtoUrl}>
@@ -177,7 +218,7 @@ export default function Contact() {
                   </a>
                 )}
               </div>
-              <button type="button" className="enquiry-reset" onClick={() => { setForm(EMPTY); setStatus("idle"); }}>
+              <button type="button" className="enquiry-reset" onClick={() => { setForm(EMPTY); setStatus("idle"); setDrafted(true); }}>
                 Send another list
               </button>
             </div>
@@ -304,7 +345,7 @@ export default function Contact() {
               {/* Above the button for the same reason every hint above sits above
                   its input: it says what the control will do, so it is read
                   before the control rather than after it. */}
-              <p className="field-hint enquiry-note">Submitting also opens a WhatsApp draft so you have a thread with the owner.</p>
+              <p className="field-hint enquiry-note">Sending emails your list to the shop and opens a WhatsApp draft, so it reaches us both ways.</p>
               <button type="submit" className="enquiry-submit" disabled={status === "sending"}>
                 {status === "sending" ? "Sending" : "Send inquiry"}
               </button>

@@ -228,7 +228,7 @@ html[data-splash="off"] { --hero-start:.15s; }
 .hero-bottom>p { font-size:clamp(20px,1.7vw,26px); line-height:1.5; max-width:680px; }
 .section-note,.enquiry-sent>p,
 .enquiry-details p,.footer-details p,.field-hint,.field-error,.flower-meta p,
-.result-count,.footer-base { font:400 16px/1.6 var(--sans); }
+.result-count,.footer-base,.footer-origin,.ask-dialog>p { font:400 16px/1.6 var(--sans); }
 .text-link { position:relative; display:inline-flex; gap:22px; border-bottom:1px solid var(--line); padding:18px 0 8px; text-transform:uppercase; letter-spacing:1.3px; font-size:12px; }
 .catalogue { background:var(--band-flowers); color:var(--sage); }
 /* Past roughly 1440px the 6vw gutters stop holding the page in, and the cards
@@ -467,8 +467,8 @@ html[data-splash="off"] { --hero-start:.15s; }
    scene beneath it is a portrait plate that fills most of a laptop window, so
    what is spent here is what the band has left to breathe with at its foot. */
 .story-title { text-align:center; font-size:clamp(40px,5vw,72px); margin:0 0 clamp(44px,7.5vh,84px); }
-/* Both panels, one shape: a portrait plate on the left at its own width, and
-   the copy taking whatever is left. The photo is sized by height so the pair
+/* Every panel, one shape: a portrait plate on the left at its own width, and
+   the copy taking whatever is left. The photo is sized by height so the set
    hold the same footprint on any screen — a width-driven plate would grow past
    the pinned viewport on wide monitors. */
 .story-panel { display:grid; grid-template-columns:auto minmax(0,1fr); align-items:center; gap:9vw; }
@@ -481,6 +481,20 @@ html[data-splash="off"] { --hero-start:.15s; }
    two scenes speak in one voice, and it is the same voice that names the
    section rather than a sans answering it. */
 .story-copy h3 { font:400 clamp(28px,3.3vw,46px)/1.16 var(--display); margin:0 0 42px; letter-spacing:.015em; }
+/* The other two headings are written to break at their own comma; this one is a
+   single phrase — one place going to another — so it holds its line, and takes
+   whatever face keeps it there. The cap is off the copy column rather than the
+   window because the column is what it has to fit inside, and that is not a
+   fraction of the window: the plate beside it is sized by viewport height, so at
+   one width a short window leaves the column wide and a tall one leaves it
+   narrow. 8.4cqw is a hair under the 8.8 the line actually measures. */
+/* The only landscape source of the three, so the portrait plate takes a much
+   narrower slice of it than it does of the other two. Held off centre so the
+   slice keeps the figure and the row they are walking, rather than splitting
+   the difference and landing on the empty middle of the field. */
+.origin-setup .story-image img { object-position:68% center; }
+.story-copy { container-type:inline-size; }
+.story-copy .story-oneline { white-space:nowrap; font-size:min(clamp(24px,3vw,46px),8.4cqw); }
 /* A step back from the heading without an alpha, which would fade against the
    band and cost contrast the mix keeps (5:1 on this blue). */
 .story-copy>p { max-width:540px; margin:0; color:color-mix(in srgb, var(--paper) 88%, var(--band-story)); }
@@ -488,12 +502,13 @@ html[data-splash="off"] { --hero-start:.15s; }
 /* Doubled up on .story so the narrow-screen padding further down, which is a
    later rule of equal weight, can't put the padding back — it would push the
    stage down inside its own track and the pin would engage that much late. */
-/* A screen and a bit of travel past the pin, where this was one screen flat. The
-   whole of the extra goes to the second scene: the fractions below are rescaled
-   so the first scene and the turn between them last exactly the pixels of scroll
-   they did before, and the quote is simply held for longer at the end of the
-   track rather than everything being slowed down to fill it. */
-.story.story-armed { height:240svh; padding:0; }
+/* Two screens and a bit of travel past the pin. A third scene was added, so the
+   track grew by exactly what one scene costs — its dwell plus the turn into it —
+   rather than the three being squeezed into the two-scene track. The travel is
+   210svh, which is what makes the fractions below whole: a fade window is .04
+   of the track and a stagger step .02, the same 8.4svh and 4.2svh they were on
+   the shorter one. */
+.story.story-armed { height:310svh; padding:0; }
 /* The stage pins to the very top of the window and the header floats over it,
    so the box the scene centres itself in starts below the bar rather than
    behind it — otherwise the title sits within a few pixels of the header for
@@ -504,28 +519,38 @@ html[data-splash="off"] { --hero-start:.15s; }
    same: the header is a floating bar with the band running on behind it, where
    the foot is where this band actually ends and the next one starts. */
 .story-armed .story-stage { position:sticky; top:0; height:100svh; display:grid; grid-template-rows:auto auto; align-content:center; padding:88px 6vw 44px; }
-/* Both panels in the one cell, so the pair cross-fades in place. */
+/* All three panels in the one cell, so the set turns over in place. */
 .story-armed .story-panel { grid-row:2; grid-column:1; margin:0; will-change:opacity,transform; }
-/* Out, then in — not a cross-fade. Both panels now occupy the same cell in the
+/* Out, then in — not a cross-fade. The panels all occupy the same cell in the
    same arrangement, so overlapping them mid-turn would lay one photo over the
-   other. The first is gone by .33 and the second holds off until .39.
+   other. Each turn leaves .04 of bare stage between the scene that has gone and
+   the one arriving: scene one is clear by .22 and scene two holds off until .26,
+   scene two is clear by .56 and scene three holds off until .60.
      Each scene also moves in parts rather than as one block: the photo leads,
-   the heading follows, the copy last, on windows offset by .03 of the track.
+   the heading follows, the copy last, on windows offset by .02 of the track.
    Leaving reverses it, so the copy goes first and the photo is last to clear.
    Every window reads the same --p, so this is still one style write a frame.
-     Every fraction here is the same distance of scroll it was on the shorter
-   track — .06 of 140svh is the 8svh that .08 of 100svh used to be, and .03 the
-   4svh that .04 was. What changed is where the run finishes: the quote is whole
-   by .51 and the remaining half of the track is time spent reading it, against
-   the last three tenths it used to get. */
-.story-armed .story-panel { transform:translateY(calc(var(--p,0)*-26px)); }
-.story-armed .intro-setup .story-image { opacity:clamp(0,calc((.33 - var(--p,0))/.06),1); }
-.story-armed .intro-setup h3 { opacity:clamp(0,calc((.3 - var(--p,0))/.06),1); }
-.story-armed .intro-setup p { opacity:clamp(0,calc((.27 - var(--p,0))/.06),1); }
+     Every fraction here is the same distance of scroll it was on the two-scene
+   track — .04 of 210svh is the same 8.4svh that .06 of 140svh was, and .02 the
+   same 4.2svh as .03. The middle scene is the only one needing two expressions,
+   since it is the only one that both arrives and leaves; min() takes whichever
+   of the pair is holding it down at the time. */
+.story-armed .intro-setup { transform:translateY(calc(var(--p,0)*-38px)); }
+.story-armed .intro-setup .story-image { opacity:clamp(0,calc((.22 - var(--p,0))/.04),1); }
+.story-armed .intro-setup h3 { opacity:clamp(0,calc((.2 - var(--p,0))/.04),1); }
+.story-armed .intro-setup p { opacity:clamp(0,calc((.18 - var(--p,0))/.04),1); }
+/* The middle scene passes through: it rises into place, sits level over its
+   dwell, and carries on up as it goes — where the outer two only ever do one
+   half of that. .41 is the centre of its stay, so the drift crosses zero where
+   the scene is whole and being read. */
+.story-armed .origin-setup { transform:translateY(calc((.41 - var(--p,0))*46px)); }
+.story-armed .origin-setup .story-image { opacity:min(clamp(0,calc((var(--p,0) - .26)/.04),1),clamp(0,calc((.56 - var(--p,0))/.04),1)); }
+.story-armed .origin-setup h3 { opacity:min(clamp(0,calc((var(--p,0) - .28)/.04),1),clamp(0,calc((.54 - var(--p,0))/.04),1)); }
+.story-armed .origin-setup p { opacity:min(clamp(0,calc((var(--p,0) - .3)/.04),1),clamp(0,calc((.52 - var(--p,0))/.04),1)); }
 .story-armed .story-setup { transform:translateY(calc((1 - var(--p,0))*26px)); }
-.story-armed .story-setup .story-image { opacity:clamp(0,calc((var(--p,0) - .39)/.06),1); }
-.story-armed .story-setup h3 { opacity:clamp(0,calc((var(--p,0) - .42)/.06),1); }
-.story-armed .story-setup p { opacity:clamp(0,calc((var(--p,0) - .45)/.06),1); }
+.story-armed .story-setup .story-image { opacity:clamp(0,calc((var(--p,0) - .6)/.04),1); }
+.story-armed .story-setup h3 { opacity:clamp(0,calc((var(--p,0) - .62)/.04),1); }
+.story-armed .story-setup p { opacity:clamp(0,calc((var(--p,0) - .64)/.04),1); }
 /* The first scene arrives rather than simply being there. Held at nothing until
    the stage is reached, then title, photo, heading and copy rise in one behind
    another. `backwards` is what makes this sit alongside the --p rules above:
@@ -648,6 +673,47 @@ html[data-splash="off"] { --hero-start:.15s; }
 .enquiry-details a,.footer-details a { border-bottom:1px solid var(--line); }
 .enquiry-details a,.footer-details a { transition:border-color .3s var(--ease); }
 .enquiry-details a:hover,.footer-details a:hover { border-color:var(--ink); }
+
+/* ---------------------------------------------------------------------------
+   The ask panel, offered by every "ask" on the site. A native <dialog>, so the
+   backdrop, the Escape key, the focus loop and the rest of the page going inert
+   are the element's own; what is set here is the paper it lands on and the two
+   ways out of it. It takes the cream rather than the paper so it reads as a
+   sheet over the page instead of a piece of it.
+   --------------------------------------------------------------------------- */
+/* Centred here rather than left to the user-agent sheet: setting a position of
+   our own drops the inset and the auto margins that sheet centres a modal with,
+   and the panel lands in the top corner.
+     Every selector below is qualified with the element as well as the class, and
+   that is not decoration. The panel is a child in the markup of whatever offered
+   it — a card that centres its own text, the closing band whose h2 runs at 13vw
+   on a phone — and it inherits and is matched by those rules even though it is
+   drawn in the top layer. The extra element beats a section's `.contact h2` on
+   specificity, where a class on its own loses to it. Ground, ink and rag are all
+   stated for the same reason: the panel should read the same wherever it opened
+   from. */
+dialog.ask-dialog { position:fixed; inset:0; margin:auto; width:min(430px,calc(100vw - 36px)); height:fit-content; padding:40px 36px 34px; border:0; border-radius:var(--card-radius); background:var(--cream); color:var(--ink); text-align:left; box-shadow:0 26px 64px rgba(23,40,46,.3); }
+dialog.ask-dialog::backdrop { background:rgba(17,41,47,.55); }
+dialog.ask-dialog h2 { font:400 clamp(25px,2.6vw,32px)/1.18 var(--display); letter-spacing:.015em; margin:0 0 16px; }
+dialog.ask-dialog>p { margin:0 0 30px; color:color-mix(in srgb, var(--ink) 76%, var(--cream)); }
+/* Stacked rather than side by side: the two are not a confirm/cancel pair, they
+   are two different errands, and a row of equal buttons asks the reader to
+   compare their widths before their words. */
+.ask-actions { display:flex; flex-direction:column; gap:20px; }
+.ask-actions .solid-button { width:100%; margin:0; padding-inline:20px; }
+.ask-dialog .ask-quiet { align-self:center; border-bottom:1px solid var(--line); padding-bottom:3px; font:500 13px var(--sans); text-transform:none; letter-spacing:0; transition:border-color .3s var(--ease); }
+.ask-dialog .ask-quiet:hover { border-color:var(--ink); }
+/* Escape already closes it; this is the same exit for a pointer. Set back until
+   it is reached, and sized past the 24px a thumb needs whatever the glyph does. */
+.ask-dialog .ask-close { position:absolute; top:10px; right:10px; display:flex; align-items:center; justify-content:center; width:44px; height:44px; border:0; background:none; font-size:22px; line-height:1; cursor:pointer; opacity:.5; transition:opacity .3s var(--ease); }
+.ask-dialog .ask-close:hover { opacity:1; }
+/* Both halves of the arrival, on the panel and on its ground. A dialog is put
+   into the top layer the moment it opens, so there is nothing to delay and no
+   mark to add — the animation runs off the element appearing. */
+dialog.ask-dialog[open] { animation:ask-in .45s var(--ease-out); }
+dialog.ask-dialog[open]::backdrop { animation:ask-fade .45s var(--ease-out); }
+@keyframes ask-in { from { opacity:0; transform:translateY(14px) scale(.97); } to { opacity:1; transform:none; } }
+@keyframes ask-fade { from { opacity:0 } to { opacity:1 } }
 /* Three full-width bands stacked — the mark and its line, the directory, then
    the notice — so every column starts under the N of the wordmark. The two
    gaps differ on purpose: the directory sits nearer the notice than the mark. */
@@ -658,6 +724,10 @@ footer { padding:96px 6vw 34px; display:flex; flex-direction:column; }
 /* A sheared roman rather than a drawn italic — the same slant the hero puts on
    its second line, which is all the upright cut can give us. */
 .footer-tagline { font:italic 400 clamp(18px,2.05vw,29px)/1.3 var(--serif); margin:30px 0 0; }
+/* Sits close under the line it qualifies — nearer to it than the line is to the
+   name — and set back with a mix rather than an alpha, which at the .55 the
+   footer labels take would drop a run of prose under 4.5:1. */
+.footer-origin { margin:12px 0 0; color:color-mix(in srgb, var(--ink) 68%, var(--paper)); }
 /* Same shape as the contact page aside, laid out across instead of down. The
    230px floor is the email address plus a little air, so the row folds to two
    columns and then one at the width that text actually stops fitting. */
@@ -846,7 +916,12 @@ a:focus-visible,button:focus-visible,input:focus-visible { outline:2px solid var
      they take the centre instead — a left rag against a full-width photo reads
      as two things that missed each other. */
   .story-panel { justify-items:center; }
-  .story-copy { text-align:center; }
+  /* Centred by its text rather than by the grid: the copy is a query container,
+     and a container measured on its own contents has no inline size to report —
+     shrink-to-fit plus inline-size containment collapses it to nothing and takes
+     the heading's cap down with it. Full width and centred text is the same
+     picture, since the paragraph carries its own measure and centres inside it. */
+  .story-copy { text-align:center; justify-self:stretch; }
   .story-image img,.story-copy>p { margin-inline:auto; }
   .section-heading { display:block; }
   .section-note { margin-top:30px; }
@@ -902,6 +977,11 @@ a:focus-visible,button:focus-visible,input:focus-visible { outline:2px solid var
      than one of two, so it gives back the most: at 38svh the copy beneath it
      finished about 20px off the foot of a phone. */
   .story-image img { height:min(33svh,300px); }
+  /* The middle scene carries about twice the copy of the other two, which is
+     three or four extra lines once the column is stacked — enough to run the
+     scene off the foot of a short phone. Its plate gives that height back, and
+     only its plate: the other two have nothing to spare and nothing to fix. */
+  .origin-setup .story-image img { height:min(28svh,260px); }
   .story-copy h3 { font-size:29px; margin-bottom:28px; }
   /* Stacked: the photograph, then everything about the stem. It is first in the
      source too, so this is the column collapsing rather than an order being
@@ -1029,5 +1109,8 @@ html[data-splash="off"] .splash { display:none; }
   .story-entrance .intro-setup .story-image,
   .story-entrance .intro-setup h3,
   .story-entrance .intro-setup p { animation:none; }
+  /* The panel is simply there over its ground. Both are opaque from their first
+     frame anyway, so dropping the runs costs nothing but the movement. */
+  .ask-dialog[open],.ask-dialog[open]::backdrop { animation:none; }
 }
 

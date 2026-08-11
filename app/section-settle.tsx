@@ -15,7 +15,7 @@ import { useEffect } from "react";
 // considered.
 //
 // Two more reasons this is not scroll-snap: `mandatory` has to land on a snap
-// point after every scroll, which would make the middle of Our Story's 240svh
+// point after every scroll, which would make the middle of Our Story's 310svh
 // track a place the page won't stop, and `proximity` is what produced the
 // backward pull. So the track is skipped outright below, and everything here is
 // a plain smooth scrollTo — no wheel handler, nothing preventDefault'ed, so

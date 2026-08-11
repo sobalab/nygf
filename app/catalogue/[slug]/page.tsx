@@ -1,9 +1,10 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
+import { Ask } from "../../ask";
 import { categoryNeighbours, flowerBySlug, flowers, relatedFlowers, type Flower } from "../../catalogue-data";
 import { SiteFooter, SiteHeader } from "../../chrome";
 import { FlowerCard } from "../../flower-card";
-import { shop, whatsappHref } from "../../site";
+import { shop } from "../../site";
 
 // Every variety is a real page rather than a panel over the grid: these are
 // meant to be sent to a buyer, kept in a tab and found from a search for
@@ -112,10 +113,10 @@ export default async function FlowerPage({ params }: { params: Promise<{ slug: s
   const related = relatedFlowers(flower);
   const { previous, next } = categoryNeighbours(flower);
 
-  // Same shape as the catalogue's own WhatsApp button, narrowed to the one
-  // variety the reader is looking at, so the shop opens the thread already
-  // knowing what is being asked about.
-  const ask = whatsappHref(`Hello, could you tell me about availability and pricing for ${flower.name}?`);
+  // Same shape as the catalogue's own ask, narrowed to the one variety the
+  // reader is looking at, so whichever way they answer it — the form or the
+  // thread — the shop already knows what is being asked about.
+  const ask = `Hello, could you tell me about availability and pricing for ${flower.name}?`;
 
   // The counts print only where the Colombia office confirmed them. Everywhere
   // else the slot they would have taken says so plainly: a florist who plans an
@@ -204,9 +205,9 @@ export default async function FlowerPage({ params }: { params: Promise<{ slug: s
               never posted, so there is nothing here to add to an order — every
               way forward from this page is a person answering. */}
           <div className="item-actions">
-            <a className="item-action" href={ask} target="_blank" rel="noreferrer">
-              Ask about {flower.name} on WhatsApp
-            </a>
+            <Ask className="item-action" message={ask} inquiry={`/contact?about=${encodeURIComponent(flower.name)}`}>
+              Ask about {flower.name}
+            </Ask>
             <a className="item-action item-action-quiet" href={shop.storePhoneHref}>
               Call {shop.storePhone}
             </a>

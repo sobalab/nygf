@@ -1,6 +1,7 @@
 "use client";
 
 import { Fragment, useEffect, useId, useMemo, useRef, useState, useSyncExternalStore } from "react";
+import { Ask } from "../ask";
 import { categories, flowers, normalizeQuery, services, type CategoryId } from "../catalogue-data";
 import { Arrow, SiteFooter, SiteHeader } from "../chrome";
 import { FlowerCard } from "../flower-card";
@@ -196,7 +197,7 @@ export default function Catalogue() {
           </div>
         )}
 
-        <a href={whatsappHref(AVAILABILITY_ASK)} target="_blank" rel="noreferrer" className="solid-button">Ask on WhatsApp</a>
+        <Ask className="solid-button" message={AVAILABILITY_ASK} inquiry="/contact">Ask About Availability</Ask>
       </section>
 
       <section className="offerings section-pad">
@@ -210,7 +211,16 @@ export default function Catalogue() {
                   same thing twice. */}
               <img className="offering-photo" src={service.image} alt="" loading="lazy" />
               <h3>{service.name}</h3>
-              <a href={whatsappHref(SERVICES_ASK)} target="_blank" rel="noreferrer" className="text-link">Ask about this <Arrow /></a>
+              {/* The order kinds the form offers are these three plus the
+                  general case, so an offering can hand the form its own name
+                  and arrive with the right one already chosen. */}
+              <Ask
+                className="text-link"
+                message={`Hello, I'd like to ask about ${service.name.toLowerCase()}.`}
+                inquiry={`/contact?service=${encodeURIComponent(service.name)}`}
+              >
+                Ask about this <Arrow />
+              </Ask>
             </article>
           ))}
         </div>

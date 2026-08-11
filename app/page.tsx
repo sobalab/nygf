@@ -1,3 +1,4 @@
+import { Ask } from "./ask";
 import { previewFlowers } from "./catalogue-data";
 import { CutReveal } from "./cut-reveal";
 import { SiteFooter, SiteHeader } from "./chrome";
@@ -52,18 +53,26 @@ export default function Home() {
           story. Each keeps its own copy, photo and layout; the section pins and
           turns from one to the other as you scroll through it. */}
       <StoryScroll>
-        {/* Constant across both panels — it names the section, so it holds
+        {/* Constant across all three panels — it names the section, so it holds
             while the scenes underneath it turn over. */}
         <h2 className="story-title">Our Story</h2>
 
-        {/* Both scenes take the same shape — photo left, heading and copy right —
-            so the turn between them reads as one frame changing its contents
-            rather than the page relaying itself. */}
+        {/* Every scene takes the same shape — photo left, heading and copy right —
+            so each turn reads as one frame changing its contents rather than the
+            page relaying itself. */}
         <div className="story-panel intro-setup">
           <div className="story-image"><img src="/media/our-story.webp" alt="Wrapped bunches of tulips in red, pink, orange and purple on the market floor" loading="lazy" /></div>
           <div className="story-copy">
             <h3>Direct From the Farm,<br />Closer to Your Needs.</h3>
-            <p>Since 1990, New York Garden Flower Wholesale has imported cut flowers directly from Ecuador, Colombia, Costa Rica, Mexico, Holland, and Canada.</p>
+            <p>We opened in Flushing in 1990 and started importing direct from the beginning. Today we bring flowers in from Ecuador, Colombia, Costa Rica, Mexico, Poland and Canada.</p>
+          </div>
+        </div>
+
+        <div className="story-panel origin-setup">
+          <div className="story-image"><img src="/media/colombia-farm.webp" alt="A worker walking a planted row on a Colombian flower farm with a freshly cut bunch on their shoulder" loading="lazy" /></div>
+          <div className="story-copy">
+            <h3 className="story-oneline">Fusagasugá to Flushing.</h3>
+            <p>Being a direct importer means more than skipping the middleman. We employ our own procurement staff in Colombia, based in Fusagasugá, in the Cundinamarca flower belt where most of the country&apos;s cut flowers are grown. They are at the farms, and we are on the floor in Flushing. Nobody in between.</p>
           </div>
         </div>
 
@@ -81,9 +90,9 @@ export default function Home() {
         {/* The cards rise into place one after another every time the band is
             scrolled to; the order is the DOM order, left to right. */}
         <Reveal className="service-list">
-          <article><h3>Direct Importing</h3><p>We import and clear our own shipments, removing the broker between farm and shop.</p></article>
+          <article><h3>Direct Importing</h3><p>We import and clear our own shipments, removing the broker between farm and shop. Our own procurement staff work in Fusagasugá, Colombia.</p></article>
           <article><h3>Delivery</h3><p>We deliver across the New York metropolitan area and nearby Connecticut, with pickup options in our Flushing warehouse.</p></article>
-          <article><h3>Every Occasion</h3><p>Flowers are not limited to any type of occasions, events, and needs. Inform us and we will take care of supplying.</p></article>
+          <article><h3>Every Occasion</h3><p>Flowers are not limited to any type of occasions, events, and needs. Inform us and we will take care of supplying for your needs.</p></article>
         </Reveal>
       </section>
 
@@ -101,7 +110,7 @@ export default function Home() {
         {/* The reach/visit/hours columns that used to sit under this live in the
             footer, which is directly beneath — they were the same three columns
             twice in one screenful. */}
-        <a className="contact-button" href="https://wa.me/12018151040?text=Hello%2C%20I%27d%20like%20to%20ask%20about%20today%27s%20flowers." target="_blank" rel="noreferrer">Contact Us</a>
+        <Ask className="contact-button" message="Hello, I'd like to ask about today's flowers." inquiry="/contact">Contact Us</Ask>
       </section>
 
       <SiteFooter home />

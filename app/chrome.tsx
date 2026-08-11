@@ -48,6 +48,11 @@ export function SiteFooter({ home = false }: { home?: boolean }) {
       <div className="footer-brand">
         <a href={home ? "#top" : "/"} className="wordmark wordmark-full">New York Garden Flower Wholesale Inc.</a>
         <p className="footer-tagline">Direct-Import Wholesale Cut Flowers</p>
+        {/* The other half of what "direct" means, and the only place on the site
+            that says where the buying end of it sits. It is a fact rather than a
+            claim, so it takes the body tier under the line instead of a second
+            slanted one. */}
+        <p className="footer-origin">Procurement office in Fusagasugá, Cundinamarca, Colombia</p>
       </div>
 
       {/* Contact leads: with the home page's own reach/visit/hours columns gone,
