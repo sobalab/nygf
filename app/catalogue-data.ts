@@ -130,22 +130,11 @@ export type CatalogueItem = {
 // than a figure, and a bouquet carries no stem fields at all because there is no
 // stem count in a made-up piece.
 const items: CatalogueItem[] = [
-  {
-    name: "Red Rose",
-    slug: "red-rose",
-    category: "roses",
-    image: "/media/red-rose.webp",
-    packingConfirmed: true,
-    description: "The standard long-stem hybrid tea in red, and the highest volume single product on any New York wholesale floor. Graded by stem length, which is the main thing separating one price from another. Bred for head size and shipping durability.",
-    colours: "Red, across a range of named varieties",
-    stemLength: "40, 50, 60, 70 and 80cm. 50 and 60 are the everyday grades",
-    stemsPerBunch: "25",
-    stemsPerBox: "Quarter box about 100. Half box 250 to 350 depending on box size",
-    vaseLife: "7 to 10 days",
-    care: "Cut on an angle and strip the lower foliage. Clean water, changed often. Keep away from ripening fruit.",
-    boughtFor: "Retail bouquets, restaurant weekly, hotel work and sympathy arrangements. Valentine's is the largest red rose week of the year.",
-    related: ["vendela", "mandala", "pink-floyd", "garden-rose"],
-  },
+  // "Red Rose" was the first card on this list and is deliberately gone: it was
+  // a grade rather than a variety, and with Explorer, Freedom and Redvolution
+  // named below it, a card meaning "a red rose, some red rose" was answering a
+  // question the named reds answer better. Its photograph is still in
+  // public/media if it is ever wanted back.
   {
     name: "Spray Rose",
     slug: "spray-rose",
@@ -157,7 +146,7 @@ const items: CatalogueItem[] = [
     vaseLife: "7 to 10 days. Smaller heads open faster than standard roses",
     care: "Cut on an angle, strip lower foliage, clean water. Remove spent blooms so the rest keep opening.",
     boughtFor: "Bridesmaid work, boutonnieres, small arrangements and retail mixed bouquets.",
-    related: ["red-rose", "garden-rose", "mini-carnation"],
+    related: ["garden-rose", "mini-carnation"],
   },
   {
     name: "Garden Rose",
@@ -177,7 +166,7 @@ const items: CatalogueItem[] = [
     vaseLife: "4 to 7 days",
     care: "Arrives closed and needs warmth and two to three days to open. Order ahead of the event rather than the morning of.",
     boughtFor: "Weddings and luxury event work, editorial shoots, and high-end hotel arrangements.",
-    related: ["red-rose", "vendela", "spray-rose", "peony"],
+    related: ["vendela", "spray-rose", "peony"],
   },
   // The three above are grades; these are the varieties bought by name, so they
   // sit under the same chip rather than taking one of their own.
@@ -206,7 +195,7 @@ const items: CatalogueItem[] = [
     vaseLife: "8 to 12 days, above average for a soft-toned rose",
     care: "Cut on an angle, clean water, cool storage. Guard petals can be left on for a softer tone or removed for a cleaner white.",
     boughtFor: "Weddings above all, plus hotel and corporate work.",
-    related: ["mondial", "red-rose", "garden-rose", "mandala"],
+    related: ["mondial", "garden-rose", "mandala"],
   },
   {
     name: "Mondial",
@@ -223,7 +212,7 @@ const items: CatalogueItem[] = [
     vaseLife: "8 to 12 days. Around 30 to 37 petals",
     care: "Leave the green guard petals on for a soft green tone, or remove them for a clean white. Cut and hydrate on arrival.",
     boughtFor: "Weddings, quinceañeras, sympathy work, hotel lobby arrangements and large-scale designs.",
-    related: ["vendela", "mandala", "red-rose", "garden-rose"],
+    related: ["vendela", "mandala", "garden-rose"],
   },
   {
     name: "Mandala",
@@ -240,7 +229,7 @@ const items: CatalogueItem[] = [
     vaseLife: "7 to 10 days",
     care: "Cut on an angle, strip lower foliage, clean water. Keep away from ripening fruit.",
     boughtFor: "Weddings, retail bouquets, Mother's Day and general event work.",
-    related: ["pink-floyd", "vendela", "mondial", "red-rose"],
+    related: ["pink-floyd", "vendela", "mondial"],
   },
   {
     name: "Momentum",
@@ -257,7 +246,7 @@ const items: CatalogueItem[] = [
     vaseLife: "8 to 12 days",
     care: "Cut on an angle, strip lower foliage, clean water. Keep away from ripening fruit.",
     boughtFor: "Retail bouquets, birthday and celebration work, graduation season, autumn arrangements and restaurant weekly.",
-    related: ["high-and-magic", "red-rose", "mandala", "tinted-rose"],
+    related: ["high-and-magic", "mandala", "tinted-rose"],
   },
   {
     name: "High & Magic",
@@ -274,7 +263,7 @@ const items: CatalogueItem[] = [
     vaseLife: "8 to 12 days",
     care: "Cut on an angle, clean water. The edge colour deepens over the first few days, which is normal.",
     boughtFor: "Retail bouquets, birthday and celebration work, autumn arrangements and restaurant weekly.",
-    related: ["momentum", "red-rose", "tinted-rose", "mandala"],
+    related: ["momentum", "tinted-rose", "mandala"],
   },
   {
     name: "Pink Floyd",
@@ -291,7 +280,7 @@ const items: CatalogueItem[] = [
     vaseLife: "7 to 10 days",
     care: "Cut on an angle, strip lower foliage, clean water. Keep away from ripening fruit.",
     boughtFor: "Party and celebration work, retail bunches, and event design needing saturated colour.",
-    related: ["mandala", "red-rose", "tinted-rose", "momentum"],
+    related: ["mandala", "tinted-rose", "momentum"],
   },
   // The rest of what the shop buys by name, off the owner's colour list. Nine
   // varieties on that list are the nine above and are not repeated here.
@@ -357,7 +346,7 @@ const items: CatalogueItem[] = [
     vaseLife: "7 to 10 days",
     care: "Colour can transfer to hands and fabric while wet. Handle with care when arranging and keep off pale linens.",
     boughtFor: "Graduation, proms, quinceañeras, birthdays, school and team colour work, and novelty retail. A significant seasonal line in New York through May and June.",
-    related: ["red-rose", "pink-floyd", "high-and-magic", "momentum"],
+    related: ["pink-floyd", "high-and-magic", "momentum"],
   },
 
   {
@@ -374,7 +363,7 @@ const items: CatalogueItem[] = [
     vaseLife: "14 to 21 days, the longest of any common cut flower",
     care: "Very sensitive to ethylene. Keep away from ripening fruit, exhaust, smoke and dying flowers. Cut between the nodes rather than at them.",
     boughtFor: "Sympathy and funeral work, restaurant weekly where longevity matters, budget event work, and increasingly serious design work.",
-    related: ["mini-carnation", "chrysanthemum", "red-rose"],
+    related: ["mini-carnation", "chrysanthemum"],
   },
   {
     name: "Mini Carnation",
@@ -970,7 +959,7 @@ const items: CatalogueItem[] = [
     vaseLife: "As for roses, 7 to 10 days",
     care: "Recut on arrival and stand in clean water. Keep cool and away from ripening fruit.",
     boughtFor: "Retail resale, corporate and hotel accounts, and gift programs. Valentine's and Mother's Day drive most of the volume.",
-    related: ["mixed-bouquet", "tropical-bouquet", "red-rose"],
+    related: ["mixed-bouquet", "tropical-bouquet"],
   },
   {
     name: "Mixed Bouquet",
@@ -1079,5 +1068,5 @@ export function categoryNeighbours(flower: Flower) {
 // These are names, so renaming an item above means renaming it here too — the
 // lookup below asserts the match rather than checking it, and a miss would take
 // the home page down rather than dropping one stem out of the field.
-const previewNames = ["Red Rose", "Premium Hydrangea", "Premium Lilies", "Peony", "Tulips", "Ranunculus", "Sunflowers", "Calla Lilies", "Anemone"];
+const previewNames = ["Garden Rose", "Premium Hydrangea", "Premium Lilies", "Peony", "Tulips", "Ranunculus", "Sunflowers", "Calla Lilies", "Anemone"];
 export const previewFlowers = previewNames.map((name) => flowers.find((flower) => flower.name === name)!);

@@ -6,7 +6,7 @@
 @font-face { font-family:"Uncut Sans"; src:url("/fonts/UncutSans-VariableItalic.ttf") format("truetype-variations"); font-weight:300 700; font-style:italic; font-display:swap; }
 
 /* Palette. --ink is the near-black used for all type and dark UI. The four
-   --band-* blues paint the four full-bleed sections below the hero, running
+   --band-* greens paint the four full-bleed sections below the hero, running
    from near-black to a pale wash; each one is named for the section it belongs
    to rather than its hue, because the section is what fixes it. --rust is no
    longer a band — it survives only as the form-error red. --field and the
@@ -14,10 +14,14 @@
    --field is white let through at a little over half, so a form control is the
    band lightened rather than a colour laid on top of it, and it belongs to
    whatever ground it is placed on. Same mechanic as the service cards, which are
-   white at .15 over their blue — a plate here is simply a much brighter one.
+   white at .15 over their green — a plate here is simply a much brighter one.
    --cream is the last of the old warm off-white, which survives as the hero
-   button's hover and nowhere else. */
-:root { --paper:#ecebeb; --ink:#17282e; --band-flowers:#11292f; --band-story:#2a5662; --band-trade:#387f93; --band-contact:#99bcc5; --sage:#cacbb5; --rust:#a7593a; --mist:#b7c2c1; --line:rgba(23,40,46,.22); --cream:#f6f1ea; --field:rgba(255,255,255,.6); --field-hover:rgba(255,255,255,.74); --field-focus:rgba(255,255,255,.92); --ease:cubic-bezier(.22,.7,.3,1); --ease-out:cubic-bezier(.16,1,.3,1); --serif:"Baskervville",Georgia,serif; --display:"Baskervville SC",Georgia,serif; --sans:"Uncut Sans",Helvetica,Arial,sans-serif; --btn-radius:6px; --tile-radius:8px; --card-radius:12px; --content-max:1280px; }
+   button's hover and nowhere else.
+     The bands were teal-blues until the owner specified this set: same four
+   steps, same order, swung to green. Three of the four carry their type at the
+   value they did before — sage on flowers 8.7:1, paper on story 6.0:1, ink on
+   contact 8.0:1. Trade is the one that moved: see the note on .trade below. */
+:root { --paper:#ecebeb; --ink:#17282e; --band-flowers:#112f28; --band-story:#2a624d; --band-trade:#38936f; --band-contact:#99c5b1; --sage:#cacbb5; --rust:#a7593a; --mist:#b7c2c1; --line:rgba(23,40,46,.22); --cream:#f6f1ea; --field:rgba(255,255,255,.6); --field-hover:rgba(255,255,255,.74); --field-focus:rgba(255,255,255,.92); --ease:cubic-bezier(.22,.7,.3,1); --ease-out:cubic-bezier(.16,1,.3,1); --serif:"Baskervville",Georgia,serif; --display:"Baskervville SC",Georgia,serif; --sans:"Uncut Sans",Helvetica,Arial,sans-serif; --btn-radius:6px; --tile-radius:8px; --card-radius:12px; --content-max:1280px; }
 * { box-sizing:border-box; }
 html { scroll-behavior:smooth; }
 body { margin:0; background:var(--paper); color:var(--ink); font-family:var(--sans); }
@@ -156,12 +160,12 @@ html[data-splash="off"] { --hero-start:.15s; }
    pages now, so the lower one can simply cover it. */
 .page-head:has(+ .catalogue) + .catalogue,.page-head:has(+ .enquiry) + .enquiry { margin-top:-1px; }
 /* White rather than --paper for the same reason the home services band uses it:
-   the warm off-white only reaches 3.7:1 on this blue. The cards below keep
+   the warm off-white only reaches 3.7:1 on this green. The cards below keep
    their pale ground, so their own type stays ink. */
 .offerings { background:var(--band-trade); color:#fff; }
 .offerings h2 { margin-bottom:46px; }
 /* Three across, the same row the home band's service cards take — these are the
-   same object on the same blue, and at two columns the third offering was left
+   same object on the same green, and at two columns the third offering was left
    sitting on a row of its own. */
 .offerings-list { display:grid; grid-template-columns:repeat(3,1fr); gap:32px; }
 /* The link sits directly under the heading rather than being pushed to the foot
@@ -311,7 +315,7 @@ html[data-splash="off"] { --hero-start:.15s; }
 .catalogue-search { display:block; max-width:400px; }
 .search-field { position:relative; }
 /* The field is drawn in the band's own two colours rather than being the cream
-   plate the enquiry form's inputs are: on the blue that plate read as a slab cut
+   plate the enquiry form's inputs are: on the band that plate read as a slab cut
    out of the section, and the chips sitting under it in sage line and sage type
    made it look like it had arrived from another page. So the rule, the type and
    the caret are all sage, and the fill is barely a fill — a sixteenth of the
@@ -415,21 +419,30 @@ html[data-splash="off"] { --hero-start:.15s; }
 .flower-meta h3 { display:inline-block; font:400 21px/1.3 var(--serif); margin:0; }
 .flower-meta p { color:inherit; opacity:.72; margin:5px 0 0; }
 .solid-button { display:flex; align-items:center; justify-content:center; width:fit-content; background:var(--ink); color:var(--paper); padding:18px 34px; margin:70px auto 0; border-radius:var(--btn-radius); text-transform:uppercase; font-size:12px; letter-spacing:1.2px; }
-/* White, not --paper: the warm off-white only reaches 3.7:1 on this blue, which
-   the service copy can't carry at body size. White clears AA at 4.6:1, and the hero
-   already sets its type in white, so the band isn't introducing a value. */
+/* White, not --paper: the warm off-white was never able to carry body copy on
+   this band, and white is the best this ground can do. It is also the one place
+   the new green palette costs something. On the old teal white cleared AA at
+   4.54:1; on #38936f it reaches 3.77:1, which passes for the headings — they run
+   24px and up — and falls short of the 4.5:1 body text wants. The plates make it
+   harder again: white at .15 over the band is #56a385, where white sits at
+   3.01:1. That plate was already under AA on the teal at 3.48:1, so it is a
+   standing problem this palette deepens rather than one it created.
+     Darkening the band to about #2c7457 would clear AA on the band and very
+   nearly on the plates, at the cost of the step down from Our Story being
+   smaller than the owner drew it. Left as specified until she decides which she
+   would rather have. */
 .trade { background:var(--band-trade); color:#fff; text-align:center; }
 /* Centred over the row, at the size the story title carries — the two are the
    only sections that head a full band on their own. */
 .trade-title h2 { font-size:clamp(40px,5vw,72px); }
 .service-list { display:grid; grid-template-columns:repeat(3,1fr); gap:32px; padding-top:clamp(72px,11vh,140px); max-width:var(--content-max); margin-inline:auto; }
-/* The cards are the band lifted, not a new colour: white at 15% over the blue,
+/* The cards are the band lifted, not a new colour: white at 15% over the green,
    so the section still reads as one ground with plates on it. The catalogue
-   page's service cards are the same object on the same blue, so they share
+   page's service cards are the same object on the same green, so they share
    these rules rather than keeping a second copy that drifts. */
 .service-list article,.offering { background:rgba(255,255,255,.15); border-radius:var(--card-radius); padding:46px 34px 42px; display:flex; flex-direction:column; text-align:center; }
 /* --paper, where the copy below takes white: the heading is large enough to
-   clear AA on this blue at 3.7:1, and the warmer white sets it apart from the
+   clear AA on this green at 3.7:1, and the warmer white sets it apart from the
    copy without a second size doing the work. */
 .service-list h3,.offering h3 { font:400 clamp(24px,2.2vw,32px)/1.15 var(--display); letter-spacing:.015em; color:var(--paper); margin:0 0 44px; }
 /* Auto margins top and bottom, so a card with a shorter paragraph centres it
@@ -503,7 +516,7 @@ html[data-splash="off"] { --hero-start:.15s; }
 .story-copy { container-type:inline-size; }
 .story-copy .story-oneline { white-space:nowrap; font-size:min(clamp(24px,3vw,46px),8.4cqw); }
 /* A step back from the heading without an alpha, which would fade against the
-   band and cost contrast the mix keeps (5:1 on this blue). */
+   band and cost contrast the mix keeps (5:1 on this green). */
 .story-copy>p { max-width:540px; margin:0; color:color-mix(in srgb, var(--paper) 88%, var(--band-story)); }
 
 /* Doubled up on .story so the narrow-screen padding further down, which is a
@@ -573,7 +586,7 @@ html[data-splash="off"] { --hero-start:.15s; }
 .story-armed .story-entrance .intro-setup h3 { animation:story-in .8s var(--ease-out) .32s backwards; }
 .story-armed .story-entrance .intro-setup p { animation:story-in .8s var(--ease-out) .48s backwards; }
 @keyframes story-in { from { opacity:0; transform:translateY(30px); } to { opacity:1; transform:none; } }
-/* The palest band, and the only one that takes dark type: --paper on this blue
+/* The palest band, and the only one that takes dark type: --paper on this green
    is 1.6:1. Ink reads at 7.3:1, so the whole band inverts — including the
    button, which was paper-on-rust and would now sink into its own ground. */
 .contact { background:var(--band-contact); color:var(--ink); text-align:center; min-height:85vh; display:flex; flex-direction:column; justify-content:center; align-items:center; }
@@ -582,10 +595,10 @@ html[data-splash="off"] { --hero-start:.15s; }
 .contact h2 { margin:0 0 26px; }
 .contact p { max-width:520px; margin:0 0 54px; }
 .contact-button { display:flex; align-items:center; justify-content:center; background:var(--ink); color:var(--paper); padding:18px 34px; border-radius:var(--btn-radius); text-transform:uppercase; font-size:12px; letter-spacing:1.4px; }
-/* One ground for the whole page, the same blue the home page closes on. The
-   inputs are that blue lightened rather than a second colour set down on it:
+/* One ground for the whole page, the same green the home page closes on. The
+   inputs are that green lightened rather than a second colour set down on it:
    the warm cream they used to carry was a page's worth of off-white that had
-   arrived from the paper they no longer sit on, and against this blue it read
+   arrived from the paper they no longer sit on, and against this green it read
    as a stack of slabs cut out of the section. */
 .enquiry { background:var(--band-contact); display:grid; grid-template-columns:1.25fr .75fr; gap:8vw; align-items:start; }
 /* Sent, the band holds one thing, so the two-column split collapses and the
@@ -639,7 +652,7 @@ html[data-splash="off"] { --hero-start:.15s; }
    is all this can do. */
 .field input[type="date"]::-webkit-calendar-picker-indicator { opacity:.5; cursor:pointer; transition:opacity .3s var(--ease); }
 .field input[type="date"]:hover::-webkit-calendar-picker-indicator { opacity:.8; }
-/* .8, not the .66 this carried on paper: the blue underneath is lighter, and
+/* .8, not the .66 this carried on paper: the green underneath is lighter, and
    the softer ink fell to 3.6:1 on it. */
 /* Italic sets the description apart from the label above it without another
    size or weight doing the work. Uncut Sans ships a drawn italic, so this is
@@ -650,7 +663,7 @@ html[data-splash="off"] { --hero-start:.15s; }
 .choices { display:flex; flex-wrap:wrap; gap:10px; }
 .choice input { position:absolute; width:1px; height:1px; opacity:0; }
 /* A lighter share of the fill the inputs take, so the set reads as one family of
-   controls on the one ground — sitting on the bare blue, an unselected choice
+   controls on the one ground — sitting on the bare green, an unselected choice
    used to be the only thing in the form that wasn't a pale plate. Lighter and
    not equal: the boxes a reader writes in should still be the brightest. */
 .choice span { display:block; border:1px solid var(--line); border-radius:var(--btn-radius); background:rgba(255,255,255,.32); padding:12px 20px; font:500 12px var(--sans); text-transform:uppercase; letter-spacing:1.2px; cursor:pointer; transition:border-color .3s var(--ease), background-color .3s var(--ease), transform .3s var(--ease); }
