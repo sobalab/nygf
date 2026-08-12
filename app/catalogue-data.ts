@@ -293,6 +293,56 @@ const items: CatalogueItem[] = [
     boughtFor: "Party and celebration work, retail bunches, and event design needing saturated colour.",
     related: ["mandala", "red-rose", "tinted-rose", "momentum"],
   },
+  // The rest of what the shop buys by name, off the owner's colour list. Nine
+  // varieties on that list are the nine above and are not repeated here.
+  //   These carry a name, a colour and nothing else, and that is the whole
+  // record until someone fills it in: no photograph has been taken of them and
+  // no line of the reference sheet describes them, so there is no description,
+  // no stem length and no packing to print. The card falls back to a flat tile
+  // and the page runs to a name and the two ways of asking about it — which is
+  // what Stock and Limonium already do further down, and is the shape this file
+  // is built to allow. A variety invented a vase life for is worse than one
+  // that says nothing.
+  //   Ordered by colour, in the order the list is written in, because that is
+  // how they are bought: nobody asks for a rose by breeder, they ask for a red
+  // or a lavender and then pick the name. The pinks are the reason the colour
+  // field exists at all, and they are now a scale of three words — light pink,
+  // medium pink, hot pink — with the photographed pinks above keeping the words
+  // they were given off their own pictures.
+  { name: "Explorer", slug: "explorer", category: "roses", colour: "red" },
+  { name: "Freedom", slug: "freedom", category: "roses", colour: "red" },
+  { name: "Redvolution", slug: "redvolution", category: "roses", colour: "red" },
+  { name: "Nena", slug: "nena", category: "roses", colour: "light pink" },
+  { name: "Novia", slug: "novia", category: "roses", colour: "light pink" },
+  { name: "Sweet Beat", slug: "sweet-beat", category: "roses", colour: "light pink" },
+  { name: "Frutetto", slug: "frutetto", category: "roses", colour: "light pink" },
+  { name: "Be Sweeter", slug: "be-sweeter", category: "roses", colour: "light pink" },
+  { name: "Vi Pink", slug: "vi-pink", category: "roses", colour: "hot pink" },
+  { name: "Full Monty", slug: "full-monty", category: "roses", colour: "hot pink" },
+  { name: "Poma Rosa", slug: "poma-rosa", category: "roses", colour: "hot pink" },
+  { name: "Sweet Unique", slug: "sweet-unique", category: "roses", colour: "medium pink" },
+  { name: "Sweet Memory", slug: "sweet-memory", category: "roses", colour: "medium pink" },
+  { name: "Hermosa", slug: "hermosa", category: "roses", colour: "medium pink" },
+  { name: "Tiffany", slug: "tiffany", category: "roses", colour: "peach" },
+  { name: "Kahala", slug: "kahala", category: "roses", colour: "peach" },
+  { name: "Felicity", slug: "felicity", category: "roses", colour: "peach" },
+  { name: "Orange Crush", slug: "orange-crush", category: "roses", colour: "orange" },
+  { name: "Nexus", slug: "nexus", category: "roses", colour: "orange" },
+  // "bicolor" rather than the list's "bi color", because High & Magic above
+  // already reads that way on its card and the two sit in the same group line.
+  { name: "High Orange Magic", slug: "high-orange-magic", category: "roses", colour: "bicolor" },
+  { name: "Sweetness", slug: "sweetness", category: "roses", colour: "bicolor" },
+  { name: "Playa Blanca", slug: "playa-blanca", category: "roses", colour: "white" },
+  { name: "Tibet", slug: "tibet", category: "roses", colour: "white" },
+  { name: "Proud", slug: "proud", category: "roses", colour: "white" },
+  { name: "Latina", slug: "latina", category: "roses", colour: "yellow" },
+  { name: "Exotic", slug: "exotic", category: "roses", colour: "yellow" },
+  { name: "Candle Light", slug: "candle-light", category: "roses", colour: "beige" },
+  { name: "Andrea", slug: "andrea", category: "roses", colour: "lavender" },
+  { name: "Ocean Song", slug: "ocean-song", category: "roses", colour: "lavender" },
+  { name: "Cool Down", slug: "cool-down", category: "roses", colour: "lavender" },
+  { name: "Moody Blue", slug: "moody-blue", category: "roses", colour: "lavender" },
+  { name: "Cool Water", slug: "cool-water", category: "roses", colour: "lavender" },
   {
     name: "Tinted Rose",
     slug: "tinted-rose",
