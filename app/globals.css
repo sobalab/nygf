@@ -468,10 +468,17 @@ html[data-splash="off"] { --hero-start:.15s; }
    what is spent here is what the band has left to breathe with at its foot. */
 .story-title { text-align:center; font-size:clamp(40px,5vw,72px); margin:0 0 clamp(44px,7.5vh,84px); }
 /* Every panel, one shape: a portrait plate on the left at its own width, and
-   the copy taking whatever is left. The photo is sized by height so the set
-   hold the same footprint on any screen — a width-driven plate would grow past
-   the pinned viewport on wide monitors. */
-.story-panel { display:grid; grid-template-columns:auto minmax(0,1fr); align-items:center; gap:9vw; }
+   the copy beside it. The photo is sized by height so the set hold the same
+   footprint on any screen — a width-driven plate would grow past the pinned
+   viewport on wide monitors.
+     The copy column is capped rather than taking whatever is left, and the pair
+   is centred in what remains: given the whole row, the column ran on past the
+   longest line in it, so the plate sat on the left margin and the text stopped
+   well short of the right one — the scene read as pushed to one side under a
+   centred title. 560px is a little over the widest heading (534px, once the
+   face caps at 46px) and the 540px the paragraphs already measure, so the cap
+   never rewraps anything; below that the track simply shrinks as it did. */
+.story-panel { display:grid; grid-template-columns:auto minmax(0,560px); justify-content:center; align-items:center; gap:9vw; }
 .story-panel + .story-panel { margin-top:110px; }
 /* 56svh, not 60: at 60 the plate and the title between them came to within
    about 40px of the foot of a 900px window, which is what made the band read as
@@ -765,6 +772,12 @@ footer { padding:96px 6vw 34px; display:flex; flex-direction:column; }
    every time it is tied, so all of it should be there at once. */
 .item-gallery { display:grid; grid-template-columns:1fr 1fr; gap:12px; }
 .item-gallery img { aspect-ratio:1/1; }
+/* No photograph on file yet: one column, and the copy capped to a measure so it
+   doesn't run the full width of the band. Drop a picture in public/media, run
+   `npm run media` and point the record at it, and the page takes its second
+   column back on its own. */
+.item-bare { grid-template-columns:minmax(0,1fr); }
+.item-bare .item-info { max-width:660px; }
 .item-info { display:flex; flex-direction:column; align-items:flex-start; }
 /* Back to the grid with this category already narrowed to. Small and grey: it is
    the way out, not the first thing on the page. */

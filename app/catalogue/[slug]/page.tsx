@@ -135,29 +135,32 @@ export default async function FlowerPage({ params }: { params: Promise<{ slug: s
     <main>
       <SiteHeader />
 
-      <article className="item section-pad">
+      {/* A record with no photograph yet loses the column rather than keeping an
+          empty one: the grid card can fall back to a flat tile at its own size,
+          but the same tile here is a grey rectangle half the page tall, which
+          reads as a broken image rather than as a picture nobody has taken. The
+          copy takes the width instead, capped to a measure. */}
+      <article className={frames.length > 0 ? "item section-pad" : "item item-bare section-pad"}>
         {/* Photo first in the source as well as on screen, so the stacked phone
             order falls out of the document rather than out of a reordering
             property a screen reader wouldn't follow. */}
-        <div className="item-photo">
-          {frames.length > 0 ? (
-            <>
-              <img src={frames[0]} alt={photoAlt(flower, 0)} />
-              {/* Bouquets are made up to order, so one frame of one is a claim
-                  the next delivery has to live up to. The rest of the set sits
-                  under the lead frame as a small gallery rather than turning
-                  over on its own the way the card does: a reader who came here
-                  to look at it should be able to look at all of it at once. */}
-              {frames.length > 1 ? (
-                <div className="item-gallery">
-                  {frames.slice(1).map((src, index) => (
-                    <img key={src} src={src} alt={photoAlt(flower, index + 1)} loading="lazy" />
-                  ))}
-                </div>
-              ) : null}
-            </>
-          ) : null}
-        </div>
+        {frames.length > 0 ? (
+          <div className="item-photo">
+            <img src={frames[0]} alt={photoAlt(flower, 0)} />
+            {/* Bouquets are made up to order, so one frame of one is a claim the
+                next delivery has to live up to. The rest of the set sits under
+                the lead frame as a small gallery rather than turning over on its
+                own the way the card does: a reader who came here to look at it
+                should be able to look at all of it at once. */}
+            {frames.length > 1 ? (
+              <div className="item-gallery">
+                {frames.slice(1).map((src, index) => (
+                  <img key={src} src={src} alt={photoAlt(flower, index + 1)} loading="lazy" />
+                ))}
+              </div>
+            ) : null}
+          </div>
+        ) : null}
 
         <div className="item-info">
           {/* Back to the grid with the chip for this category already pressed —

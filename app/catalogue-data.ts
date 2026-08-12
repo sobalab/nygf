@@ -1,15 +1,25 @@
-// The filter chips, in the order they render. The six stem chips are sized so
-// none of them comes back with only two or three cards, which is the failure
-// this replaced — a new stem category has to be able to carry a grid before it
-// earns one. Bouquets is the exception and sits last on purpose: it is the one
-// chip that isn't stems by the bunch at all, so a short list under it reads as
-// the whole of what is made up rather than as a category that fell short.
+// The filter chips, in the order they render. The stem chips were sized so none
+// of them came back with only two or three cards, which is the failure this
+// replaced — a new stem category had to be able to carry a grid before it earned
+// one. Bouquets is one exception and sits last on purpose: it is the chip that
+// isn't stems by the bunch at all, so a short list under it reads as the whole
+// of what is made up rather than as a category that fell short.
+//   Garden Roses is the other, and it is a deliberate exception rather than a
+// drift: the founder asked for it out of Roses, and it carries one card. The
+// product is priced, ordered and handled differently enough from a standard rose
+// that filing the two together was costing the shop the distinction, and a chip
+// nobody can miss was judged worth a row with three empty columns in it. If a
+// second garden variety is ever bought by name, it belongs here and the row
+// fills itself.
 //   A label is display copy in two places, not one: it is the chip, and it is
 // the group line printed under every card in that category. Title Case, as
 // every heading on the site is — the lower-case colour that some cards add
 // after it is the only part of that line set as running text.
 export const categories = [
   { id: "roses", label: "Roses" },
+  // Next to Roses rather than off at the end: the chip is there to be told apart
+  // from the one beside it, which only works if it is beside it.
+  { id: "garden", label: "Garden Roses" },
   { id: "carnations", label: "Carnations" },
   { id: "lilies", label: "Lilies and Callas" },
   { id: "orchids", label: "Orchids and Tropicals" },
@@ -152,7 +162,11 @@ const items: CatalogueItem[] = [
   {
     name: "Garden Rose",
     slug: "garden-rose",
-    category: "roses",
+    // Out of Roses on the founder's instruction, and the only card under its own
+    // chip. Left in place in this array rather than moved to the end of it, so
+    // the unfiltered grid still shows it among the roses it looks like — the
+    // chip is what separates the two, not the running order.
+    category: "garden",
     image: "/media/garden-rose.webp",
     packingConfirmed: true,
     description: "A full cupped or rosette head with a high petal count, and often real scent. The premium rose product. Shorter lived and more fragile than a standard rose, so it is bought close to the date it is needed.",
@@ -710,6 +724,20 @@ const items: CatalogueItem[] = [
     boughtFor: "Tall event and pedestal arrangements, garden-style wedding work and hotel lobby pieces.",
     related: ["delphinium", "molucella", "lisianthus"],
   },
+  // Filed beside Snapdragon because the two are bought for the same job — a
+  // spike that gives an arrangement its height — rather than because the list
+  // is alphabetical. Moving it is a matter of moving the record.
+  //   Photographed, and the counts are what the Colombia office confirmed. The
+  // prose is still to come, so the page runs short rather than filling itself in.
+  {
+    name: "Stock",
+    slug: "stock",
+    category: "seasonal",
+    image: "/media/stock.webp",
+    packingConfirmed: true,
+    stemsPerBunch: "10",
+    stemsPerBox: "About 120 per quarter box",
+  },
   {
     name: "Molucella",
     slug: "molucella",
@@ -800,6 +828,20 @@ const items: CatalogueItem[] = [
     care: "Very forgiving. Recut on arrival and it will hold whether or not it stays in water.",
     boughtFor: "Mixed bouquets, dried and preserved arrangements, and rustic wedding work.",
     related: ["babys-breath", "solidago", "wax-flower"],
+  },
+  // Next to Statice on purpose. The two are close enough in the trade that they
+  // get confused for one another, and the reference sheet keeps them apart as
+  // separate lines with separate packing — so the catalogue keeps them apart
+  // too, side by side, where a buyer can see they are two things.
+  //   Photographed; the prose is still to come.
+  {
+    name: "Limonium",
+    slug: "limonium",
+    category: "greens",
+    image: "/media/limonium.webp",
+    packingConfirmed: true,
+    stemsPerBunch: "5",
+    stemsPerBox: "140 to 160 per quarter box",
   },
   {
     name: "Wax Flower",
