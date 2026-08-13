@@ -156,40 +156,22 @@ const items: CatalogueItem[] = [
     vaseLife: "7 to 10 days. Smaller heads open faster than standard roses",
     care: "Cut on an angle, strip lower foliage, clean water. Remove spent blooms so the rest keep opening.",
     boughtFor: "Bridesmaid work, boutonnieres, small arrangements and retail mixed bouquets.",
-    related: ["garden-rose", "mini-carnation"],
+    related: ["mini-carnation"],
   },
-  {
-    name: "Garden Rose",
-    slug: "garden-rose",
-    // Out of Roses on the founder's instruction, and the only card under its own
-    // chip. Left in place in this array rather than moved to the end of it, so
-    // the unfiltered grid still shows it among the roses it looks like — the
-    // chip is what separates the two, not the running order.
-    category: "garden",
-    image: "/media/garden-rose.webp",
-    packingConfirmed: true,
-    description: "A full cupped or rosette head with a high petal count, and often real scent. The premium rose product. Shorter lived and more fragile than a standard rose, so it is bought close to the date it is needed.",
-    colours: "White, ivory, blush, pink, peach, apricot, coral, burgundy, mauve, and the toffee novelty shades",
-    stemLength: "40 to 60cm. Head size matters more than length",
-    stemsPerBunch: "25",
-    stemsPerBox: "Quarter box about 100. Half box 250 to 350 depending on box size",
-    vaseLife: "4 to 7 days",
-    care: "Arrives closed and needs warmth and two to three days to open. Order ahead of the event rather than the morning of.",
-    boughtFor: "Weddings and luxury event work, editorial shoots, and high-end hotel arrangements.",
-    related: ["vendela", "spray-rose", "peony"],
-  },
-  // The garden varieties bought by name, under the chip Garden Rose opened. They
-  // fill the row it was carrying on its own.
-  //   Nothing but a name yet: no photograph, no packing, and deliberately no
-  // colour tag. Three of the five have a colour in the name and two do not, and
-  // a tag read off a name rather than off a photograph is a guess printed as a
-  // fact — the roses above got theirs off their own pictures. The apostrophe is
-  // the straight one the rest of the file uses, as in Baby's Breath.
-  { name: "Pink O'Hara", slug: "pink-ohara", category: "garden" },
-  { name: "White O'Hara", slug: "white-ohara", category: "garden" },
-  { name: "Pink x-pression", slug: "pink-x-pression", category: "garden" },
-  { name: "Candy x-pression", slug: "candy-x-pression", category: "garden" },
-  { name: "Melon x-pression", slug: "melon-x-pression", category: "garden" },
+  // The garden varieties, bought by name. There was a "Garden Rose" card here
+  // too, and it is deliberately gone: it named the whole class rather than
+  // anything a buyer can order, which is the chip's job now that the chip exists.
+  // A card called Garden Rose sitting inside a category called Garden Roses was
+  // the category twice, once as a heading and once as a product.
+  //   Deliberately no colour tag. Three of the five have a colour in the name and
+  // two do not, and a tag read off a name rather than off a photograph is a guess
+  // printed as a fact — the roses below got theirs off their own pictures. The
+  // apostrophe is the straight one the rest of the file uses, as in Baby's Breath.
+  { name: "Pink O'Hara", slug: "pink-ohara", category: "garden", image: "/media/pink-ohara.webp" },
+  { name: "White O'Hara", slug: "white-ohara", category: "garden", image: "/media/white-ohara.webp" },
+  { name: "Pink X-pression", slug: "pink-x-pression", category: "garden", image: "/media/pink-x-pression.webp" },
+  { name: "Candy X-pression", slug: "candy-x-pression", category: "garden", image: "/media/candy-x-pression.webp" },
+  { name: "Melon X-pression", slug: "melon-x-pression", category: "garden", image: "/media/melon-x-pression.webp" },
   // The three above are grades; these are the varieties bought by name, so they
   // sit under the same chip rather than taking one of their own.
   //   Every colour here is read off the photograph beside it rather than off a
@@ -217,7 +199,7 @@ const items: CatalogueItem[] = [
     vaseLife: "8 to 12 days, above average for a soft-toned rose",
     care: "Cut on an angle, clean water, cool storage. Guard petals can be left on for a softer tone or removed for a cleaner white.",
     boughtFor: "Weddings above all, plus hotel and corporate work.",
-    related: ["mondial", "garden-rose", "mandala"],
+    related: ["mondial", "mandala"],
   },
   {
     name: "Mondial",
@@ -234,7 +216,7 @@ const items: CatalogueItem[] = [
     vaseLife: "8 to 12 days. Around 30 to 37 petals",
     care: "Leave the green guard petals on for a soft green tone, or remove them for a clean white. Cut and hydrate on arrival.",
     boughtFor: "Weddings, quinceañeras, sympathy work, hotel lobby arrangements and large-scale designs.",
-    related: ["vendela", "mandala", "garden-rose"],
+    related: ["vendela", "mandala"],
   },
   {
     name: "Mandala",
@@ -899,7 +881,7 @@ const items: CatalogueItem[] = [
     vaseLife: "5 to 10 days when hydrated properly",
     care: "Hydrangea drinks through the head as well as the stem. If it wilts, submerge the whole head in cool water for about thirty minutes, then recut and stand it in deep water.",
     boughtFor: "Wedding centerpieces, hotel lobby work, and event coverage where volume matters. Peaks at Mother's Day.",
-    related: ["peony", "garden-rose", "premium-lilies"],
+    related: ["peony", "premium-lilies"],
   },
   {
     name: "Tulips",
@@ -948,7 +930,7 @@ const items: CatalogueItem[] = [
     vaseLife: "5 to 7 days once open",
     care: "Buy in firm bud that gives slightly under the thumb, then allow two to four days in warmth to open. Cold holds them closed if you need to slow them down.",
     boughtFor: "Spring weddings above all, luxury event work and Mother's Day.",
-    related: ["garden-rose", "ranunculus", "premium-hydrangea"],
+    related: ["ranunculus", "premium-hydrangea"],
   },
   {
     name: "Ranunculus",
@@ -979,7 +961,7 @@ const items: CatalogueItem[] = [
     vaseLife: "7 to 10 days, notably longer than standard ranunculus, and the buds keep opening",
     care: "Handle gently. Clean shallow water. The buds continue opening in the vase, so leave room around each stem.",
     boughtFor: "High-end bridal bouquets, editorial and photo work, and luxury event design.",
-    related: ["ranunculus", "anemone", "garden-rose"],
+    related: ["ranunculus", "anemone"],
   },
   {
     name: "Anemone",
@@ -1025,7 +1007,7 @@ const items: CatalogueItem[] = [
     vaseLife: "7 to 14 days, among the best of the soft-looking flowers",
     care: "Strip lower foliage and use clean water. Remove spent blooms so the remaining buds keep opening.",
     boughtFor: "Weddings, hotel and corporate weekly, retail bouquets, and as a rose substitute where budget is tight.",
-    related: ["garden-rose", "spray-rose", "sweet-pea"],
+    related: ["spray-rose", "sweet-pea"],
   },
   {
     name: "Chrysanthemum",
@@ -1470,5 +1452,5 @@ export function categoryNeighbours(flower: Flower) {
 // These are names, so renaming an item above means renaming it here too — the
 // lookup below asserts the match rather than checking it, and a miss would take
 // the home page down rather than dropping one stem out of the field.
-const previewNames = ["Garden Rose", "Premium Hydrangea", "Premium Lilies", "Peony", "Tulips", "Ranunculus", "Sunflowers", "Calla Lilies", "Anemone"];
+const previewNames = ["Vendela", "Premium Hydrangea", "Premium Lilies", "Peony", "Tulips", "Ranunculus", "Sunflowers", "Calla Lilies", "Anemone"];
 export const previewFlowers = previewNames.map((name) => flowers.find((flower) => flower.name === name)!);
