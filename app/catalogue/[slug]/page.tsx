@@ -93,15 +93,16 @@ function Fact({ label, value }: { label: string; value?: string }) {
   );
 }
 
-function Note({ heading, body }: { heading: string; body?: string }) {
-  if (!body) return null;
-  return (
-    <div className="item-note">
-      <h2>{heading}</h2>
-      <p>{body}</p>
-    </div>
-  );
-}
+// Care and Usually Bought For used to render here, through a small Note block.
+// Both are off the page for now on the owner's call, and the component went with
+// them rather than sitting unreferenced. The records still carry `care` and
+// `boughtFor`, and .item-note is still in globals.css, so putting them back is
+// this and the two lines marked further down:
+//
+//   function Note({ heading, body }: { heading: string; body?: string }) {
+//     if (!body) return null;
+//     return <div className="item-note"><h2>{heading}</h2><p>{body}</p></div>;
+//   }
 
 export default async function FlowerPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
@@ -125,11 +126,24 @@ export default async function FlowerPage({ params }: { params: Promise<{ slug: s
   const packing = flower.packingConfirmed
     ? { bunch: flower.stemsPerBunch, box: flower.stemsPerBox }
     : { bunch: undefined, box: undefined };
+  // Named for what is actually missing rather than for both every time. The
+  // office came back with one of the two figures for several lines — a box count
+  // and no bunch, or the reverse — and a page that asks for both when it is
+  // already printing one of them reads as though it hasn't looked at itself.
+  const missing = !bouquet && [!packing.bunch && "bunch", !packing.box && "box"].filter(Boolean);
+  const packingAsk = !missing || missing.length === 0
+    ? null
+    : missing.length === 2
+      ? "Ask for bunch and box counts."
+      : `Ask for the ${missing[0]} count.`;
   const facts = bouquet
     ? [flower.contains, flower.colours, flower.soldAs, flower.vaseLife]
     : [flower.colours, flower.stemLength, flower.headSize, packing.bunch, packing.box, flower.vaseLife];
   const hasFacts = facts.some(Boolean);
-  const asksForPacking = !bouquet && !flower.packingConfirmed;
+  // The note is about the packing, so it sits with the packing rather than in
+  // its own block: what a bunch is made up by, whether the line is seasonal,
+  // whether it is a standing item at all.
+  const packingLines = [flower.packingNote, packingAsk].filter(Boolean);
 
   return (
     <main>
@@ -174,7 +188,7 @@ export default async function FlowerPage({ params }: { params: Promise<{ slug: s
 
           {flower.description ? <p className="item-lede">{flower.description}</p> : null}
 
-          {hasFacts || asksForPacking ? (
+          {hasFacts || packingLines.length > 0 ? (
             <div className="item-facts">
               {hasFacts ? (
                 <dl>
@@ -197,12 +211,16 @@ export default async function FlowerPage({ params }: { params: Promise<{ slug: s
                   )}
                 </dl>
               ) : null}
-              {asksForPacking ? <p className="item-packing">Ask for bunch and box counts.</p> : null}
+              {packingLines.map((line) => <p className="item-packing" key={line}>{line}</p>)}
             </div>
           ) : null}
 
-          <Note heading="Care" body={flower.care} />
-          <Note heading="Usually Bought For" body={flower.boughtFor} />
+          {/* Care and Usually Bought For are off the page for now, on the
+              owner's call. The prose itself is untouched in catalogue-data.ts —
+              it came off her reference sheet and is not recoverable from
+              anywhere else, so it is the rendering that stopped rather than the
+              records that were emptied. Putting the two blocks back is the Note
+              component below and these two lines. */}
 
           {/* The point of the page. Prices move with the market daily and are
               never posted, so there is nothing here to add to an order — every

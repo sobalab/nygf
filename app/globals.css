@@ -771,7 +771,28 @@ footer { padding:96px 6vw 34px; display:flex; flex-direction:column; }
    size, the weight and the two greys, and every string renders in the case it
    was written in.
    --------------------------------------------------------------------------- */
-.item { display:grid; grid-template-columns:minmax(0,1fr) minmax(0,1fr); gap:clamp(38px,5vw,88px); align-items:start; }
+/* Half the row to the photograph and half to the copy — but only where the
+   window is tall enough to hold half a row. The plate is a 3/4 portrait sized
+   off the column it sits in, so on a wide short window half of 1280px came out
+   803px tall in a 900px window: the foot of the photograph sat below the fold on
+   arrival, and once the column stuck it was a sticky element taller than the
+   viewport, which is the one thing sticky cannot do — it pins and then drags its
+   own bottom down the screen as you scroll.
+     So the column is capped by the height it would need rather than by the width
+   it would like. --photo-fit is that height turned back into a width: the plate
+   starts 130px down the page under the section's own padding and leaves 24px
+   under itself, and a 3/4 plate is three quarters as wide as it is tall. Where
+   the window is tall enough the cap is the larger of the two and the split is
+   the even one it always was; where it isn't, the photograph gives up the
+   difference and the copy column takes it, which is the right way round — the
+   copy is capped to a measure of its own and simply carries a wider right
+   margin, where the photograph would have gone off the bottom of the screen. */
+.item { --item-gap:clamp(38px,5vw,88px); --photo-fit:calc((100svh - 154px) * 3 / 4); display:grid; grid-template-columns:minmax(0,min(calc((100% - var(--item-gap)) / 2),var(--photo-fit))) minmax(0,1fr); gap:var(--item-gap); align-items:start; }
+/* A bouquet's column is the lead plate, the 12px gap and a row of square
+   thumbnails half the column wide, so it stands 11/6 of its own width tall
+   rather than 4/3 — same fit, solved for the taller stack. The 6px is what is
+   left of the gap once it is divided through. */
+.item:has(.item-gallery) { --photo-fit:calc((100svh - 160px) * 6 / 11); }
 /* The lead frame at the proportion every stem on the site is shot at, so a
    variety page and its card are the same photograph at two sizes rather than
    two crops. Sticky, because the right column is the long one: on a record with
