@@ -4,22 +4,29 @@
 // one. Bouquets is one exception and sits last on purpose: it is the chip that
 // isn't stems by the bunch at all, so a short list under it reads as the whole
 // of what is made up rather than as a category that fell short.
-//   Garden Roses is the other, and it is a deliberate exception rather than a
-// drift: the founder asked for it out of Roses, and it carries one card. The
-// product is priced, ordered and handled differently enough from a standard rose
-// that filing the two together was costing the shop the distinction, and a chip
-// nobody can miss was judged worth a row with three empty columns in it. If a
-// second garden variety is ever bought by name, it belongs here and the row
-// fills itself.
+//   The four rose chips are the other, and they are a deliberate exception
+// rather than a drift: the founder asked for the rose wall to be split the way
+// the shop actually sells it, and two of the four carry a single card. A garden
+// rose, a spray and a tinted stem are priced, ordered and handled differently
+// enough from a standard rose that filing all four together was costing the shop
+// the distinction, and chips nobody can miss were judged worth a row with three
+// empty columns in it. A second spray or tinted line bought by name belongs here
+// and the row fills itself.
+//   `roses` keeps its id under the new label: it is the standard rose the whole
+// wall is measured against, and the id is what every /catalogue#roses link a
+// variety page draws is pointing at.
 //   A label is display copy in two places, not one: it is the chip, and it is
 // the group line printed under every card in that category. Title Case, as
 // every heading on the site is — the lower-case colour that some cards add
 // after it is the only part of that line set as running text.
 export const categories = [
-  { id: "roses", label: "Roses" },
-  // Next to Roses rather than off at the end: the chip is there to be told apart
-  // from the one beside it, which only works if it is beside it.
+  { id: "roses", label: "Standard Roses" },
+  // The three beside it rather than off at the end: each is there to be told
+  // apart from the standard rose, which only works if it is next to it. They run
+  // in the order the grid runs in below.
   { id: "garden", label: "Garden Roses" },
+  { id: "spray", label: "Spray Roses" },
+  { id: "tinted", label: "Tinted/Dyed Roses" },
   { id: "carnations", label: "Carnations" },
   { id: "lilies", label: "Lilies and Callas" },
   { id: "orchids", label: "Orchids and Tropicals" },
@@ -137,43 +144,16 @@ export type CatalogueItem = {
 // than a figure, and a bouquet carries no stem fields at all because there is no
 // stem count in a made-up piece.
 const items: CatalogueItem[] = [
-  // "Red Rose" was the first card on this list and is deliberately gone: it was
+  // The standard roses lead, and the three other rose chips follow them in the
+  // order the chips run in: garden, spray, tinted. The whole wall used to sit
+  // under one chip called Roses, with the spray and the tinted stems filed in
+  // among the named varieties — they are the first and the last card of the rose
+  // run now, which is where the grid puts them once each has a chip of its own.
+  //   "Red Rose" was the first card on this list and is deliberately gone: it was
   // a grade rather than a variety, and with Explorer, Freedom and Redvolution
   // named below it, a card meaning "a red rose, some red rose" was answering a
   // question the named reds answer better. Its photograph is still in
   // public/media if it is ever wanted back.
-  {
-    name: "Spray Rose",
-    slug: "spray-rose",
-    category: "roses",
-    image: "/media/spray-rose.webp",
-    packingConfirmed: true,
-    description: "Several smaller blooms branching off a single stem, giving a florist multiple heads for the price of one. Fills a bouquet quickly and softens a design that would look stiff with standard roses alone.",
-    colours: "White, cream, blush, pink, hot pink, red, peach, apricot, yellow, lavender and bicolour",
-    stemLength: "40 to 60cm, with 3 to 5 usable blooms per stem",
-    stemsPerBunch: "10",
-    stemsPerBox: "12 bunches per box",
-    vaseLife: "7 to 10 days. Smaller heads open faster than standard roses",
-    care: "Cut on an angle, strip lower foliage, clean water. Remove spent blooms so the rest keep opening.",
-    boughtFor: "Bridesmaid work, boutonnieres, small arrangements and retail mixed bouquets.",
-    related: ["mini-carnation"],
-  },
-  // The garden varieties, bought by name. There was a "Garden Rose" card here
-  // too, and it is deliberately gone: it named the whole class rather than
-  // anything a buyer can order, which is the chip's job now that the chip exists.
-  // A card called Garden Rose sitting inside a category called Garden Roses was
-  // the category twice, once as a heading and once as a product.
-  //   Deliberately no colour tag. Three of the five have a colour in the name and
-  // two do not, and a tag read off a name rather than off a photograph is a guess
-  // printed as a fact — the roses below got theirs off their own pictures. The
-  // apostrophe is the straight one the rest of the file uses, as in Baby's Breath.
-  { name: "Pink O'Hara", slug: "pink-ohara", category: "garden", image: "/media/pink-ohara.webp" },
-  { name: "White O'Hara", slug: "white-ohara", category: "garden", image: "/media/white-ohara.webp" },
-  { name: "Pink X-pression", slug: "pink-x-pression", category: "garden", image: "/media/pink-x-pression.webp" },
-  { name: "Candy X-pression", slug: "candy-x-pression", category: "garden", image: "/media/candy-x-pression.webp" },
-  { name: "Melon X-pression", slug: "melon-x-pression", category: "garden", image: "/media/melon-x-pression.webp" },
-  // The three above are grades; these are the varieties bought by name, so they
-  // sit under the same chip rather than taking one of their own.
   //   Every colour here is read off the photograph beside it rather than off a
   // variety's reputation: Mondial and Momentum are a white and a red in the
   // trade at large, and the shop's own stems are the blush and the yellow the
@@ -181,9 +161,6 @@ const items: CatalogueItem[] = [
   //   Which makes the three pinks a scale rather than three guesses at one word:
   // light pink, pink, hot pink, palest first. They are the only colours on the
   // list a reader has to tell apart from each other.
-  //   Tinted Rose is the one with no colour of its own: it is a treatment
-  // rather than a group, and the name has already said so by the time the meta
-  // line would repeat it.
   {
     name: "Vendela",
     slug: "vendela",
@@ -656,10 +633,47 @@ const items: CatalogueItem[] = [
     stemsPerBox: "Half box 250 to 300 stems",
     packingNote: "Where in that range a box lands depends on whether the stems are short or long.",
   },
+  // The garden varieties, bought by name. There was a "Garden Rose" card here
+  // too, and it is deliberately gone: it named the whole class rather than
+  // anything a buyer can order, which is the chip's job now that the chip exists.
+  // A card called Garden Rose sitting inside a category called Garden Roses was
+  // the category twice, once as a heading and once as a product.
+  //   Deliberately no colour tag. Three of the five have a colour in the name and
+  // two do not, and a tag read off a name rather than off a photograph is a guess
+  // printed as a fact — the roses above got theirs off their own pictures. The
+  // apostrophe is the straight one the rest of the file uses, as in Baby's Breath.
+  { name: "Pink O'Hara", slug: "pink-ohara", category: "garden", image: "/media/pink-ohara.webp" },
+  { name: "White O'Hara", slug: "white-ohara", category: "garden", image: "/media/white-ohara.webp" },
+  { name: "Pink X-pression", slug: "pink-x-pression", category: "garden", image: "/media/pink-x-pression.webp" },
+  { name: "Candy X-pression", slug: "candy-x-pression", category: "garden", image: "/media/candy-x-pression.webp" },
+  { name: "Melon X-pression", slug: "melon-x-pression", category: "garden", image: "/media/melon-x-pression.webp" },
+  // A spray is a different stem rather than a grade of the one above it — many
+  // small heads on one stem, bought by the bunch of ten where a standard rose is
+  // bought by the twenty-five — so it holds its own chip rather than sitting a
+  // third of the way down a list of named reds and pinks.
+  {
+    name: "Spray Rose",
+    slug: "spray-rose",
+    category: "spray",
+    image: "/media/spray-rose.webp",
+    packingConfirmed: true,
+    description: "Several smaller blooms branching off a single stem, giving a florist multiple heads for the price of one. Fills a bouquet quickly and softens a design that would look stiff with standard roses alone.",
+    colours: "White, cream, blush, pink, hot pink, red, peach, apricot, yellow, lavender and bicolour",
+    stemLength: "40 to 60cm, with 3 to 5 usable blooms per stem",
+    stemsPerBunch: "10",
+    stemsPerBox: "12 bunches per box",
+    vaseLife: "7 to 10 days. Smaller heads open faster than standard roses",
+    care: "Cut on an angle, strip lower foliage, clean water. Remove spent blooms so the rest keep opening.",
+    boughtFor: "Bridesmaid work, boutonnieres, small arrangements and retail mixed bouquets.",
+    related: ["mini-carnation"],
+  },
+  // Deliberately no colour tag, and now deliberately its own chip: the tint is a
+  // treatment rather than a colour group, and the chip has already said so by
+  // the time the meta line would repeat it.
   {
     name: "Tinted Rose",
     slug: "tinted-rose",
-    category: "roses",
+    category: "tinted",
     image: "/media/tinted-rose.webp",
     packingConfirmed: true,
     description: "White roses dyed or infused with colour at the farm. A finished product rather than a grown variety, which is what makes the colour range effectively unlimited.",

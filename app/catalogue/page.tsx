@@ -24,7 +24,7 @@ function SearchGlass() {
 }
 
 // A variety page's back link carries the category it belongs to, and this pair
-// is what makes that link honest: /catalogue#roses opens with the Roses chip
+// is what makes that link honest: /catalogue#roses opens with the Standard Roses chip
 // already down rather than dropping a reader into the whole list to find their
 // place in it again.
 //   The hash is the browser's value, not this component's, so it is subscribed
@@ -136,7 +136,7 @@ export default function Catalogue() {
 
           <div className="filter-row" role="group" aria-label="Filter flowers by category">
             {/* The way back to the whole list, and the state the page opens in.
-                It doesn't toggle off the way the six below it do: there is
+                It doesn't toggle off the way the ones below it do: there is
                 nowhere for it to go, since it is already the resting state. */}
             <button type="button" aria-pressed={active === null} onClick={() => setChosen(null)}>
               All Flowers
