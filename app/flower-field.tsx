@@ -64,16 +64,16 @@ type Spot = {
 // there so the band reads as a scatter rather than two straight ranks.
 const PLACEMENT: Spot[] = [
   { t: "10%", l: "2%", w: "clamp(108px,16vw,248px)", ratio: "3/4", hcap: 0.32, depth: 0.6, mt: "3%", ml: "auto", mr: "3%", mw: "min(35vw,138px)", mratio: "1/1" },
-  { above: "clamp(168px,19%,320px)", l: "24%", w: "clamp(96px,13vw,200px)", ratio: "1/1", hcap: 0.24, depth: 1.3 },
-  { above: "clamp(140px,16%,280px)", l: "49%", w: "clamp(124px,18vw,268px)", ratio: "5/4", hcap: 0.28, depth: 2.1, mt: "5%", ml: "3%", mw: "min(38vw,166px)" },
+  { above: "clamp(200px,22%,352px)", l: "24%", w: "clamp(96px,13vw,200px)", ratio: "1/1", hcap: 0.24, depth: 1.3 },
+  { above: "clamp(176px,19.5%,320px)", l: "49%", w: "clamp(124px,18vw,268px)", ratio: "5/4", hcap: 0.28, depth: 2.1, mt: "5%", ml: "3%", mw: "min(38vw,166px)" },
   { t: "12%", r: "3%", w: "clamp(104px,16vw,258px)", ratio: "4/5", hcap: 0.31, depth: 1, mAbove: "clamp(140px,15%,240px)", ml: "33%", mr: "auto", mw: "min(33vw,130px)", mratio: "1/1" },
   { t: "45%", l: "1%", w: "clamp(112px,16vw,258px)", ratio: "1/1", hcap: 0.25, depth: 1.5, mBelow: "clamp(300px,34%,520px)", ml: "37%", mw: "min(33vw,138px)" },
   // Square, not portrait: three tall cards down the right flank left no room
   // between them once the field took its gutters.
   { t: "47%", r: "1%", w: "clamp(102px,13vw,220px)", ratio: "1/1", hcap: 0.21, depth: 0.7 },
-  { below: "clamp(178px,23%,340px)", l: "7%", w: "clamp(120px,19.5vw,300px)", ratio: "4/3", hcap: 0.24, depth: 3, mBelow: "clamp(165px,18%,280px)", ml: "3%", mw: "min(38vw,166px)" },
-  { below: "clamp(140px,16%,280px)", l: "44%", w: "clamp(112px,15vw,210px)", ratio: "4/5", hcap: 0.3, depth: 1.1 },
-  { below: "clamp(165px,21.5%,320px)", r: "9%", w: "clamp(108px,17vw,272px)", ratio: "1/1", hcap: 0.26, depth: 2.2, mBelow: "clamp(140px,15%,240px)", mr: "3%", mw: "min(35vw,150px)" },
+  { below: "clamp(200px,25%,360px)", l: "7%", w: "clamp(120px,19.5vw,300px)", ratio: "4/3", hcap: 0.24, depth: 3, mBelow: "clamp(165px,18%,280px)", ml: "3%", mw: "min(38vw,166px)" },
+  { below: "clamp(176px,19.5%,320px)", l: "44%", w: "clamp(112px,15vw,210px)", ratio: "4/5", hcap: 0.3, depth: 1.1 },
+  { below: "clamp(188px,23.5%,344px)", r: "9%", w: "clamp(108px,17vw,272px)", ratio: "1/1", hcap: 0.26, depth: 2.2, mBelow: "clamp(140px,15%,240px)", mr: "3%", mw: "min(35vw,150px)" },
 ];
 
 // A centre-line anchor: the offset runs from the field's middle to the card.
