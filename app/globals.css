@@ -786,13 +786,20 @@ footer { padding:96px 6vw 34px; display:flex; flex-direction:column; }
    the even one it always was; where it isn't, the photograph gives up the
    difference and the copy column takes it, which is the right way round — the
    copy is capped to a measure of its own and simply carries a wider right
-   margin, where the photograph would have gone off the bottom of the screen. */
-.item { --item-gap:clamp(38px,5vw,88px); --photo-fit:calc((100svh - 154px) * 3 / 4); display:grid; grid-template-columns:minmax(0,min(calc((100% - var(--item-gap)) / 2),var(--photo-fit))) minmax(0,1fr); gap:var(--item-gap); align-items:start; }
+   margin, where the photograph would have gone off the bottom of the screen.
+     --photo-note is the rest of that column: the 12px gap and the line under the
+   frames, which is two lines of 13px at the width the plate usually takes and
+   three at its narrowest. It is an allowance rather than a measurement, because
+   the thing it is measuring wraps to the width this calculation produces. Taken
+   off the height before the plate is sized, so the caption is inside the fit
+   rather than hanging under it — which is what it did on a 780px window before
+   this was here. */
+.item { --item-gap:clamp(38px,5vw,88px); --photo-note:64px; --photo-fit:calc((100svh - 154px - var(--photo-note)) * 3 / 4); display:grid; grid-template-columns:minmax(0,min(calc((100% - var(--item-gap)) / 2),var(--photo-fit))) minmax(0,1fr); gap:var(--item-gap); align-items:start; }
 /* A bouquet's column is the lead plate, the 12px gap and a row of square
    thumbnails half the column wide, so it stands 11/6 of its own width tall
    rather than 4/3 — same fit, solved for the taller stack. The 6px is what is
    left of the gap once it is divided through. */
-.item:has(.item-gallery) { --photo-fit:calc((100svh - 160px) * 6 / 11); }
+.item:has(.item-gallery) { --photo-fit:calc((100svh - 160px - var(--photo-note)) * 6 / 11); }
 /* The lead frame at the proportion every stem on the site is shot at, so a
    variety page and its card are the same photograph at two sizes rather than
    two crops. Sticky, because the right column is the long one: on a record with
@@ -806,6 +813,11 @@ footer { padding:96px 6vw 34px; display:flex; flex-direction:column; }
    every time it is tied, so all of it should be there at once. */
 .item-gallery { display:grid; grid-template-columns:1fr 1fr; gap:12px; }
 .item-gallery img { aspect-ratio:1/1; }
+/* The line under the frames. Quieter than anything in the copy column and set
+   to the smallest size on the site: it is a qualification on the picture, read
+   once, and it must not compete with the name it sits beside. The column's own
+   12px gap puts it under the last frame, so it carries no top margin. */
+.item-photo-note { font:400 13px/1.5 var(--sans); opacity:.55; margin:0; }
 /* No photograph on file yet: one column, and the copy capped to a measure so it
    doesn't run the full width of the band. Drop a picture in public/media, run
    `npm run media` and point the record at it, and the page takes its second

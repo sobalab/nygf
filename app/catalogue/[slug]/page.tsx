@@ -173,6 +173,13 @@ export default async function FlowerPage({ params }: { params: Promise<{ slug: s
                 ))}
               </div>
             ) : null}
+            {/* What the photograph is and isn't. It sits under the frames rather
+                than with the copy because it is about them: a crop is a crop of
+                one week's stems, and a buyer choosing off the picture should
+                read that where they are looking. Inside the conditional, so a
+                record with no photograph yet doesn't caption the absence of
+                one. */}
+            <p className="item-photo-note">Photographs are provided as a visual reference. Variety, colour and form vary by crop and by season.</p>
           </div>
         ) : null}
 

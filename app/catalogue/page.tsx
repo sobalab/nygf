@@ -96,7 +96,7 @@ export default function Catalogue() {
 
       <section className="page-head section-pad">
         <h1>Our Flowers</h1>
-        <p className="section-note">What we carry regularly. We bring in more than this and the cooler changes week to week, so call for what you need. Prices move with the market daily and are never posted.</p>
+        <p className="section-note">Our regular range. Availability extends beyond what is listed here and changes weekly, so please call for current stock. Pricing follows the daily market and is quoted on request. Photographs are provided as a visual reference. Variety, colour and form vary by crop and by season.</p>
       </section>
 
       <section className="catalogue section-pad" id="catalogue">

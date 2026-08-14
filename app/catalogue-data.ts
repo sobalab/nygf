@@ -4,14 +4,12 @@
 // one. Bouquets is one exception and sits last on purpose: it is the chip that
 // isn't stems by the bunch at all, so a short list under it reads as the whole
 // of what is made up rather than as a category that fell short.
-//   The four rose chips are the other, and they are a deliberate exception
-// rather than a drift: the founder asked for the rose wall to be split the way
-// the shop actually sells it, and two of the four carry a single card. A garden
-// rose, a spray and a tinted stem are priced, ordered and handled differently
-// enough from a standard rose that filing all four together was costing the shop
-// the distinction, and chips nobody can miss were judged worth a row with three
-// empty columns in it. A second spray or tinted line bought by name belongs here
-// and the row fills itself.
+//   The rose wall is split four ways because the shop sells it four ways: a
+// garden rose, a spray and a tinted stem are priced, ordered and handled
+// differently enough from a standard rose that filing all four under one chip
+// was costing the shop the distinction. Three of the four were one or five cards
+// when the split was made and are a full grid each now that the supplier lists
+// have been read in, which is the direction a chip is meant to move in.
 //   `roses` keeps its id under the new label: it is the standard rose the whole
 // wall is measured against, and the id is what every /catalogue#roses link a
 // variety page draws is pointing at.
@@ -105,6 +103,10 @@ export type CatalogueItem = {
   // marks it: the Colombia procurement office confirmed the packing for part of
   // the list, and the rest of the numbers in the trade are figures nobody has
   // checked against what actually lands here.
+  //   The varieties off the supplier lists are confirmed a third way, and it is
+  // worth knowing which when one of them is ever queried: the shop gave the
+  // standard rose packing as true of the whole class rather than checking it
+  // variety by variety. See rosePacking below.
   //   Only a true lets the counts print. Everything else prints the line asking
   // for them instead — a florist who plans an order around a wrong bunch count
   // has a real problem on their hands, and a missing number is far better than a
@@ -143,12 +145,45 @@ export type CatalogueItem = {
 // `packingConfirmed` gets the line asking for its bunch and box counts rather
 // than a figure, and a bouquet carries no stem fields at all because there is no
 // stem count in a made-up piece.
+
+// How a rose is packed, which is the one thing the supplier lists' varieties
+// know about themselves before anybody photographs them: the shop buys and sells
+// them all in the same twenty-fives, and a half box holds 250 to 300 of them
+// depending on whether the stems it was filled with were short or long. Given by
+// the shop as true of the class, so it is written once here rather than copied
+// onto two hundred records that would then have to be corrected two hundred
+// times.
+//   Not the sprays. A spray bunch is ten, not twenty-five, and its box is
+// counted in bunches — see the note over that run below.
+//   A variety that turns out to be packed its own way stops using this: write it
+// out as a full record with its own counts, the way the photographed roses above
+// it are written.
+const rosePacking = {
+  packingConfirmed: true,
+  stemsPerBunch: "25",
+  stemsPerBox: "Half box 250 to 300 stems",
+  packingNote: "Where in that range a box lands depends on whether the stems are short or long.",
+} as const;
+
+// A variety the shop can name and pack but has nothing else on yet. The slug is
+// passed rather than made from the name, for the reason the type says: a slug is
+// an address, and an address that recomputes itself moves every URL a florist
+// has saved the day somebody fixes a spelling.
+const packedRose = (name: string, slug: string, category: CategoryId): CatalogueItem => ({ name, slug, category, ...rosePacking });
+
+// The same, minus the counts, for a variety whose packing this file has no
+// business claiming to know.
+const listedOnly = (name: string, slug: string, category: CategoryId): CatalogueItem => ({ name, slug, category });
+
 const items: CatalogueItem[] = [
   // The standard roses lead, and the three other rose chips follow them in the
   // order the chips run in: garden, spray, tinted. The whole wall used to sit
   // under one chip called Roses, with the spray and the tinted stems filed in
-  // among the named varieties — they are the first and the last card of the rose
-  // run now, which is where the grid puts them once each has a chip of its own.
+  // among the named varieties; each opens its own run now.
+  //   Within every one of the four the same order holds: the varieties the shop
+  // has photographed and written up first, then the ones it can only name yet,
+  // alphabetical. A buyer scrolling a chip meets what can be shown to them
+  // before what can only be ordered for them.
   //   "Red Rose" was the first card on this list and is deliberately gone: it was
   // a grade rather than a variety, and with Explorer, Freedom and Redvolution
   // named below it, a card meaning "a red rose, some red rose" was answering a
@@ -227,7 +262,7 @@ const items: CatalogueItem[] = [
     vaseLife: "8 to 12 days",
     care: "Cut on an angle, strip lower foliage, clean water. Keep away from ripening fruit.",
     boughtFor: "Retail bouquets, birthday and celebration work, graduation season, autumn arrangements and restaurant weekly.",
-    related: ["high-and-magic", "mandala", "tinted-rose"],
+    related: ["high-and-magic", "mandala"],
   },
   {
     name: "High & Magic",
@@ -244,7 +279,7 @@ const items: CatalogueItem[] = [
     vaseLife: "8 to 12 days",
     care: "Cut on an angle, clean water. The edge colour deepens over the first few days, which is normal.",
     boughtFor: "Retail bouquets, birthday and celebration work, autumn arrangements and restaurant weekly.",
-    related: ["momentum", "tinted-rose", "mandala"],
+    related: ["momentum", "mandala"],
   },
   {
     name: "Pink Floyd",
@@ -261,7 +296,7 @@ const items: CatalogueItem[] = [
     vaseLife: "7 to 10 days",
     care: "Cut on an angle, strip lower foliage, clean water. Keep away from ripening fruit.",
     boughtFor: "Party and celebration work, retail bunches, and event design needing saturated colour.",
-    related: ["mandala", "tinted-rose", "momentum"],
+    related: ["mandala", "momentum"],
   },
   // The rest of what the shop buys by name, off the owner's colour list. Nine
   // varieties on that list are the nine above and are not repeated here.
@@ -438,17 +473,6 @@ const items: CatalogueItem[] = [
     slug: "tiffany",
     category: "roses",
     image: "/media/tiffany.webp",
-    colour: "peach",
-    packingConfirmed: true,
-    stemsPerBunch: "25",
-    stemsPerBox: "Half box 250 to 300 stems",
-    packingNote: "Where in that range a box lands depends on whether the stems are short or long.",
-  },
-  {
-    name: "Kahala",
-    slug: "kahala",
-    category: "roses",
-    image: "/media/kahala.webp",
     colour: "peach",
     packingConfirmed: true,
     stemsPerBunch: "25",
@@ -633,59 +657,336 @@ const items: CatalogueItem[] = [
     stemsPerBox: "Half box 250 to 300 stems",
     packingNote: "Where in that range a box lands depends on whether the stems are short or long.",
   },
+  // The rest of the wall, off the four lists the shop buys from: BellaRosa and
+  // Qualisa in Ecuador, La Rosaleda, Fiorentina, and Edilberto's Colombia list.
+  //   A name, a chip and the standard rose packing is the whole of each record,
+  // and that is the point rather than an omission. A supplier list carries no
+  // photograph, no vase life and no head size, and a colour read off a variety's
+  // name instead of its picture is a guess printed as a fact — so these say what
+  // is certainly true, which is that the shop can get them and how they come.
+  // They fill in the way the photographed varieties above did: a picture first,
+  // then whatever the owner's reference sheet says about it.
+  //   Alphabetical, because nothing else is known about them yet to sort on.
+  //   Spelling is the suppliers' own, including where it looks like a slip:
+  // Millenial Pink, Madona, Fall Hellujah, T-Marshmellow. That is what is
+  // printed on the order sheet a buyer is reading from, so it is what the card
+  // says.
+  //   How many of the four lists carry a variety is deliberately not stored.
+  // Two thirds of these are on one list only and the count moves with the
+  // season, so it would be a number going stale on the page rather than a fact
+  // about the flower.
+  packedRose("3D", "3d", "roses"),
+  packedRose("Absolut in Pink", "absolut-in-pink", "roses"),
+  packedRose("Alhambra", "alhambra", "roses"),
+  packedRose("All 4 Love", "all-4-love", "roses"),
+  packedRose("Aloha", "aloha", "roses"),
+  packedRose("Alquimia", "alquimia", "roses"),
+  packedRose("Aly", "aly", "roses"),
+  packedRose("Amelia", "amelia", "roses"),
+  packedRose("Amnesia", "amnesia", "roses"),
+  packedRose("Amsterdam", "amsterdam", "roses"),
+  packedRose("Arctica", "arctica", "roses"),
+  packedRose("Arleen", "arleen", "roses"),
+  packedRose("Art Deco", "art-deco", "roses"),
+  packedRose("Arya", "arya", "roses"),
+  packedRose("Barbie Core", "barbie-core", "roses"),
+  packedRose("Barista", "barista", "roses"),
+  packedRose("Bikini", "bikini", "roses"),
+  packedRose("Blessing", "blessing", "roses"),
+  packedRose("Blizzard", "blizzard", "roses"),
+  packedRose("Blue Dream", "blue-dream", "roses"),
+  packedRose("Bluez", "bluez", "roses"),
+  packedRose("Blush", "blush", "roses"),
+  packedRose("Born Free", "born-free", "roses"),
+  packedRose("Born Hot", "born-hot", "roses"),
+  packedRose("Breathless", "breathless", "roses"),
+  packedRose("Brighton", "brighton", "roses"),
+  packedRose("Bromo", "bromo", "roses"),
+  packedRose("Bumblebee", "bumblebee", "roses"),
+  packedRose("Cabaret", "cabaret", "roses"),
+  packedRose("Cafe del Mar", "cafe-del-mar", "roses"),
+  packedRose("Cancun", "cancun", "roses"),
+  packedRose("Carnelian", "carnelian", "roses"),
+  packedRose("Carousel", "carousel", "roses"),
+  packedRose("Champagne", "champagne", "roses"),
+  packedRose("Cherry Brandy", "cherry-brandy", "roses"),
+  packedRose("Christa", "christa", "roses"),
+  packedRose("Coffee Break", "coffee-break", "roses"),
+  packedRose("Country Blues", "country-blues", "roses"),
+  packedRose("Country Candy", "country-candy", "roses"),
+  packedRose("Country Home", "country-home", "roses"),
+  packedRose("Cream Shimmer", "cream-shimmer", "roses"),
+  packedRose("Cream X-pression", "cream-x-pression", "roses"),
+  packedRose("Dallas", "dallas", "roses"),
+  packedRose("Deep Purple", "deep-purple", "roses"),
+  packedRose("Deja Vu", "deja-vu", "roses"),
+  packedRose("Dynamic", "dynamic", "roses"),
+  packedRose("Enchantment", "enchantment", "roses"),
+  packedRose("Engagement", "engagement", "roses"),
+  packedRose("Escimo", "escimo", "roses"),
+  packedRose("Esperance", "esperance", "roses"),
+  packedRose("Exotix Berry", "exotix-berry", "roses"),
+  packedRose("Exotix Mint", "exotix-mint", "roses"),
+  packedRose("Exotix Pop", "exotix-pop", "roses"),
+  packedRose("Fair Lady", "fair-lady", "roses"),
+  packedRose("Faith", "faith", "roses"),
+  packedRose("Fancy Dreams", "fancy-dreams", "roses"),
+  packedRose("Fascination", "fascination", "roses"),
+  packedRose("Fidji", "fidji", "roses"),
+  packedRose("First Lady", "first-lady", "roses"),
+  packedRose("Flirty", "flirty", "roses"),
+  packedRose("Fortune", "fortune", "roses"),
+  packedRose("French Kiss", "french-kiss", "roses"),
+  packedRose("Friendship", "friendship", "roses"),
+  packedRose("Garden Spirit", "garden-spirit", "roses"),
+  packedRose("Geraldine", "geraldine", "roses"),
+  packedRose("Glitz", "glitz", "roses"),
+  packedRose("Glow Girl", "glow-girl", "roses"),
+  packedRose("Goldfinch", "goldfinch", "roses"),
+  packedRose("Gotcha", "gotcha", "roses"),
+  packedRose("Govinda", "govinda", "roses"),
+  packedRose("Green Romance", "green-romance", "roses"),
+  packedRose("Happy Bride", "happy-bride", "roses"),
+  packedRose("Hard Rock", "hard-rock", "roses"),
+  packedRose("High & Candy", "high-and-candy", "roses"),
+  packedRose("High & Yellow Magic", "high-and-yellow-magic", "roses"),
+  packedRose("Highlight", "highlight", "roses"),
+  packedRose("Hot Cake", "hot-cake", "roses"),
+  packedRose("Hot Kiss", "hot-kiss", "roses"),
+  packedRose("Hot Lady", "hot-lady", "roses"),
+  packedRose("Hot Merengue", "hot-merengue", "roses"),
+  packedRose("Hot Spot", "hot-spot", "roses"),
+  packedRose("Iguazu", "iguazu", "roses"),
+  packedRose("Jacarandá", "jacaranda", "roses"),
+  packedRose("Jade", "jade", "roses"),
+  packedRose("Jessica", "jessica", "roses"),
+  packedRose("Joy", "joy", "roses"),
+  packedRose("Juicy X-pression", "juicy-x-pression", "roses"),
+  packedRose("Kendall", "kendall", "roses"),
+  packedRose("Kora", "kora", "roses"),
+  packedRose("Lady Amira", "lady-amira", "roses"),
+  packedRose("Lemonade", "lemonade", "roses"),
+  packedRose("Lighthouse", "lighthouse", "roses"),
+  packedRose("Lola", "lola", "roses"),
+  packedRose("Lorena Summerhouse", "lorena-summerhouse", "roses"),
+  packedRose("Lorraine", "lorraine", "roses"),
+  packedRose("Luciano", "luciano", "roses"),
+  packedRose("Lumia", "lumia", "roses"),
+  packedRose("Mademoiselle", "mademoiselle", "roses"),
+  packedRose("Madona", "madona", "roses"),
+  packedRose("Maggi", "maggi", "roses"),
+  packedRose("Magic Times", "magic-times", "roses"),
+  packedRose("Magnolia Rose", "magnolia-rose", "roses"),
+  packedRose("Malibú", "malibu", "roses"),
+  packedRose("Mamma Mia", "mamma-mia", "roses"),
+  packedRose("Mango Tango", "mango-tango", "roses"),
+  packedRose("Marzipan", "marzipan", "roses"),
+  packedRose("Matilda", "matilda", "roses"),
+  packedRose("Mayra Peach", "mayra-peach", "roses"),
+  packedRose("Mayra's White", "mayras-white", "roses"),
+  packedRose("Menta", "menta", "roses"),
+  packedRose("Mia", "mia", "roses"),
+  packedRose("Millenial Pink", "millenial-pink", "roses"),
+  packedRose("Miss Piggy", "miss-piggy", "roses"),
+  packedRose("Mother of Pearl", "mother-of-pearl", "roses"),
+  packedRose("Nautica", "nautica", "roses"),
+  packedRose("News Flash", "news-flash", "roses"),
+  packedRose("Nina", "nina", "roses"),
+  packedRose("Nuage", "nuage", "roses"),
+  packedRose("Opala", "opala", "roses"),
+  packedRose("Orange Enigma", "orange-enigma", "roses"),
+  packedRose("Paloma", "paloma", "roses"),
+  packedRose("Peach Wave", "peach-wave", "roses"),
+  packedRose("Phoenix", "phoenix", "roses"),
+  packedRose("Piacere", "piacere", "roses"),
+  packedRose("Pink Amaretto", "pink-amaretto", "roses"),
+  packedRose("Pink Mondial", "pink-mondial", "roses"),
+  packedRose("Pinky Promise", "pinky-promise", "roses"),
+  packedRose("Powder Puff", "powder-puff", "roses"),
+  packedRose("Princess Crown", "princess-crown", "roses"),
+  packedRose("Purple Cezanne", "purple-cezanne", "roses"),
+  packedRose("Purple Haze", "purple-haze", "roses"),
+  packedRose("Purple Moon", "purple-moon", "roses"),
+  packedRose("Queen Berry", "queen-berry", "roses"),
+  packedRose("Queen's Crown", "queens-crown", "roses"),
+  packedRose("Quicksand", "quicksand", "roses"),
+  packedRose("Red Panther", "red-panther", "roses"),
+  packedRose("Red Paris", "red-paris", "roses"),
+  packedRose("Rhoslyn", "rhoslyn", "roses"),
+  packedRose("Rise n Shine", "rise-n-shine", "roses"),
+  packedRose("Rosita Vendela", "rosita-vendela", "roses"),
+  packedRose("Sand Castle", "sand-castle", "roses"),
+  packedRose("Secret Garden", "secret-garden", "roses"),
+  packedRose("Shimmer", "shimmer", "roses"),
+  packedRose("Shocking Blue", "shocking-blue", "roses"),
+  packedRose("Showgirl", "showgirl", "roses"),
+  packedRose("Silantoi", "silantoi", "roses"),
+  packedRose("Snowbliss", "snowbliss", "roses"),
+  packedRose("Sophie", "sophie", "roses"),
+  packedRose("Starbright", "starbright", "roses"),
+  packedRose("Stardust", "stardust", "roses"),
+  packedRose("Stiletto", "stiletto", "roses"),
+  packedRose("Summer Light", "summer-light", "roses"),
+  packedRose("Summer Romance", "summer-romance", "roses"),
+  packedRose("Sunfire", "sunfire", "roses"),
+  packedRose("Sunny Days", "sunny-days", "roses"),
+  packedRose("Sunset Glory", "sunset-glory", "roses"),
+  packedRose("Swan", "swan", "roses"),
+  packedRose("Sweet 4 Love", "sweet-4-love", "roses"),
+  packedRose("Sweet Akito", "sweet-akito", "roses"),
+  packedRose("Sweet Bliss", "sweet-bliss", "roses"),
+  packedRose("Sweet Cake", "sweet-cake", "roses"),
+  packedRose("Sweet Escimo", "sweet-escimo", "roses"),
+  packedRose("Sweet Lady", "sweet-lady", "roses"),
+  packedRose("Symbol", "symbol", "roses"),
+  packedRose("Tabatha", "tabatha", "roses"),
+  packedRose("Toffee", "toffee", "roses"),
+  packedRose("Topaz", "topaz", "roses"),
+  packedRose("Tutti Frutti", "tutti-frutti", "roses"),
+  packedRose("Twilight", "twilight", "roses"),
+  packedRose("Tycoon", "tycoon", "roses"),
+  packedRose("Undercover", "undercover", "roses"),
+  packedRose("Unforgiven", "unforgiven", "roses"),
+  packedRose("Unstoppable", "unstoppable", "roses"),
+  packedRose("Veggie", "veggie", "roses"),
+  packedRose("Vintage", "vintage", "roses"),
+  packedRose("Wild Crown", "wild-crown", "roses"),
+  packedRose("Wild Dancer", "wild-dancer", "roses"),
+  packedRose("Wild Esperance", "wild-esperance", "roses"),
+  packedRose("Wildcat", "wildcat", "roses"),
+  packedRose("X Factor", "x-factor", "roses"),
+  packedRose("Yellow Summer", "yellow-summer", "roses"),
+  packedRose("Zephyr", "zephyr", "roses"),
   // The garden varieties, bought by name. There was a "Garden Rose" card here
   // too, and it is deliberately gone: it named the whole class rather than
   // anything a buyer can order, which is the chip's job now that the chip exists.
   // A card called Garden Rose sitting inside a category called Garden Roses was
   // the category twice, once as a heading and once as a product.
-  //   Deliberately no colour tag. Three of the five have a colour in the name and
-  // two do not, and a tag read off a name rather than off a photograph is a guess
-  // printed as a fact — the roses above got theirs off their own pictures. The
-  // apostrophe is the straight one the rest of the file uses, as in Baby's Breath.
+  //   Deliberately no colour tag on the five below. Three of them have a colour
+  // in the name and two do not, and a tag read off a name rather than off a
+  // photograph is a guess printed as a fact — the roses above got theirs off
+  // their own pictures, and so did Kahala, which is why it is the one card here
+  // that carries one. The apostrophe is the straight one the rest of the file
+  // uses, as in Baby's Breath.
   { name: "Pink O'Hara", slug: "pink-ohara", category: "garden", image: "/media/pink-ohara.webp" },
   { name: "White O'Hara", slug: "white-ohara", category: "garden", image: "/media/white-ohara.webp" },
   { name: "Pink X-pression", slug: "pink-x-pression", category: "garden", image: "/media/pink-x-pression.webp" },
   { name: "Candy X-pression", slug: "candy-x-pression", category: "garden", image: "/media/candy-x-pression.webp" },
   { name: "Melon X-pression", slug: "melon-x-pression", category: "garden", image: "/media/melon-x-pression.webp" },
-  // A spray is a different stem rather than a grade of the one above it — many
-  // small heads on one stem, bought by the bunch of ten where a standard rose is
-  // bought by the twenty-five — so it holds its own chip rather than sitting a
-  // third of the way down a list of named reds and pinks.
+  // Filed with the standard roses until the supplier lists came in and four
+  // catalogues out of four called it a garden rose. It keeps its photograph, its
+  // colour and its packing across the move — only the chip changed — and its old
+  // address still works, because a variety's slug is its own and doesn't carry
+  // the category in it.
   {
-    name: "Spray Rose",
-    slug: "spray-rose",
-    category: "spray",
-    image: "/media/spray-rose.webp",
+    name: "Kahala",
+    slug: "kahala",
+    category: "garden",
+    image: "/media/kahala.webp",
+    colour: "peach",
     packingConfirmed: true,
-    description: "Several smaller blooms branching off a single stem, giving a florist multiple heads for the price of one. Fills a bouquet quickly and softens a design that would look stiff with standard roses alone.",
-    colours: "White, cream, blush, pink, hot pink, red, peach, apricot, yellow, lavender and bicolour",
-    stemLength: "40 to 60cm, with 3 to 5 usable blooms per stem",
-    stemsPerBunch: "10",
-    stemsPerBox: "12 bunches per box",
-    vaseLife: "7 to 10 days. Smaller heads open faster than standard roses",
-    care: "Cut on an angle, strip lower foliage, clean water. Remove spent blooms so the rest keep opening.",
-    boughtFor: "Bridesmaid work, boutonnieres, small arrangements and retail mixed bouquets.",
-    related: ["mini-carnation"],
-  },
-  // Deliberately no colour tag, and now deliberately its own chip: the tint is a
-  // treatment rather than a colour group, and the chip has already said so by
-  // the time the meta line would repeat it.
-  {
-    name: "Tinted Rose",
-    slug: "tinted-rose",
-    category: "tinted",
-    image: "/media/tinted-rose.webp",
-    packingConfirmed: true,
-    description: "White roses dyed or infused with colour at the farm. A finished product rather than a grown variety, which is what makes the colour range effectively unlimited.",
-    colours: "Blue, black, rainbow, metallic, glitter-tipped, and pastels not achievable naturally",
-    stemLength: "50 to 70cm",
     stemsPerBunch: "25",
-    stemsPerBox: "Quarter box about 100. Half box 250 to 350 depending on box size",
-    vaseLife: "7 to 10 days",
-    care: "Colour can transfer to hands and fabric while wet. Handle with care when arranging and keep off pale linens.",
-    boughtFor: "Graduation, proms, quinceañeras, birthdays, school and team colour work, and novelty retail. A significant seasonal line in New York through May and June.",
-    related: ["pink-floyd", "high-and-magic", "momentum"],
+    stemsPerBox: "Half box 250 to 300 stems",
+    packingNote: "Where in that range a box lands depends on whether the stems are short or long.",
   },
+  // The rest of the garden varieties off the same four lists. Two families run
+  // through this chip and their series names are kept whole: X-pression, whose
+  // nine colours are split across this chip and the standard one, and Mayra
+  // Rose, in six.
+  //   Peonikiss is written without the registered mark the supplier sets it
+  // with. Every name on this list is running copy on a card, and none of the
+  // rest carries a symbol.
+  packedRose("Antonia Gardens", "antonia-gardens", "garden"),
+  packedRose("Aurora Gardens", "aurora-gardens", "garden"),
+  packedRose("Carina", "carina", "garden"),
+  packedRose("Carpe Diem", "carpe-diem", "garden"),
+  packedRose("Cotton X-pression", "cotton-x-pression", "garden"),
+  packedRose("Creamykiss", "creamykiss", "garden"),
+  packedRose("Cute Enigma", "cute-enigma", "garden"),
+  packedRose("Dark X-pression", "dark-x-pression", "garden"),
+  packedRose("Dragonfly", "dragonfly", "garden"),
+  packedRose("Fatima Gardens", "fatima-gardens", "garden"),
+  packedRose("Free Spirit", "free-spirit", "garden"),
+  packedRose("Hearts", "hearts", "garden"),
+  packedRose("Mandarin X-pression", "mandarin-x-pression", "garden"),
+  packedRose("Mayra Hot Pink", "mayra-hot-pink", "garden"),
+  packedRose("Mayra Rose Bridal Pink", "mayra-rose-bridal-pink", "garden"),
+  packedRose("Mayra Rose Peach", "mayra-rose-peach", "garden"),
+  packedRose("Mayra Rose Pink", "mayra-rose-pink", "garden"),
+  packedRose("Mayra Rose Red", "mayra-rose-red", "garden"),
+  packedRose("Mayra Rose White", "mayra-rose-white", "garden"),
+  packedRose("Moonstone", "moonstone", "garden"),
+  packedRose("Peonikiss", "peonikiss", "garden"),
+  packedRose("Sunny X-pression", "sunny-x-pression", "garden"),
+  packedRose("Sunset X-pression", "sunset-x-pression", "garden"),
+  packedRose("Vicky Gardens", "vicky-gardens", "garden"),
+  // A spray is a different stem rather than a grade of the standard rose — many
+  // small heads on one stem, bought by the bunch of ten where a standard rose is
+  // bought by the twenty-five — which is what the chip is for.
+  //   There was a "Spray Rose" card at the head of it, and it went the way "Red
+  // Rose" and "Garden Rose" went: it named the class the chip already names, so
+  // once the chip existed it was the category twice, once as a heading and once
+  // as a product. The reference sheet's spray lines went with it — the ten-stem
+  // bunch, the three to five heads per stem, the note that small heads open
+  // faster — and they are worth putting back on the first named variety the shop
+  // photographs. Its photograph is still in public/media.
+  //   The named sprays are all off Fiorentina's list, the only one of the four
+  // that lists sprays by name, so this is one supplier's range rather than the
+  // market's and the chip will grow when another sends theirs. The Majolika
+  // family runs across four colours.
+  //   These are the one rose run carrying no counts, and deliberately: the
+  // twenty-five-stem bunch and the 250 to 300 half box the rest of the wall is
+  // written up with are standard rose figures, and the sheet put a spray at ten
+  // stems to the bunch and twelve bunches to the box. Rather than print a
+  // standard count over a spray, they ask — which is what every card without
+  // packing on this site does. The moment the shop confirms the spray counts
+  // hold for these, they take a packing of their own.
+  listedOnly("Blue Moon", "blue-moon", "spray"),
+  listedOnly("Bright Sensation", "bright-sensation", "spray"),
+  listedOnly("Champagne Majolika", "champagne-majolika", "spray"),
+  listedOnly("Cream Majolika", "cream-majolika", "spray"),
+  listedOnly("Elba", "elba", "spray"),
+  listedOnly("Fibonacci", "fibonacci", "spray"),
+  listedOnly("Fire Up", "fire-up", "spray"),
+  listedOnly("Golden Blossom", "golden-blossom", "spray"),
+  listedOnly("Morning Star", "morning-star", "spray"),
+  listedOnly("Pink Majolika", "pink-majolika", "spray"),
+  listedOnly("Portrait", "portrait", "spray"),
+  listedOnly("Rubicon", "rubicon", "spray"),
+  listedOnly("Shining Star", "shining-star", "spray"),
+  listedOnly("Star Blush", "star-blush", "spray"),
+  listedOnly("Suspiro", "suspiro", "spray"),
+  listedOnly("Sweet Dreams", "sweet-dreams", "spray"),
+  listedOnly("White Majolika", "white-majolika", "spray"),
+  // A tint is a treatment rather than a colour group: white roses dyed or
+  // infused at the farm, which is what makes the range of them unlimited and
+  // what earns them a chip of their own.
+  //   A "Tinted Rose" card led this run and is gone for the same reason the
+  // spray one is. It carried the sheet's dye handling with it — colour transfers
+  // to hands and fabric while the stem is wet, so it is kept off pale linens —
+  // and that warning is true of every card below, so it belongs on the first of
+  // them to be written up. Its photograph is still in public/media.
+  //   The named tints are mostly holiday lines: Halloween, Christmas, autumn and
+  // Easter. BellaRosa runs a full tinted catalogue of its own that has not been
+  // sent, so this chip is the short version of what is actually available.
+  packedRose("Candy Cane", "candy-cane", "tinted"),
+  packedRose("Cotton Cloud", "cotton-cloud", "tinted"),
+  packedRose("Fall Hellujah", "fall-hellujah", "tinted"),
+  packedRose("Fall in Love", "fall-in-love", "tinted"),
+  packedRose("Fall Rainbow", "fall-rainbow", "tinted"),
+  packedRose("Fancy Cake", "fancy-cake", "tinted"),
+  packedRose("Fluffy", "fluffy", "tinted"),
+  packedRose("Hallow Queen", "hallow-queen", "tinted"),
+  packedRose("Harvest Delight", "harvest-delight", "tinted"),
+  packedRose("Hopper", "hopper", "tinted"),
+  packedRose("Peeps", "peeps", "tinted"),
+  packedRose("Pumpkin Patch", "pumpkin-patch", "tinted"),
+  packedRose("Santa's Helper", "santas-helper", "tinted"),
+  packedRose("Spooktacular", "spooktacular", "tinted"),
+  packedRose("Stalk The Sun", "stalk-the-sun", "tinted"),
+  packedRose("T-Marshmellow", "t-marshmellow", "tinted"),
+  packedRose("Whisper Mellow Edge", "whisper-mellow-edge", "tinted"),
+  packedRose("X-mas Gift", "x-mas-gift", "tinted"),
 
   {
     name: "Select-grade Carnation",
@@ -717,7 +1018,7 @@ const items: CatalogueItem[] = [
     vaseLife: "14 to 21 days",
     care: "Same ethylene sensitivity as the standard. Keep away from fruit and dying flowers.",
     boughtFor: "Filler in mixed bouquets, sympathy work, supermarket and retail bunch programs, and party work.",
-    related: ["select-grade-carnation", "spray-rose", "daisy"],
+    related: ["select-grade-carnation", "daisy"],
   },
 
   {
@@ -814,7 +1115,7 @@ const items: CatalogueItem[] = [
     vaseLife: "7 to 10 days",
     care: "Shallow clean water and a spotless vessel. Do not crush the stem end.",
     boughtFor: "Bridal bouquets and boutonnieres, event centerpieces, retail bouquets and corporate weekly.",
-    related: ["calla-lilies", "spray-rose", "dendrobium"],
+    related: ["calla-lilies", "dendrobium"],
   },
 
   {
@@ -1021,7 +1322,7 @@ const items: CatalogueItem[] = [
     vaseLife: "7 to 14 days, among the best of the soft-looking flowers",
     care: "Strip lower foliage and use clean water. Remove spent blooms so the remaining buds keep opening.",
     boughtFor: "Weddings, hotel and corporate weekly, retail bouquets, and as a rose substitute where budget is tight.",
-    related: ["spray-rose", "sweet-pea"],
+    related: ["sweet-pea"],
   },
   {
     name: "Chrysanthemum",

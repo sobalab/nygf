@@ -64,7 +64,7 @@ export default function Home() {
           <div className="story-image"><img src="/media/our-story.webp" alt="Wrapped bunches of tulips in red, pink, orange and purple on the market floor" loading="lazy" /></div>
           <div className="story-copy">
             <h3>Direct From the Farm,<br />Closer to Your Needs.</h3>
-            <p>We opened in Flushing in 1990 and started importing direct from the beginning. Today we bring flowers in from Ecuador, Colombia, Costa Rica, Mexico, Poland and Canada.</p>
+            <p>We opened in Flushing in 1990 and started importing direct from the beginning. Today we bring flowers in from several farms located in Ecuador, Colombia, Costa Rica, Mexico, Poland, Canada, and more.</p>
           </div>
         </div>
 
