@@ -793,13 +793,19 @@ footer { padding:96px 6vw 34px; display:flex; flex-direction:column; }
    the thing it is measuring wraps to the width this calculation produces. Taken
    off the height before the plate is sized, so the caption is inside the fit
    rather than hanging under it — which is what it did on a 780px window before
-   this was here. */
-.item { --item-gap:clamp(38px,5vw,88px); --photo-note:64px; --photo-fit:calc((100svh - 154px - var(--photo-note)) * 3 / 4); display:grid; grid-template-columns:minmax(0,min(calc((100% - var(--item-gap)) / 2),var(--photo-fit))) minmax(0,1fr); gap:var(--item-gap); align-items:start; }
+   this was here.
+     --photo-max is the other end of the same argument. The fit only ever takes
+   width away, so on a tall wide monitor there was nothing stopping the plate
+   from growing past 800px tall beside a copy column that is capped to a measure
+   and doesn't grow at all: a photograph the size of the screen with a paragraph
+   standing next to it. The cap holds it near what a laptop already shows, and
+   the copy takes the width the plate gives up. */
+.item { --item-gap:clamp(38px,5vw,88px); --photo-note:76px; --photo-max:500px; --photo-fit:min(calc((100svh - 154px - var(--photo-note)) * 3 / 4),var(--photo-max)); display:grid; grid-template-columns:minmax(0,min(calc((100% - var(--item-gap)) / 2),var(--photo-fit))) minmax(0,1fr); gap:var(--item-gap); align-items:start; }
 /* A bouquet's column is the lead plate, the 12px gap and a row of square
    thumbnails half the column wide, so it stands 11/6 of its own width tall
    rather than 4/3 — same fit, solved for the taller stack. The 6px is what is
    left of the gap once it is divided through. */
-.item:has(.item-gallery) { --photo-fit:calc((100svh - 160px - var(--photo-note)) * 6 / 11); }
+.item:has(.item-gallery) { --photo-fit:min(calc((100svh - 160px - var(--photo-note)) * 6 / 11),var(--photo-max)); }
 /* The lead frame at the proportion every stem on the site is shot at, so a
    variety page and its card are the same photograph at two sizes rather than
    two crops. Sticky, because the right column is the long one: on a record with
@@ -1048,6 +1054,16 @@ a:focus-visible,button:focus-visible,input:focus-visible { outline:2px solid var
      the top half of the screen for the whole length of the copy. */
   .item { grid-template-columns:1fr; gap:38px; }
   .item-photo { position:static; }
+  /* Stacked, the plate is as wide as the phone and a 3/4 crop of that is most of
+     a screen on its own — which left the line under it below the fold, and the
+     line is a qualification on the picture a reader has to meet while they are
+     still looking at it. So the frame is capped by height here rather than by
+     the column width: same plate, shorter crop, and the caption lands on the
+     same screen at every phone size. */
+  .item-photo img { max-height:min(58svh,540px); }
+  /* A bouquet's stack is the lead frame, two square thumbnails and then the
+     line, so the lead gives up more to leave room for what follows it. */
+  .item:has(.item-gallery) .item-photo>img { max-height:min(40svh,380px); }
   .item-facts { max-width:none; }
   .item-actions { gap:12px; }
   .item-action { width:100%; }
