@@ -165,25 +165,29 @@ const rosePacking = {
   packingNote: "Where in that range a box lands depends on whether the stems are short or long.",
 } as const;
 
-// A variety the shop can name and pack but has nothing else on yet. The slug is
-// passed rather than made from the name, for the reason the type says: a slug is
-// an address, and an address that recomputes itself moves every URL a florist
-// has saved the day somebody fixes a spelling.
-const packedRose = (name: string, slug: string, category: CategoryId): CatalogueItem => ({ name, slug, category, ...rosePacking });
+// A variety the shop can name and pack, and — once somebody has stood it in
+// front of a camera — photograph. The slug is passed rather than made from the
+// name, for the reason the type says: a slug is an address, and an address that
+// recomputes itself moves every URL a florist has saved the day somebody fixes a
+// spelling. The photograph is passed for a plainer reason: it is a file that has
+// to exist, and a path built out of the slug would go on looking right in the
+// source long after the picture behind it stopped being there.
+const packedRose = (name: string, slug: string, category: CategoryId, image?: string): CatalogueItem => ({ name, slug, category, image, ...rosePacking });
 
 // The same, minus the counts, for a variety whose packing this file has no
 // business claiming to know.
-const listedOnly = (name: string, slug: string, category: CategoryId): CatalogueItem => ({ name, slug, category });
+const listedOnly = (name: string, slug: string, category: CategoryId, image?: string): CatalogueItem => ({ name, slug, category, image });
 
 const items: CatalogueItem[] = [
   // The standard roses lead, and the three other rose chips follow them in the
   // order the chips run in: garden, spray, tinted. The whole wall used to sit
   // under one chip called Roses, with the spray and the tinted stems filed in
   // among the named varieties; each opens its own run now.
-  //   Within every one of the four the same order holds: the varieties the shop
-  // has photographed and written up first, then the ones it can only name yet,
-  // alphabetical. A buyer scrolling a chip meets what can be shown to them
-  // before what can only be ordered for them.
+  //   Within every one of the four the varieties the shop has photographed and
+  // written up come first, then the ones it can only name yet. That is the
+  // editing order and not the reading order: the page alphabetises each chip on
+  // its way out — see the sort under `flowers` at the foot of this file — so
+  // nothing here has to be kept in the order a buyer will meet it in.
   //   "Red Rose" was the first card on this list and is deliberately gone: it was
   // a grade rather than a variety, and with Explorer, Freedom and Redvolution
   // named below it, a card meaning "a red rose, some red rose" was answering a
@@ -673,30 +677,26 @@ const items: CatalogueItem[] = [
   // is certainly true, which is that the shop can get them and how they come.
   // They fill in the way the photographed varieties above did: a picture first,
   // then whatever the owner's reference sheet says about it.
-  //   Alphabetical, because nothing else is known about them yet to sort on.
+  //   Kept alphabetical here as well as on the page, because nothing else is
+  // known about them yet to sort on and a name is the only way to find one of
+  // them in a file this long.
   //   Spelling is the suppliers' own, including where it looks like a slip:
   // Fall Hellujah and T-Marshmellow under the tinted chip, Malibú and Menta
   // here. That is what is printed on the order sheet a buyer is reading from, so
   // it is what the card says.
-  packedRose("3D", "3d", "roses"),
-  packedRose("Absolut in Pink", "absolut-in-pink", "roses"),
-  packedRose("Aloha", "aloha", "roses"),
-  packedRose("Amnesia", "amnesia", "roses"),
-  packedRose("Amsterdam", "amsterdam", "roses"),
-  packedRose("Arctica", "arctica", "roses"),
-  packedRose("Arya", "arya", "roses"),
-  packedRose("Barista", "barista", "roses"),
-  packedRose("Bikini", "bikini", "roses"),
-  packedRose("Blush", "blush", "roses"),
-  packedRose("Born Free", "born-free", "roses"),
-  packedRose("Brighton", "brighton", "roses"),
-  packedRose("Champagne", "champagne", "roses"),
-  packedRose("Cherry Brandy", "cherry-brandy", "roses"),
-  packedRose("Coffee Break", "coffee-break", "roses"),
-  packedRose("Country Blues", "country-blues", "roses"),
-  packedRose("Country Candy", "country-candy", "roses"),
-  packedRose("Country Home", "country-home", "roses"),
-  packedRose("Cream X-pression", "cream-x-pression", "roses"),
+  packedRose("3D", "3d", "roses", "/media/3d.webp"),
+  packedRose("Absolut in Pink", "absolut-in-pink", "roses", "/media/absolut-in-pink.webp"),
+  packedRose("Aloha", "aloha", "roses", "/media/aloha.webp"),
+  packedRose("Amnesia", "amnesia", "roses", "/media/amnesia.webp"),
+  packedRose("Amsterdam", "amsterdam", "roses", "/media/amsterdam.webp"),
+  packedRose("Arctica", "arctica", "roses", "/media/arctica.webp"),
+  packedRose("Barista", "barista", "roses", "/media/barista.webp"),
+  packedRose("Bikini", "bikini", "roses", "/media/bikini.webp"),
+  packedRose("Blush", "blush", "roses", "/media/blush.webp"),
+  packedRose("Born Free", "born-free", "roses", "/media/born-free.webp"),
+  packedRose("Brighton", "brighton", "roses", "/media/brighton.webp"),
+  packedRose("Cherry Brandy", "cherry-brandy", "roses", "/media/cherry-brandy.webp"),
+  packedRose("Coffee Break", "coffee-break", "roses", "/media/coffee-break.webp"),
   packedRose("Deep Purple", "deep-purple", "roses"),
   packedRose("Engagement", "engagement", "roses"),
   packedRose("Escimo", "escimo", "roses"),
@@ -776,13 +776,24 @@ const items: CatalogueItem[] = [
   },
   // The rest of the garden varieties the shop supplies. Two families run through
   // this chip and their series names are kept whole: X-pression, whose eight
-  // colours are split six here and two under the standard chip, and Mayra Rose,
-  // whose six are all here — Mayra Peach is a standard rose and a different
-  // thing, however much the name looks like the seventh of them.
+  // colours are split seven here and one — Juicy — under the standard chip, and
+  // Mayra Rose, whose six are all here. Mayra Peach is a standard rose and a
+  // different thing, however much the name looks like the seventh of them.
+  //   Arya, Champagne, Country Blues, Country Candy, Country Home and Cream
+  // X-pression were filed as standard roses when the supplier lists came in and
+  // were moved here on the shop's own reading of them. A supplier list does not
+  // always mark which of the two a variety is, and where it doesn't, the shop
+  // knowing what lands in the cooler beats a name.
   packedRose("All 4 Love", "all-4-love", "garden"),
   packedRose("Antonia Gardens", "antonia-gardens", "garden"),
+  packedRose("Arya", "arya", "garden", "/media/arya.webp"),
   packedRose("Aurora Gardens", "aurora-gardens", "garden"),
+  packedRose("Champagne", "champagne", "garden", "/media/champagne.webp"),
   packedRose("Cotton X-pression", "cotton-x-pression", "garden"),
+  packedRose("Country Blues", "country-blues", "garden", "/media/country-blues.webp"),
+  packedRose("Country Candy", "country-candy", "garden", "/media/country-candy.webp"),
+  packedRose("Country Home", "country-home", "garden", "/media/country-home.webp"),
+  packedRose("Cream X-pression", "cream-x-pression", "garden", "/media/cream-x-pression.webp"),
   packedRose("Creamykiss", "creamykiss", "garden"),
   packedRose("Dark X-pression", "dark-x-pression", "garden"),
   packedRose("Dragonfly", "dragonfly", "garden"),
@@ -1319,8 +1330,9 @@ const items: CatalogueItem[] = [
     related: ["delphinium", "molucella", "lisianthus"],
   },
   // Filed beside Snapdragon because the two are bought for the same job — a
-  // spike that gives an arrangement its height — rather than because the list
-  // is alphabetical. Moving it is a matter of moving the record.
+  // spike that gives an arrangement its height. That neighbouring is for whoever
+  // is reading the file: the grid alphabetises the chip, so the two sit apart on
+  // the page whatever order they are written in here.
   //   Photographed, and the counts are what the Colombia office confirmed. The
   // prose is still to come, so the page runs short rather than filling itself in.
   {
@@ -1588,15 +1600,35 @@ export function normalizeQuery(value: string) {
   return normalize(value.trim());
 }
 
+// Where a chip sits in the row, which is where its cards sit in the grid.
+const categoryOrder = new Map<CategoryId, number>(categories.map(({ id }, index) => [id, index]));
+
 // The haystack is built once, at module load, rather than per keystroke: name
 // first, then the colour group and the Korean and botanical names if the record
 // carries them.
-export const flowers = items.map((item) => ({
-  ...item,
-  group: categoryLabels.get(item.category)!,
-  href: `/catalogue/${item.slug}`,
-  search: normalize([item.name, item.colour, item.korean, item.botanical].filter(Boolean).join(" ")),
-}));
+//   Sorted here rather than kept in order above, and the two orders answer to
+// different people. The grid is alphabetical inside each chip, because a buyer
+// arrives with a name in mind and a florist reading down 101 roses for Quicksand
+// should find it where the alphabet says it is. The array above stays grouped
+// the way the shop thinks — photographed varieties first, then the ones it can
+// only name, families kept together — because that is the order somebody editing
+// this file needs. Neither has to be the other.
+//   By chip first, so the chips stay whole and in the order the row runs in:
+// Bouquets still close the grid, which is what the break above them is written
+// against. Then by name, through the same normalize the search box uses, so an
+// accent doesn't throw a stem to the end of its chip.
+export const flowers = items
+  .map((item) => ({
+    ...item,
+    group: categoryLabels.get(item.category)!,
+    href: `/catalogue/${item.slug}`,
+    search: normalize([item.name, item.colour, item.korean, item.botanical].filter(Boolean).join(" ")),
+  }))
+  .sort(
+    (a, b) =>
+      categoryOrder.get(a.category)! - categoryOrder.get(b.category)! ||
+      normalize(a.name).localeCompare(normalize(b.name)),
+  );
 
 export type Flower = (typeof flowers)[number];
 
