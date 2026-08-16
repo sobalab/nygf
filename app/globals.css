@@ -17,11 +17,16 @@
    white at .15 over their green — a plate here is simply a much brighter one.
    --cream is the last of the old warm off-white, which survives as the hero
    button's hover and nowhere else.
+     --photo-shadow lifts every flower photograph off its ground. It is near
+   black rather than an --ink tint because three of the four places a stem is
+   shown sit on --band-flowers, and a shadow the value of --ink is invisible
+   against a green that dark. Black at this alpha reads as a soft lift on
+   --paper and as a deepening under the plate on the band.
      The bands were teal-blues until the owner specified this set: same four
    steps, same order, swung to green. Three of the four carry their type at the
    value they did before — sage on flowers 8.7:1, paper on story 6.0:1, ink on
    contact 8.0:1. Trade is the one that moved: see the note on .trade below. */
-:root { --paper:#ecebeb; --ink:#17282e; --band-flowers:#112f28; --band-story:#2a624d; --band-trade:#38936f; --band-contact:#99c5b1; --sage:#cacbb5; --rust:#a7593a; --mist:#b7c2c1; --line:rgba(23,40,46,.22); --cream:#f6f1ea; --field:rgba(255,255,255,.6); --field-hover:rgba(255,255,255,.74); --field-focus:rgba(255,255,255,.92); --ease:cubic-bezier(.22,.7,.3,1); --ease-out:cubic-bezier(.16,1,.3,1); --serif:"Baskervville",Georgia,serif; --display:"Baskervville SC",Georgia,serif; --sans:"Uncut Sans",Helvetica,Arial,sans-serif; --btn-radius:6px; --tile-radius:8px; --card-radius:12px; --content-max:1280px; }
+:root { --paper:#ecebeb; --ink:#17282e; --band-flowers:#112f28; --band-story:#2a624d; --band-trade:#38936f; --band-contact:#99c5b1; --sage:#cacbb5; --rust:#a7593a; --mist:#b7c2c1; --line:rgba(23,40,46,.22); --cream:#f6f1ea; --field:rgba(255,255,255,.6); --field-hover:rgba(255,255,255,.74); --field-focus:rgba(255,255,255,.92); --ease:cubic-bezier(.22,.7,.3,1); --ease-out:cubic-bezier(.16,1,.3,1); --serif:"Baskervville",Georgia,serif; --display:"Baskervville SC",Georgia,serif; --sans:"Uncut Sans",Helvetica,Arial,sans-serif; --btn-radius:6px; --tile-radius:8px; --card-radius:12px; --content-max:1280px; --photo-shadow:0 2px 6px rgba(0,0,0,.20), 0 10px 24px rgba(0,0,0,.30); }
 * { box-sizing:border-box; }
 html { scroll-behavior:smooth; }
 body { margin:0; background:var(--paper); color:var(--ink); font-family:var(--sans); }
@@ -275,7 +280,7 @@ html[data-splash="off"] { --hero-start:.15s; }
    where the flanks would otherwise run into each other. */
 .field-item { --cw:min(var(--w),calc(var(--band) * var(--hcap) / var(--hr))); --h:calc(var(--cw) * var(--hr)); position:absolute; top:var(--t,auto); bottom:var(--bt,auto); left:var(--l,auto); right:var(--r,auto); width:var(--cw); transform:translate3d(calc(var(--px,0)*var(--d)*-16px),calc(var(--py,0)*var(--d)*-12px),0); transition:transform .6s var(--ease-out); }
 .field-item a { display:block; transition:transform .5s var(--ease-out); }
-.field-item img { aspect-ratio:var(--ar); object-fit:cover; filter:saturate(.78); border-radius:var(--tile-radius); }
+.field-item img { aspect-ratio:var(--ar); object-fit:cover; filter:saturate(.78); border-radius:var(--tile-radius); box-shadow:var(--photo-shadow); }
 /* Armed from script so the cards are simply present without JavaScript. */
 .field-armed .field-item a { opacity:0; }
 .field-in .field-item a { animation:field-arrive .7s var(--ease) calc(var(--i)*90ms) forwards; }
@@ -390,7 +395,20 @@ html[data-splash="off"] { --hero-start:.15s; }
    the heading is the first thing in the grid and there is nothing above it for
    a rule to close off. The name still belongs; the line doesn't. */
 .catalogue .grid-break:first-child { border-top:0; padding-top:0; margin-top:0; }
-.flower-image-wrap { position:relative; overflow:hidden; background:var(--mist); aspect-ratio:3/4; border-radius:var(--tile-radius); }
+/* A shadow is a darkening, so how much of one it takes to be seen depends on
+   the ground under it. The value in :root is set for --paper, where the variety
+   page shows its photograph; on --band-flowers, near black over a green nearly
+   that dark, the same shadow does not register at all. The three places that
+   sit on the band take a deeper one, and it reads there as the lighter one does
+   on paper.
+     It is also a tighter one. The gutter between two cards in the grid is about
+   18px, and a shadow blurred wider than that meets its neighbour's and fills
+   the gap end to end, which darkens the spacing rather than lifting the plates.
+   Held under the gutter, each card keeps its own. */
+.catalogue,.item-related,.flower-field { --photo-shadow:0 2px 4px rgba(0,0,0,.26), 0 6px 13px rgba(0,0,0,.32); }
+/* The shadow is on the plate rather than the photograph inside it: the image
+   scales on hover, and a shadow on the image would swell with it. */
+.flower-image-wrap { position:relative; overflow:hidden; background:var(--mist); aspect-ratio:3/4; border-radius:var(--tile-radius); box-shadow:var(--photo-shadow); }
 /* The wrap already clips, but Safari lets a transformed child bleed past a
    rounded parent mid-animation, and the image scales on hover. */
 .flower-image-wrap img { aspect-ratio:3/4; object-fit:cover; filter:saturate(.76); border-radius:inherit; transition:transform .9s var(--ease-out), filter .9s var(--ease-out); }
@@ -812,7 +830,7 @@ footer { padding:96px 6vw 34px; display:flex; flex-direction:column; }
    care notes and a full set of counts the photograph would otherwise scroll away
    from the copy describing it. */
 .item-photo { position:sticky; top:110px; display:grid; gap:12px; }
-.item-photo img { aspect-ratio:3/4; object-fit:cover; background:var(--mist); filter:saturate(.82); border-radius:var(--tile-radius); }
+.item-photo img { aspect-ratio:3/4; object-fit:cover; background:var(--mist); filter:saturate(.82); border-radius:var(--tile-radius); box-shadow:var(--photo-shadow); }
 /* Bouquets carry three frames rather than one, and unlike the card, which turns
    them over on a timer, the page lays the rest out under the lead: a reader who
    opened this page came to look at the thing, and made-up work is different

@@ -222,7 +222,7 @@ const items: CatalogueItem[] = [
     slug: "mondial",
     category: "roses",
     image: "/media/mondial.webp",
-    colour: "light pink",
+    colour: "white",
     packingConfirmed: true,
     description: "A large full head with strong, mostly thornless stems and a high petal count. Mondial carries a green cast on the outer petals at bud stage that fades as the bloom opens.",
     colours: "Ivory white with green guard petals. Pink Mondial is a separate variety in soft light pink",
@@ -585,7 +585,7 @@ const items: CatalogueItem[] = [
     packingNote: "Where in that range a box lands depends on whether the stems are short or long.",
   },
   {
-    name: "High Exotic",
+    name: "High & Exotic",
     slug: "high-exotic",
     category: "roses",
     image: "/media/high-exotic.webp",
@@ -686,7 +686,6 @@ const items: CatalogueItem[] = [
   // it is what the card says.
   packedRose("3D", "3d", "roses", "/media/3d.webp"),
   packedRose("Absolut in Pink", "absolut-in-pink", "roses", "/media/absolut-in-pink.webp"),
-  packedRose("Aloha", "aloha", "roses", "/media/aloha.webp"),
   packedRose("Amnesia", "amnesia", "roses", "/media/amnesia.webp"),
   packedRose("Amsterdam", "amsterdam", "roses", "/media/amsterdam.webp"),
   packedRose("Arctica", "arctica", "roses", "/media/arctica.webp"),
@@ -697,51 +696,46 @@ const items: CatalogueItem[] = [
   packedRose("Brighton", "brighton", "roses", "/media/brighton.webp"),
   packedRose("Cherry Brandy", "cherry-brandy", "roses", "/media/cherry-brandy.webp"),
   packedRose("Coffee Break", "coffee-break", "roses", "/media/coffee-break.webp"),
-  packedRose("Deep Purple", "deep-purple", "roses"),
-  packedRose("Engagement", "engagement", "roses"),
-  packedRose("Escimo", "escimo", "roses"),
-  packedRose("Esperance", "esperance", "roses"),
-  packedRose("Exotix Berry", "exotix-berry", "roses"),
-  packedRose("Fair Lady", "fair-lady", "roses"),
-  packedRose("Faith", "faith", "roses"),
-  packedRose("Friendship", "friendship", "roses"),
-  packedRose("Garden Spirit", "garden-spirit", "roses"),
-  packedRose("Glitz", "glitz", "roses"),
-  packedRose("Goldfinch", "goldfinch", "roses"),
-  packedRose("Gotcha", "gotcha", "roses"),
-  packedRose("Govinda", "govinda", "roses"),
-  packedRose("Green Romance", "green-romance", "roses"),
-  packedRose("High & Candy", "high-and-candy", "roses"),
-  packedRose("High & Yellow Magic", "high-and-yellow-magic", "roses"),
-  packedRose("Hot Lady", "hot-lady", "roses"),
-  packedRose("Hot Spot", "hot-spot", "roses"),
-  packedRose("Iguazu", "iguazu", "roses"),
-  packedRose("Jessica", "jessica", "roses"),
-  packedRose("Juicy X-pression", "juicy-x-pression", "roses"),
-  packedRose("Lemonade", "lemonade", "roses"),
-  packedRose("Luciano", "luciano", "roses"),
-  packedRose("Mademoiselle", "mademoiselle", "roses"),
-  packedRose("Malibú", "malibu", "roses"),
-  packedRose("Mango Tango", "mango-tango", "roses"),
-  packedRose("Mayra Peach", "mayra-peach", "roses"),
-  packedRose("Menta", "menta", "roses"),
-  packedRose("Mother of Pearl", "mother-of-pearl", "roses"),
-  packedRose("Nina", "nina", "roses"),
-  packedRose("Phoenix", "phoenix", "roses"),
-  packedRose("Pink Mondial", "pink-mondial", "roses"),
-  packedRose("Queen's Crown", "queens-crown", "roses"),
-  packedRose("Quicksand", "quicksand", "roses"),
-  packedRose("Rosita Vendela", "rosita-vendela", "roses"),
-  packedRose("Secret Garden", "secret-garden", "roses"),
-  packedRose("Shimmer", "shimmer", "roses"),
-  packedRose("Shocking Blue", "shocking-blue", "roses"),
-  packedRose("Silantoi", "silantoi", "roses"),
-  packedRose("Stardust", "stardust", "roses"),
-  packedRose("Sweet Akito", "sweet-akito", "roses"),
-  packedRose("Sweet Cake", "sweet-cake", "roses"),
-  packedRose("Sweet Escimo", "sweet-escimo", "roses"),
-  packedRose("Sweet Lady", "sweet-lady", "roses"),
-  packedRose("Toffee", "toffee", "roses"),
+  packedRose("Deep Purple", "deep-purple", "roses", "/media/deep-purple.webp"),
+  packedRose("Engagement", "engagement", "roses", "/media/engagement.webp"),
+  packedRose("Escimo", "escimo", "roses", "/media/escimo.webp"),
+  packedRose("Esperance", "esperance", "roses", "/media/esperance.webp"),
+  packedRose("Fair Lady", "fair-lady", "roses", "/media/fair-lady.webp"),
+  packedRose("Faith", "faith", "roses", "/media/faith.webp"),
+  packedRose("Friendship", "friendship", "roses", "/media/friendship.webp"),
+  packedRose("Goldfinch", "goldfinch", "roses", "/media/goldfinch.webp"),
+  packedRose("Gotcha", "gotcha", "roses", "/media/gotcha.webp"),
+  packedRose("Govinda", "govinda", "roses", "/media/govinda.webp"),
+  packedRose("Green Romance", "green-romance", "roses", "/media/green-romance.webp"),
+  packedRose("High & Candy", "high-and-candy", "roses", "/media/high-and-candy.webp"),
+  packedRose("High & Yellow Magic", "high-and-yellow-magic", "roses", "/media/high-and-yellow-magic.webp"),
+  packedRose("Hot Lady", "hot-lady", "roses", "/media/hot-lady.webp"),
+  packedRose("Hot Spot", "hot-spot", "roses", "/media/hot-spot.webp"),
+  packedRose("Iguazu", "iguazu", "roses", "/media/iguazu.webp"),
+  packedRose("Jessica", "jessica", "roses", "/media/jessica.webp"),
+  packedRose("Lemonade", "lemonade", "roses", "/media/lemonade.webp"),
+  packedRose("Luciano", "luciano", "roses", "/media/luciano.webp"),
+  packedRose("Malibú", "malibu", "roses", "/media/malibu.webp"),
+  packedRose("Mango Tango", "mango-tango", "roses", "/media/mango-tango.webp"),
+  packedRose("Menta", "menta", "roses", "/media/menta.webp"),
+  packedRose("Mother of Pearl", "mother-of-pearl", "roses", "/media/mother-of-pearl.webp"),
+  packedRose("Nina", "nina", "roses", "/media/nina.webp"),
+  packedRose("Phoenix", "phoenix", "roses", "/media/phoenix.webp"),
+  // The colour is carried here because the pair is the one place on the wall
+  // where a name alone misleads: Mondial is the ivory white, and Pink Mondial is
+  // the separate variety this one is. Both cards say which they are.
+  { ...packedRose("Pink Mondial", "pink-mondial", "roses", "/media/pink-mondial.webp"), colour: "light pink" },
+  packedRose("Quicksand", "quicksand", "roses", "/media/quicksand.webp"),
+  packedRose("Rosita Vendela", "rosita-vendela", "roses", "/media/rosita-vendela.webp"),
+  packedRose("Secret Garden", "secret-garden", "roses", "/media/secret-garden.webp"),
+  packedRose("Shocking Blue", "shocking-blue", "roses", "/media/shocking-blue.webp"),
+  packedRose("Silantoi", "silantoi", "roses", "/media/silantoi.webp"),
+  packedRose("Stardust", "stardust", "roses", "/media/stardust.webp"),
+  packedRose("Sweet Akito", "sweet-akito", "roses", "/media/sweet-akito.webp"),
+  packedRose("Sweet Cake", "sweet-cake", "roses", "/media/sweet-cake.webp"),
+  packedRose("Sweet Escimo", "sweet-escimo", "roses", "/media/sweet-escimo.webp"),
+  packedRose("Sweet Lady", "sweet-lady", "roses", "/media/sweet-lady.webp"),
+  packedRose("Toffee", "toffee", "roses", "/media/toffee.webp"),
   // The garden varieties, bought by name. There was a "Garden Rose" card here
   // too, and it is deliberately gone: it named the whole class rather than
   // anything a buyer can order, which is the chip's job now that the chip exists.
@@ -776,15 +770,18 @@ const items: CatalogueItem[] = [
   },
   // The rest of the garden varieties the shop supplies. Two families run through
   // this chip and their series names are kept whole: X-pression, whose eight
-  // colours are split seven here and one — Juicy — under the standard chip, and
-  // Mayra Rose, whose six are all here. Mayra Peach is a standard rose and a
-  // different thing, however much the name looks like the seventh of them.
-  //   Arya, Champagne, Country Blues, Country Candy, Country Home and Cream
-  // X-pression were filed as standard roses when the supplier lists came in and
-  // were moved here on the shop's own reading of them. A supplier list does not
-  // always mark which of the two a variety is, and where it doesn't, the shop
-  // knowing what lands in the cooler beats a name.
+  // colours are all here, and Mayra Rose, whose six are all here too. Mayra
+  // Peach sits beside them rather than among them: it is its own variety, not
+  // the seventh Mayra Rose, however much the name reads like one.
+  //   Aloha, Arya, Champagne, Country Blues, Country Candy, Country Home, Cream
+  // X-pression, Exotix Berry, Garden Spirit, Glitz, Juicy X-pression,
+  // Mademoiselle, Mayra Peach, Queen's Crown and Shimmer were filed as standard
+  // roses when the supplier lists came in and were moved here on the shop's own
+  // reading of them. A supplier list does not always mark which of the two a
+  // variety is, and where it doesn't, the shop knowing what lands in the cooler
+  // beats a name.
   packedRose("All 4 Love", "all-4-love", "garden"),
+  packedRose("Aloha", "aloha", "garden", "/media/aloha.webp"),
   packedRose("Antonia Gardens", "antonia-gardens", "garden"),
   packedRose("Arya", "arya", "garden", "/media/arya.webp"),
   packedRose("Aurora Gardens", "aurora-gardens", "garden"),
@@ -797,15 +794,23 @@ const items: CatalogueItem[] = [
   packedRose("Creamykiss", "creamykiss", "garden"),
   packedRose("Dark X-pression", "dark-x-pression", "garden"),
   packedRose("Dragonfly", "dragonfly", "garden"),
+  packedRose("Exotix Berry", "exotix-berry", "garden", "/media/exotix-berry.webp"),
   packedRose("Free Spirit", "free-spirit", "garden"),
+  packedRose("Garden Spirit", "garden-spirit", "garden", "/media/garden-spirit.webp"),
+  packedRose("Glitz", "glitz", "garden", "/media/glitz.webp"),
   packedRose("Hearts", "hearts", "garden"),
+  packedRose("Juicy X-pression", "juicy-x-pression", "garden", "/media/juicy-x-pression.webp"),
+  packedRose("Mademoiselle", "mademoiselle", "garden", "/media/mademoiselle.webp"),
   packedRose("Mandarin X-pression", "mandarin-x-pression", "garden"),
   packedRose("Mayra Hot Pink", "mayra-hot-pink", "garden"),
+  packedRose("Mayra Peach", "mayra-peach", "garden", "/media/mayra-peach.webp"),
   packedRose("Mayra Rose Bridal Pink", "mayra-rose-bridal-pink", "garden"),
   packedRose("Mayra Rose Peach", "mayra-rose-peach", "garden"),
   packedRose("Mayra Rose Pink", "mayra-rose-pink", "garden"),
   packedRose("Mayra Rose Red", "mayra-rose-red", "garden"),
   packedRose("Mayra Rose White", "mayra-rose-white", "garden"),
+  packedRose("Queen's Crown", "queens-crown", "garden", "/media/queens-crown.webp"),
+  packedRose("Shimmer", "shimmer", "garden", "/media/shimmer.webp"),
   packedRose("Vicky Gardens", "vicky-gardens", "garden"),
   // A spray is a different stem rather than a grade of the standard rose — many
   // small heads on one stem, bought by the bunch of ten where a standard rose is
