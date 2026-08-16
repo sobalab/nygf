@@ -278,25 +278,43 @@ html[data-splash="off"] { --hero-start:.15s; }
    largest share of the band, and takes whichever of the two comes out smaller:
    the widths hold their full size on anything tall and give way on the windows
    where the flanks would otherwise run into each other. */
-.field-item { --cw:min(var(--w),calc(var(--band) * var(--hcap) / var(--hr))); --h:calc(var(--cw) * var(--hr)); position:absolute; top:var(--t,auto); bottom:var(--bt,auto); left:var(--l,auto); right:var(--r,auto); width:var(--cw); transform:translate3d(calc(var(--px,0)*var(--d)*-16px),calc(var(--py,0)*var(--d)*-12px),0); transition:transform .6s var(--ease-out); }
-.field-item a { display:block; transition:transform .5s var(--ease-out); }
+.field-item { --cw:min(var(--w),calc(var(--band) * var(--hcap) / var(--hr))); --h:calc(var(--cw) * var(--hr)); --float-x:calc((1 + var(--d))*3.2px); --float-y:calc((1 + var(--d))*5px); --float-period:calc(9s + var(--d)*1.7s); position:absolute; top:var(--t,auto); bottom:var(--bt,auto); left:var(--l,auto); right:var(--r,auto); width:var(--cw); transform:translate3d(calc(var(--px,0)*var(--d)*-20px),calc(var(--py,0)*var(--d)*-15px),0); transition:transform .6s var(--ease-out); }
+.field-item a { display:block; position:relative; transition:transform .5s var(--ease-out); }
 .field-item img { aspect-ratio:var(--ar); object-fit:cover; filter:saturate(.78); border-radius:var(--tile-radius); box-shadow:var(--photo-shadow); }
 /* Armed from script so the cards are simply present without JavaScript. */
 .field-armed .field-item a { opacity:0; }
 .field-in .field-item a { animation:field-arrive .7s var(--ease) calc(var(--i)*90ms) forwards; }
 @keyframes field-arrive { to { opacity:1 } }
-/* A touch screen has no cursor to answer, so the cards carry their own drift
-   instead: a slow ellipse whose reach and period both come off the same --d the
-   pointer parallax uses, so a card that leans hardest into the cursor on a
-   desktop is also the one that swims furthest here. The amplitude is small
-   enough that no two cards can close the gaps the placement leaves them, even
-   at opposite phases. */
+/* Every card carries its own drift: a slow ellipse whose reach and period both
+   come off the same --d the pointer parallax uses, so a card that leans hardest
+   into the cursor is also the one that swims furthest. The amplitude is small
+   enough that no two cards can close the gaps the placement leaves them, even at
+   opposite phases.
+     It runs on the photograph, not on the link around it, because the link owns
+   two transforms already — the hover scale, and nothing else may fight it. An
+   animation beats a rule, so a float on the link would swallow the hover
+   outright. Two elements, two jobs, and the card can lift and drift at once.
+     Reach and period are read from the card rather than written in here, so the
+   narrow layout can swim more gently through the same keyframes. */
 @keyframes field-float {
   0%,100% { transform:translate3d(0,0,0) }
-  25% { transform:translate3d(calc((1 + var(--d))*1.5px),calc((1 + var(--d))*-3.6px),0) }
-  50% { transform:translate3d(calc((1 + var(--d))*2.4px),0,0) }
-  75% { transform:translate3d(calc((1 + var(--d))*1.5px),calc((1 + var(--d))*3.6px),0) }
+  25% { transform:translate3d(calc(var(--float-x)*.62),calc(var(--float-y)*-1),0) }
+  50% { transform:translate3d(var(--float-x),0,0) }
+  75% { transform:translate3d(calc(var(--float-x)*.62),var(--float-y),0) }
 }
+.field-plate { display:block; position:relative; }
+.field-in .field-item .field-plate { animation:field-float var(--float-period) ease-in-out calc(var(--i)*-2.3s) infinite; }
+/* The name is a hover flourish, so it is painted rather than laid out: a wash of
+   the band over the photograph with the variety set on it. It is placed against
+   the plate and takes the plate's radius, so it covers the photograph corner to
+   corner and travels with it.
+     Set in the catalogue card's face and size — same family, same weight, same
+   leading — because a reader who has seen the grid has seen these names once
+   already, and this is the same name in a smaller frame, not a second style of
+   label. The clamp only steps it down where a card is too narrow to hold the
+   full size; the ceiling is the grid's own 21px. */
+.field-name { position:absolute; inset:0; display:grid; place-items:center; padding:10px; text-align:center; border-radius:var(--tile-radius); background:rgba(17,47,40,.66); color:var(--sage); font:400 clamp(15px,1.3vw,21px)/1.3 var(--serif); opacity:0; transition:opacity .3s var(--ease-out); }
+.field-item a:hover .field-name { opacity:1; }
 /* Proportional, not just capped: a fixed 560px would eat the side margins on a
    1000px window and leave the edge cards nowhere to sit. */
 .field-center { position:relative; z-index:1; max-width:min(560px,44%); text-align:center; }
@@ -1028,14 +1046,10 @@ a:focus-visible,button:focus-visible,input:focus-visible { outline:2px solid var
   .field-item img { aspect-ratio:var(--mar); }
   .field-center { max-width:88%; }
   .field-wide { display:none; }
-  /* Both animations ride the same element: one owns opacity, the other owns
-     transform, so neither treads on the other. The negative delay drops each
-     card in at a different point of its own cycle — without it they would swim
-     in lockstep, which reads as a machine rather than a drift. */
-  .field-in .field-item a {
-    animation:field-arrive .7s var(--ease) calc(var(--i)*90ms) forwards,
-              field-float calc(6.5s + var(--d)*1.4s) ease-in-out calc(var(--i)*-1.9s) infinite;
-  }
+  /* A shorter reach and a quicker cycle than the desktop drift. There is less
+     room between cards here and no cursor to answer, so the field swims on its
+     own but keeps well inside the gaps the stacked placement leaves it. */
+  .field-item { --float-x:calc((1 + var(--d))*2.4px); --float-y:calc((1 + var(--d))*3.6px); --float-period:calc(6.5s + var(--d)*1.4s); }
   /* Stacked, the cards no longer need the heading pinned to a shared baseline,
      so the space under it closes up. */
   .service-list { gap:18px; padding-top:clamp(40px,6vh,64px); }
@@ -1187,8 +1201,10 @@ html[data-splash="off"] .splash { display:none; }
   .flower-slide { animation:none; }
   .flower-slide:not(:first-child) { opacity:0; }
   /* The field is still revealed, just without the drift, the float or the
-     stagger — the shorthand here drops the second animation outright. */
+     stagger. The float is its own animation on its own element now, so it is
+     called off by name rather than by being left out of a shorthand. */
   .field-item { transform:none; }
+  .field-in .field-item .field-plate { animation:none; }
   .field-in .field-item a { animation:field-arrive .3s var(--ease) forwards; }
   /* The cards still arrive, but together and without the rise. */
   .service-list.reveal-in article { animation:card-rise .3s linear forwards; }
@@ -1206,4 +1222,3 @@ html[data-splash="off"] .splash { display:none; }
      frame anyway, so dropping the runs costs nothing but the movement. */
   .ask-dialog[open],.ask-dialog[open]::backdrop { animation:none; }
 }
-

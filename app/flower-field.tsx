@@ -194,7 +194,20 @@ export function FlowerField({ flowers }: { flowers: Flower[] }) {
         return (
           <div className={narrow ? "field-item" : "field-item field-wide"} key={flower.name} style={style as CSSProperties}>
             <a href="/catalogue" tabIndex={-1}>
-              <img src={flower.image} alt="" loading="lazy" />
+              {/* The plate is what drifts, and it holds both the photograph and
+                  the name over it. Floating the photograph alone would swim it
+                  out from under its own wash, since the wash is placed against
+                  whatever box it sits in and that box would be standing still.
+                  One moving element, and the name is nailed to the picture. */}
+              <span className="field-plate">
+                <img src={flower.image} alt="" loading="lazy" />
+                {/* Named on hover rather than under the card: the scatter is a
+                    picture of the range, and nine standing captions would turn
+                    it into a list laid out badly. The field is aria-hidden and
+                    this is inside it, which is right — the name is a flourish
+                    for a pointer, and the catalogue is where these are read. */}
+                <span className="field-name">{flower.name}</span>
+              </span>
             </a>
           </div>
         );
