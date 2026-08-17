@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState, type MouseEvent, type ReactNode } from "react";
+import { motion, useReducedMotion } from "motion/react";
 import { whatsappHref } from "./site";
 
 // Every "ask" on the site used to be a wa.me link, which means an inquiry that
@@ -31,6 +32,7 @@ export function Ask({
   inquiry: string;
 }) {
   const ref = useRef<HTMLDialogElement>(null);
+  const still = useReducedMotion();
   // <dialog> is only rendered once it has been asked for. Otherwise the flower
   // pages, which are static HTML and carry one of these per page, would ship a
   // hidden copy of the same panel to every reader who never opens it.
@@ -59,7 +61,19 @@ export function Ask({
         // rest of the page going inert are all the element's own, and none of
         // them are worth reimplementing. Closing unmounts it so a second ask
         // opens a fresh one rather than a stale one being re-shown.
-        <dialog className="ask-dialog" ref={ref} onClose={() => setAsked(false)}>
+        // The panel is a motion element but the backdrop behind it is not, and
+        // cannot be: ::backdrop is a pseudo-element with no node to hand to
+        // Motion, so its fade stays in the stylesheet. The two are matched by
+        // hand — same duration, same curve — which is the price of the native
+        // dialog being worth keeping.
+        <motion.dialog
+          className="ask-dialog"
+          ref={ref}
+          onClose={() => setAsked(false)}
+          initial={still ? false : { opacity: 0, y: 14, scale: 0.97 }}
+          animate={{ opacity: 1, y: 0, scale: 1 }}
+          transition={{ duration: still ? 0 : 0.45, ease: [0.16, 1, 0.3, 1] }}
+        >
           <h2>Two Ways to Ask</h2>
           <p>
             An inquiry reaches the shop twice, by email and on WhatsApp, so nothing is lost if a thread goes quiet. A
@@ -74,7 +88,7 @@ export function Ask({
           <button type="button" className="ask-close" onClick={() => ref.current?.close()} aria-label="Close">
             <span aria-hidden="true">×</span>
           </button>
-        </dialog>
+        </motion.dialog>
       ) : null}
     </>
   );

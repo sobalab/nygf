@@ -2,6 +2,7 @@
 
 import type { CSSProperties } from "react";
 import { useEffect, useRef } from "react";
+import { motion, useMotionValue, useReducedMotion, useSpring, useTransform } from "motion/react";
 
 type Flower = { name: string; group: string; image?: string };
 
@@ -93,125 +94,172 @@ const heightRatio = (ratio: string) => {
   return h / w;
 };
 
+// How far the cursor moves a card at depth 1, in pixels. Everything else is a
+// multiple of that through the card's own depth.
+const PULL_X = -20;
+const PULL_Y = -15;
+
+// The drift a card carries on its own. Reach and period both come off the same
+// depth the pointer parallax uses, so a card that leans hardest into the cursor
+// is also the one that swims furthest.
+const FLOAT_X = 3.2;
+const FLOAT_Y = 5;
+
 export function FlowerField({ flowers }: { flowers: Flower[] }) {
   const ref = useRef<HTMLDivElement>(null);
+  const still = useReducedMotion();
+
+  // The cursor's position in the field, -1 to 1 on each axis. Two MotionValues
+  // rather than state: a pointer move writes a number and Motion reads it on
+  // its own frame, so the nine cards follow the cursor without React seeing a
+  // single render.
+  const px = useMotionValue(0);
+  const py = useMotionValue(0);
+  // The lag that makes it read as depth rather than as nine elements welded to
+  // the mouse. A spring rather than a duration, so a fast flick across the band
+  // and a slow drift both settle the same way instead of every move taking the
+  // same fixed time regardless of how far it went.
+  const sx = useSpring(px, { stiffness: 90, damping: 20, mass: 0.6 });
+  const sy = useSpring(py, { stiffness: 90, damping: 20, mass: 0.6 });
 
   useEffect(() => {
     const field = ref.current;
     if (!field) return;
 
-    // Armed from script, so the cards are simply there for a reader without
-    // JavaScript rather than stuck at opacity 0 waiting for a reveal.
-    field.classList.add("field-armed");
+    // Parallax is a pointer affordance: no fine pointer, no parallax.
+    const fine = window.matchMedia("(hover: hover) and (pointer: fine)");
+    if (!fine.matches || still) return;
 
     let onScreen = false;
-    const watch = new IntersectionObserver(
-      ([entry]) => {
-        onScreen = entry.isIntersecting;
-        if (onScreen) field.classList.add("field-in");
-      },
-      { threshold: 0.15 },
-    );
+    const watch = new IntersectionObserver(([entry]) => (onScreen = entry.isIntersecting), { threshold: 0 });
     watch.observe(field);
-
-    // Parallax is a pointer affordance: no fine pointer, no parallax. The lag
-    // itself is a CSS transition on .field-item — this only feeds it the
-    // cursor's position, one write per frame however fast the events arrive.
-    const fine = window.matchMedia("(hover: hover) and (pointer: fine)");
-    const still = window.matchMedia("(prefers-reduced-motion: reduce)");
-    if (!fine.matches || still.matches) return () => watch.disconnect();
-
-    let pending: PointerEvent | null = null;
-    let frame = 0;
-
-    const write = () => {
-      frame = 0;
-      const event = pending;
-      pending = null;
-      if (!event) return;
-      const box = field.getBoundingClientRect();
-      field.style.setProperty("--px", ((event.clientX - box.left) / box.width * 2 - 1).toFixed(3));
-      field.style.setProperty("--py", ((event.clientY - box.top) / box.height * 2 - 1).toFixed(3));
-    };
 
     const onMove = (event: PointerEvent) => {
       if (!onScreen) return;
-      pending = event;
-      if (!frame) frame = requestAnimationFrame(write);
+      const box = field.getBoundingClientRect();
+      px.set(((event.clientX - box.left) / box.width) * 2 - 1);
+      py.set(((event.clientY - box.top) / box.height) * 2 - 1);
     };
-
     // Cursor gone from the window: settle back to centre rather than holding
     // the last offset.
     const onLeave = () => {
-      field.style.setProperty("--px", "0");
-      field.style.setProperty("--py", "0");
+      px.set(0);
+      py.set(0);
     };
 
     window.addEventListener("pointermove", onMove, { passive: true });
     document.addEventListener("pointerleave", onLeave);
-
     return () => {
       watch.disconnect();
       window.removeEventListener("pointermove", onMove);
       document.removeEventListener("pointerleave", onLeave);
-      if (frame) cancelAnimationFrame(frame);
     };
-  }, []);
+  }, [px, py, still]);
 
   return (
     <div className="field" ref={ref} aria-hidden="true">
       {flowers.map((flower, index) => {
         const spot = PLACEMENT[index];
         if (!spot || !flower.image) return null;
-        // Only the side the card is anchored from is declared; the other stays
-        // unset so it resolves to auto. Both vertical sides are declared at the
-        // narrow size, since a card can swap which one it hangs from there and
-        // an unset one would fall through to the wide value underneath.
-        const narrowRatio = spot.mratio ?? spot.ratio;
-        const style: Record<string, string | number> = {
-          "--w": spot.w,
-          "--hr": heightRatio(spot.ratio),
-          "--hcap": spot.hcap,
-          "--ar": spot.ratio,
-          "--mw": spot.mw ?? spot.w,
-          "--mhr": heightRatio(narrowRatio),
-          "--mar": narrowRatio,
-          "--d": spot.depth,
-          "--i": index,
-        };
-        if (spot.t) style["--t"] = cap(spot.t);
-        if (spot.below) style["--t"] = anchor(spot.below);
-        if (spot.above) style["--bt"] = anchor(spot.above);
-        if (spot.l) style["--l"] = spot.l;
-        if (spot.r) style["--r"] = spot.r;
-        const narrow = spot.mt || spot.mAbove || spot.mBelow;
-        if (narrow) {
-          style["--mt"] = spot.mt ? cap(spot.mt) : spot.mBelow ? anchor(spot.mBelow) : "auto";
-          style["--mbt"] = spot.mAbove ? anchor(spot.mAbove) : "auto";
-        }
-        if (spot.ml) style["--ml"] = spot.ml;
-        if (spot.mr) style["--mr"] = spot.mr;
         return (
-          <div className={narrow ? "field-item" : "field-item field-wide"} key={flower.name} style={style as CSSProperties}>
-            <a href="/catalogue" tabIndex={-1}>
-              {/* The plate is what drifts, and it holds both the photograph and
-                  the name over it. Floating the photograph alone would swim it
-                  out from under its own wash, since the wash is placed against
-                  whatever box it sits in and that box would be standing still.
-                  One moving element, and the name is nailed to the picture. */}
-              <span className="field-plate">
-                <img src={flower.image} alt="" loading="lazy" />
-                {/* Named on hover rather than under the card: the scatter is a
-                    picture of the range, and nine standing captions would turn
-                    it into a list laid out badly. The field is aria-hidden and
-                    this is inside it, which is right — the name is a flourish
-                    for a pointer, and the catalogue is where these are read. */}
-                <span className="field-name">{flower.name}</span>
-              </span>
-            </a>
-          </div>
+          <FieldCard key={flower.name} flower={flower} spot={spot} index={index} sx={sx} sy={sy} still={!!still} />
         );
       })}
     </div>
+  );
+}
+
+function FieldCard({
+  flower,
+  spot,
+  index,
+  sx,
+  sy,
+  still,
+}: {
+  flower: Flower;
+  spot: Spot;
+  index: number;
+  sx: ReturnType<typeof useSpring>;
+  sy: ReturnType<typeof useSpring>;
+  still: boolean;
+}) {
+  // Only the side the card is anchored from is declared; the other stays unset
+  // so it resolves to auto. Both vertical sides are declared at the narrow
+  // size, since a card can swap which one it hangs from there and an unset one
+  // would fall through to the wide value underneath.
+  const narrowRatio = spot.mratio ?? spot.ratio;
+  const style: Record<string, string | number> = {
+    "--w": spot.w,
+    "--hr": heightRatio(spot.ratio),
+    "--hcap": spot.hcap,
+    "--ar": spot.ratio,
+    "--mw": spot.mw ?? spot.w,
+    "--mhr": heightRatio(narrowRatio),
+    "--mar": narrowRatio,
+  };
+  if (spot.t) style["--t"] = cap(spot.t);
+  if (spot.below) style["--t"] = anchor(spot.below);
+  if (spot.above) style["--bt"] = anchor(spot.above);
+  if (spot.l) style["--l"] = spot.l;
+  if (spot.r) style["--r"] = spot.r;
+  const narrow = spot.mt || spot.mAbove || spot.mBelow;
+  if (narrow) {
+    style["--mt"] = spot.mt ? cap(spot.mt) : spot.mBelow ? anchor(spot.mBelow) : "auto";
+    style["--mbt"] = spot.mAbove ? anchor(spot.mAbove) : "auto";
+  }
+  if (spot.ml) style["--ml"] = spot.ml;
+  if (spot.mr) style["--mr"] = spot.mr;
+
+  const x = useTransform(sx, (v) => v * spot.depth * PULL_X);
+  const y = useTransform(sy, (v) => v * spot.depth * PULL_Y);
+
+  // The plate is what drifts, and it holds both the photograph and the name
+  // over it. Floating the photograph alone would swim it out from under its own
+  // wash, since the wash is placed against whatever box it sits in and that box
+  // would be standing still.
+  const reach = 1 + spot.depth;
+  const float = still
+    ? undefined
+    : {
+        x: [0, reach * FLOAT_X * 0.62, reach * FLOAT_X, reach * FLOAT_X * 0.62, 0],
+        y: [0, reach * -FLOAT_Y, 0, reach * FLOAT_Y, 0],
+      };
+
+  return (
+    <motion.div
+      className={narrow ? "field-item" : "field-item field-wide"}
+      style={{ ...(style as CSSProperties), x, y }}
+      // The cards arrive one behind another the first time the band is
+      // scrolled to, and only then — `once` is what stops the scatter
+      // re-staging itself every time the reader passes it.
+      initial={still ? false : { opacity: 0 }}
+      whileInView={{ opacity: 1 }}
+      viewport={{ once: true, amount: 0.15 }}
+      transition={{ duration: 0.7, delay: index * 0.09, ease: [0.22, 0.7, 0.3, 1] }}
+    >
+      <motion.a href="/catalogue" tabIndex={-1} whileHover={{ scale: 1.05 }} transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}>
+        <motion.span
+          className="field-plate"
+          // One cycle, phase-shifted per card by a negative delay, so no two
+          // swim in lockstep — which reads as a machine rather than a drift.
+          animate={float}
+          transition={
+            still
+              ? undefined
+              : { duration: 9 + spot.depth * 1.7, repeat: Infinity, ease: "easeInOut", delay: index * -2.3 }
+          }
+        >
+          {/* The photographs are decorative here: the card is a link, and the
+              link's name is built from everything inside it, so an alt on the
+              plate would have a screen reader say the variety twice. */}
+          <img src={flower.image} alt="" loading="lazy" />
+          {/* Named on hover rather than under the card: the scatter is a picture
+              of the range, and nine standing captions would turn it into a list
+              laid out badly. */}
+          <span className="field-name">{flower.name}</span>
+        </motion.span>
+      </motion.a>
+    </motion.div>
   );
 }

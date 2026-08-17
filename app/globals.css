@@ -36,6 +36,18 @@ img { display:block; width:100%; }
 /* Floating bar: the negative bottom margin cancels its own flow height so the
    section beneath starts at the top of the page and scrolls under it. */
 .site-header { height:74px; display:flex; align-items:center; justify-content:space-between; padding:0 26px; background:var(--paper); position:sticky; top:14px; z-index:20; margin:14px 14px -88px; border-radius:8px; box-shadow:0 2px 14px rgba(23,40,46,.13), 0 0 0 1px rgba(23,40,46,.07); }
+/* The ground the home page's bands are read against. One fixed layer holding
+   one colour at a time, turned over by the scroll as each boundary crosses the
+   middle of the window — see band-backdrop.tsx.
+     It replaced a gradient painted into the head of every band, which had the
+   fade in the wrong place: a gradient sits at a fixed point in the page, so it
+   was on screen for as long as the top of that section was, and a reader who
+   stopped there was left looking at the blend rather than at the band. A fade
+   should be something you pass through, not somewhere you can stand. */
+.band-backdrop { position:fixed; inset:0; z-index:-1; }
+/* The bands are the ground on every other page and a window onto it here. The
+   type colours are untouched — only the fill goes. */
+.home > .flower-field,.home > .story,.home > .trade,.home > .contact { background:none; }
 section[id] { scroll-margin-top:102px; }
 /* Our Story is the exception: it is a scroll track with a stage that pins to the
    very top of it, so the header's worth of offset would drop a reader in just
@@ -64,8 +76,16 @@ section[id].story { scroll-margin-top:0; }
 .menu-toggle[aria-expanded="true"] .menu-icon span:nth-child(3) { top:5.75px; transform:rotate(-45deg); }
 .hero { min-height:100svh; position:relative; color:white; overflow:hidden; }
 .hero-image { position:absolute; inset:0; height:100%; object-fit:cover; object-position:center 46%; }
-.hero-shade { position:absolute; inset:0; background:rgba(23,37,43,.42); }
-.hero-copy { position:relative; z-index:1; padding:15vh 6vw 7vh; min-height:100svh; display:flex; flex-direction:column; justify-content:center; align-items:center; text-align:center; gap:38px; }
+/* Two layers: the even wash that holds the type legible over the photograph,
+   and a foot that darkens into the band below so the hero does not end on a
+   line. A photograph cannot be faded into from underneath — there is no colour
+   to fade from — so this boundary is the one the hero resolves itself. */
+.hero-shade { position:absolute; inset:0; background:linear-gradient(to bottom, transparent 66%, var(--band-flowers)), rgba(23,37,43,.42); }
+/* Even top and foot, so the copy sits on the band's own centre line. It used to
+   carry twice as much above as below, to clear the floating bar — the bar takes
+   itself away now, and a block held permanently low to make room for something
+   that is usually gone reads as a block that missed its mark. */
+.hero-copy { position:relative; z-index:1; padding:7vh 6vw; min-height:100svh; display:flex; flex-direction:column; justify-content:center; align-items:center; text-align:center; gap:38px; }
 .nav,.header-cta,.menu-toggle,.hero-button,.text-link,.filter-row button,.solid-button,.contact-button { font-weight:500; }
 /* Section headings run in the small-caps cut, the same face as the wordmark, so
    the page is headed throughout by the mark's own voice. Small caps are drawn
@@ -278,32 +298,10 @@ html[data-splash="off"] { --hero-start:.15s; }
    largest share of the band, and takes whichever of the two comes out smaller:
    the widths hold their full size on anything tall and give way on the windows
    where the flanks would otherwise run into each other. */
-.field-item { --cw:min(var(--w),calc(var(--band) * var(--hcap) / var(--hr))); --h:calc(var(--cw) * var(--hr)); --float-x:calc((1 + var(--d))*3.2px); --float-y:calc((1 + var(--d))*5px); --float-period:calc(9s + var(--d)*1.7s); position:absolute; top:var(--t,auto); bottom:var(--bt,auto); left:var(--l,auto); right:var(--r,auto); width:var(--cw); transform:translate3d(calc(var(--px,0)*var(--d)*-20px),calc(var(--py,0)*var(--d)*-15px),0); transition:transform .6s var(--ease-out); }
-.field-item a { display:block; position:relative; transition:transform .5s var(--ease-out); }
+.field-item { --cw:min(var(--w),calc(var(--band) * var(--hcap) / var(--hr))); --h:calc(var(--cw) * var(--hr)); position:absolute; top:var(--t,auto); bottom:var(--bt,auto); left:var(--l,auto); right:var(--r,auto); width:var(--cw); }
+.field-item a { display:block; position:relative; }
 .field-item img { aspect-ratio:var(--ar); object-fit:cover; filter:saturate(.78); border-radius:var(--tile-radius); box-shadow:var(--photo-shadow); }
-/* Armed from script so the cards are simply present without JavaScript. */
-.field-armed .field-item a { opacity:0; }
-.field-in .field-item a { animation:field-arrive .7s var(--ease) calc(var(--i)*90ms) forwards; }
-@keyframes field-arrive { to { opacity:1 } }
-/* Every card carries its own drift: a slow ellipse whose reach and period both
-   come off the same --d the pointer parallax uses, so a card that leans hardest
-   into the cursor is also the one that swims furthest. The amplitude is small
-   enough that no two cards can close the gaps the placement leaves them, even at
-   opposite phases.
-     It runs on the photograph, not on the link around it, because the link owns
-   two transforms already — the hover scale, and nothing else may fight it. An
-   animation beats a rule, so a float on the link would swallow the hover
-   outright. Two elements, two jobs, and the card can lift and drift at once.
-     Reach and period are read from the card rather than written in here, so the
-   narrow layout can swim more gently through the same keyframes. */
-@keyframes field-float {
-  0%,100% { transform:translate3d(0,0,0) }
-  25% { transform:translate3d(calc(var(--float-x)*.62),calc(var(--float-y)*-1),0) }
-  50% { transform:translate3d(var(--float-x),0,0) }
-  75% { transform:translate3d(calc(var(--float-x)*.62),var(--float-y),0) }
-}
 .field-plate { display:block; position:relative; }
-.field-in .field-item .field-plate { animation:field-float var(--float-period) ease-in-out calc(var(--i)*-2.3s) infinite; }
 /* The name is a hover flourish, so it is painted rather than laid out: a wash of
    the band over the photograph with the variety set on it. It is placed against
    the plate and takes the plate's radius, so it covers the photograph corner to
@@ -449,8 +447,6 @@ html[data-splash="off"] { --hero-start:.15s; }
 }
 .flower-card { display:block; }
 .flower-card:hover img,.flower-card:focus-visible img { transform:scale(1.045); filter:saturate(.94); }
-.field-item a:hover { transform:scale(1.05); }
-.field-item a:active { transform:scale(1.01); transition-duration:.1s; }
 .flower-meta { padding-top:13px; margin-top:14px; }
 .flower-meta h3 { display:inline-block; font:400 21px/1.3 var(--serif); margin:0; }
 .flower-meta p { color:inherit; opacity:.72; margin:5px 0 0; }
@@ -486,22 +482,6 @@ html[data-splash="off"] { --hero-start:.15s; }
    the headings stay on one line across the row either way. */
 /* Full strength, not the old .78 — any alpha here drops it back under AA. */
 .service-list p { max-width:none; margin:auto 0; }
-/* The row arrives every time the band is reached: each card rises the last of
-   its own height and fades up, waiting until the one before it is most of the
-   way in — the delay is a little over half the duration, so the three read as
-   one after another rather than as a single move slightly smeared.
-   The delay is the only per-card value, so the order is simply the DOM order.
-   Dropping .reveal-in cancels the animation and the armed rule takes the cards
-   back to nothing, which is what re-arms the run. */
-.service-list.reveal-armed article { opacity:0; }
-.service-list.reveal-in article { animation:card-rise .75s var(--ease-out) forwards; }
-.service-list.reveal-in article:nth-child(2) { animation-delay:.42s; }
-.service-list.reveal-in article:nth-child(3) { animation-delay:.84s; }
-@keyframes card-rise { from { opacity:0; transform:translateY(34px); } to { opacity:1; transform:none; } }
-/* Stacked, the row runs down the screen instead of across it, so the cards come
-   in from the side rather than from below — the same one-behind-the-other
-   order, read top to bottom because that is what the column now is. */
-@keyframes card-slide { from { opacity:0; transform:translateX(-34px); } to { opacity:1; transform:none; } }
 /* Our Story holds the two bands it absorbed as two panels, each with the copy,
    photo and column split it had when it was its own section — sourcing first,
    then the quote. Unarmed they simply follow one another down the page, which
@@ -548,7 +528,6 @@ html[data-splash="off"] { --hero-start:.15s; }
    narrower slice of it than it does of the other two. Held off centre so the
    slice keeps the figure and the row they are walking, rather than splitting
    the difference and landing on the empty middle of the field. */
-.origin-setup .story-image img { object-position:68% center; }
 .story-copy { container-type:inline-size; }
 .story-copy .story-oneline { white-space:nowrap; font-size:min(clamp(24px,3vw,46px),8.4cqw); }
 /* A step back from the heading without an alpha, which would fade against the
@@ -565,63 +544,25 @@ html[data-splash="off"] { --hero-start:.15s; }
    of the track and a stagger step .02, the same 8.4svh and 4.2svh they were on
    the shorter one. */
 .story.story-armed { height:310svh; padding:0; }
-/* The stage pins to the very top of the window and the header floats over it,
-   so the box the scene centres itself in starts below the bar rather than
-   behind it — otherwise the title sits within a few pixels of the header for
-   the whole of the pin, which is where a reader arriving on #story now lands.
-     The foot takes a padding of its own so the scene sits a little above the
-   middle rather than dead centre. Centred, the clearance under the plate came
-   out the same as the clearance under the header, and the two do not weigh the
-   same: the header is a floating bar with the band running on behind it, where
-   the foot is where this band actually ends and the next one starts. */
-.story-armed .story-stage { position:sticky; top:0; height:100svh; display:grid; grid-template-rows:auto auto; align-content:center; padding:88px 6vw 44px; }
+/* The stage pins to the top of the window and the scene centres itself in it,
+   evenly. It used to hold twice as much padding above as below so the title
+   cleared the floating bar, which put every scene permanently below the middle
+   of its own band. The bar hides itself on the way down now, so the clearance it
+   needed is clearance the scene was paying for the whole of the pin. */
+.story-armed .story-stage { position:sticky; top:0; height:100svh; display:grid; grid-template-rows:auto auto; align-content:center; padding:44px 6vw; }
 /* All three panels in the one cell, so the set turns over in place. */
 .story-armed .story-panel { grid-row:2; grid-column:1; margin:0; will-change:opacity,transform; }
-/* Out, then in — not a cross-fade. The panels all occupy the same cell in the
-   same arrangement, so overlapping them mid-turn would lay one photo over the
-   other. Each turn leaves .04 of bare stage between the scene that has gone and
-   the one arriving: scene one is clear by .22 and scene two holds off until .26,
-   scene two is clear by .56 and scene three holds off until .60.
-     Each scene also moves in parts rather than as one block: the photo leads,
-   the heading follows, the copy last, on windows offset by .02 of the track.
-   Leaving reverses it, so the copy goes first and the photo is last to clear.
-   Every window reads the same --p, so this is still one style write a frame.
-     Every fraction here is the same distance of scroll it was on the two-scene
-   track — .04 of 210svh is the same 8.4svh that .06 of 140svh was, and .02 the
-   same 4.2svh as .03. The middle scene is the only one needing two expressions,
-   since it is the only one that both arrives and leaves; min() takes whichever
-   of the pair is holding it down at the time. */
-.story-armed .intro-setup { transform:translateY(calc(var(--p,0)*-38px)); }
-.story-armed .intro-setup .story-image { opacity:clamp(0,calc((.22 - var(--p,0))/.04),1); }
-.story-armed .intro-setup h3 { opacity:clamp(0,calc((.2 - var(--p,0))/.04),1); }
-.story-armed .intro-setup p { opacity:clamp(0,calc((.18 - var(--p,0))/.04),1); }
-/* The middle scene passes through: it rises into place, sits level over its
-   dwell, and carries on up as it goes — where the outer two only ever do one
-   half of that. .41 is the centre of its stay, so the drift crosses zero where
-   the scene is whole and being read. */
-.story-armed .origin-setup { transform:translateY(calc((.41 - var(--p,0))*46px)); }
-.story-armed .origin-setup .story-image { opacity:min(clamp(0,calc((var(--p,0) - .26)/.04),1),clamp(0,calc((.56 - var(--p,0))/.04),1)); }
-.story-armed .origin-setup h3 { opacity:min(clamp(0,calc((var(--p,0) - .28)/.04),1),clamp(0,calc((.54 - var(--p,0))/.04),1)); }
-.story-armed .origin-setup p { opacity:min(clamp(0,calc((var(--p,0) - .3)/.04),1),clamp(0,calc((.52 - var(--p,0))/.04),1)); }
-.story-armed .story-setup { transform:translateY(calc((1 - var(--p,0))*26px)); }
-.story-armed .story-setup .story-image { opacity:clamp(0,calc((var(--p,0) - .6)/.04),1); }
-.story-armed .story-setup h3 { opacity:clamp(0,calc((var(--p,0) - .62)/.04),1); }
-.story-armed .story-setup p { opacity:clamp(0,calc((var(--p,0) - .64)/.04),1); }
-/* The first scene arrives rather than simply being there. Held at nothing until
-   the stage is reached, then title, photo, heading and copy rise in one behind
-   another. `backwards` is what makes this sit alongside the --p rules above:
-   each element holds the from-state through its delay, then hands opacity back
-   to its own expression the instant the run ends — which is still 1 this early
-   in the track, and is what fades the scene out again further down it. */
-.story-armed .story-stage.reveal-armed:not(.reveal-in) .story-title,
-.story-armed .story-stage.reveal-armed:not(.reveal-in) .intro-setup .story-image,
-.story-armed .story-stage.reveal-armed:not(.reveal-in) .intro-setup h3,
-.story-armed .story-stage.reveal-armed:not(.reveal-in) .intro-setup p { opacity:0; }
-.story-armed .story-entrance .story-title { animation:story-in .8s var(--ease-out) backwards; }
-.story-armed .story-entrance .intro-setup .story-image { animation:story-in .8s var(--ease-out) .16s backwards; }
-.story-armed .story-entrance .intro-setup h3 { animation:story-in .8s var(--ease-out) .32s backwards; }
-.story-armed .story-entrance .intro-setup p { animation:story-in .8s var(--ease-out) .48s backwards; }
-@keyframes story-in { from { opacity:0; transform:translateY(30px); } to { opacity:1; transform:none; } }
+/* The deck. Placement is set with the individual rotate and translate
+   properties rather than the transform shorthand, which leaves transform itself
+   free for the arrival — a plate can rise into place, or take the entrance run,
+   without either of those flattening the fan out of it. The fan settles as it
+   climbs: the plate underneath sits at the widest angle and the one on top comes
+   to rest almost square, which is what makes the pile read as a pile rather than
+   as three photographs pinned at random.
+     Painting order is document order, so each plate lands over the one before it
+   with no z-index to declare. The shadow is what separates them: three plates of
+   the same size overlapping on a green this flat have no edge otherwise. */
+.story-armed .story-image img { box-shadow:var(--photo-shadow); }
 /* The palest band, and the only one that takes dark type: --paper on this green
    is 1.6:1. Ink reads at 7.3:1, so the whole band inverts — including the
    button, which was paper-on-rust and would now sink into its own ground. */
@@ -766,14 +707,24 @@ dialog.ask-dialog>p { margin:0 0 30px; color:color-mix(in srgb, var(--ink) 76%, 
 /* Both halves of the arrival, on the panel and on its ground. A dialog is put
    into the top layer the moment it opens, so there is nothing to delay and no
    mark to add — the animation runs off the element appearing. */
-dialog.ask-dialog[open] { animation:ask-in .45s var(--ease-out); }
+/* The panel's own run is Motion's, on the element (see ask.tsx). This is the
+   backdrop alone, which has no node to animate and so keeps its keyframe —
+   matched to the panel by hand, same length and same curve. */
 dialog.ask-dialog[open]::backdrop { animation:ask-fade .45s var(--ease-out); }
-@keyframes ask-in { from { opacity:0; transform:translateY(14px) scale(.97); } to { opacity:1; transform:none; } }
 @keyframes ask-fade { from { opacity:0 } to { opacity:1 } }
 /* Three full-width bands stacked — the mark and its line, the directory, then
    the notice — so every column starts under the N of the wordmark. The two
    gaps differ on purpose: the directory sits nearer the notice than the mark. */
-footer { padding:96px 6vw 34px; display:flex; flex-direction:column; }
+/* The footer is a panel the page ends on rather than a strip under it, so it
+   takes the same corner the other panels do — the service cards and the ask
+   dialog are both --card-radius, and this is the largest surface of the set.
+     The negative top margin is what makes the corner mean anything: it pulls the
+   footer up over the last of the section above by exactly the radius, so the
+   round is cut out of that band's colour instead of out of the page's own
+   background, which on every page is a different colour from the band. Raised
+   above it too, since the two now overlap. */
+footer { padding:96px 6vw 34px; display:flex; flex-direction:column; position:relative; z-index:1; border-radius:var(--card-radius) var(--card-radius) 0 0; margin-top:calc(-1 * var(--card-radius)); }
+.home > footer { background:var(--paper); }
 /* Held to a measure so the name always turns before "Wholesale Inc.". The
    max-width is in em, so the break holds wherever the clamp lands. */
 .footer-brand .wordmark-full { display:block; max-width:14em; font-size:clamp(26px,3.7vw,54px); line-height:1.14; }
@@ -1046,16 +997,9 @@ a:focus-visible,button:focus-visible,input:focus-visible { outline:2px solid var
   .field-item img { aspect-ratio:var(--mar); }
   .field-center { max-width:88%; }
   .field-wide { display:none; }
-  /* A shorter reach and a quicker cycle than the desktop drift. There is less
-     room between cards here and no cursor to answer, so the field swims on its
-     own but keeps well inside the gaps the stacked placement leaves it. */
-  .field-item { --float-x:calc((1 + var(--d))*2.4px); --float-y:calc((1 + var(--d))*3.6px); --float-period:calc(6.5s + var(--d)*1.4s); }
   /* Stacked, the cards no longer need the heading pinned to a shared baseline,
      so the space under it closes up. */
   .service-list { gap:18px; padding-top:clamp(40px,6vh,64px); }
-  /* Only the direction changes — the duration, easing and stagger all hold, so
-     the column arrives at the same pace the row does. */
-  .service-list.reveal-in article { animation-name:card-slide; }
   .service-list article,.offering { padding:34px 26px 32px; }
   .service-list h3,.offering h3 { margin-bottom:22px; }
   .story { padding:90px 6vw; }
@@ -1068,7 +1012,7 @@ a:focus-visible,button:focus-visible,input:focus-visible { outline:2px solid var
      foot is the narrow-screen half of the wide rule's — smaller because there
      is less window to give, and needed more because stacking puts the copy
      rather than the plate against the bottom of the band. */
-  .story-armed .story-stage { padding:76px 6vw 32px; }
+  .story-armed .story-stage { padding:32px 6vw; }
   .story-title { margin-bottom:clamp(36px,5vh,60px); }
   /* Stacked, the plate is one of three things sharing the pinned screen rather
      than one of two, so it gives back the most: at 38svh the copy beneath it
@@ -1200,25 +1144,7 @@ html[data-splash="off"] .splash { display:none; }
      sit at full opacity in the one plate and the last one would win. */
   .flower-slide { animation:none; }
   .flower-slide:not(:first-child) { opacity:0; }
-  /* The field is still revealed, just without the drift, the float or the
-     stagger. The float is its own animation on its own element now, so it is
-     called off by name rather than by being left out of a shorthand. */
-  .field-item { transform:none; }
-  .field-in .field-item .field-plate { animation:none; }
-  .field-in .field-item a { animation:field-arrive .3s var(--ease) forwards; }
-  /* The cards still arrive, but together and without the rise. */
-  .service-list.reveal-in article { animation:card-rise .3s linear forwards; }
-  .service-list.reveal-in article:nth-child(2),
-  .service-list.reveal-in article:nth-child(3) { animation-delay:0s; }
-  @keyframes card-rise { from { opacity:0; } to { opacity:1; transform:none; } }
-  /* The story stage is unarmed under this setting, so its scene never hides
-     itself and never needs staging in — but the reveal mark is still added by
-     script, so the run is called off explicitly. */
-  .story-entrance .story-title,
-  .story-entrance .intro-setup .story-image,
-  .story-entrance .intro-setup h3,
-  .story-entrance .intro-setup p { animation:none; }
   /* The panel is simply there over its ground. Both are opaque from their first
      frame anyway, so dropping the runs costs nothing but the movement. */
-  .ask-dialog[open],.ask-dialog[open]::backdrop { animation:none; }
+  .ask-dialog[open]::backdrop { animation:none; }
 }

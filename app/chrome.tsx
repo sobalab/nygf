@@ -1,6 +1,7 @@
 "use client";
 
-import { Fragment, useState } from "react";
+import { Fragment, useRef, useState } from "react";
+import { motion, useMotionValueEvent, useReducedMotion, useScroll, useTransform } from "motion/react";
 import { shop } from "./site";
 
 // The address and hours are stored as single strings with newlines, so they read
@@ -18,12 +19,68 @@ export function Arrow() {
   return <span aria-hidden="true">↗</span>;
 }
 
+// Below this, a scroll is the tail of a gesture rather than a change of mind —
+// trackpad momentum gives up a pixel or two the other way as it stops, and
+// answering those flickers the bar.
+const TURN_PX = 5;
+
 export function SiteHeader({ home = false }: { home?: boolean }) {
   const [menuOpen, setMenuOpen] = useState(false);
   const prefix = home ? "" : "/";
+  const ref = useRef<HTMLElement>(null);
+  const still = useReducedMotion();
+  const [away, setAway] = useState(false);
+  const { scrollY } = useScroll();
+  const last = useRef(0);
+
+  // Every page opens with a block that introduces it — the hero on the home
+  // page, the page head everywhere else — and the bar belongs over that block
+  // and not much past it: it names the shop while the reader is arriving, and
+  // is gone once they have committed to reading down. Half of the lead is where
+  // that changes over. Going back up is a reader looking for something, which is
+  // exactly when a nav should be there, so it returns on the first upward travel
+  // wherever they are rather than only at the top.
+  //
+  // Measured as how far the lead's top has gone above the window against its own
+  // height, so it is the same half whatever the window is sized to and whatever
+  // the lead happens to be. A page with neither block falls back to most of a
+  // screenful, which is the same idea without something to measure it against.
+  //
+  // useMotionValueEvent rather than a scroll listener and a frame of our own:
+  // Motion is already reading the scroll elsewhere on the page, so this rides
+  // that same read instead of adding a second one.
+  useMotionValueEvent(scrollY, "change", (y) => {
+    // An open menu is the nav being used. Nothing takes it away mid-reach.
+    if (menuOpen) return;
+    const moved = y - last.current;
+    if (Math.abs(moved) < TURN_PX) return;
+    last.current = y;
+    if (moved < 0) return setAway(false);
+    const lead = document.querySelector<HTMLElement>(".hero, .page-head");
+    if (!lead) return setAway(y >= window.innerHeight * 0.6);
+    const box = lead.getBoundingClientRect();
+    if (-box.top >= box.height / 2) setAway(true);
+  });
+
 
   return (
-    <header className="site-header">
+    // Away means fully away: its own height, then the 14px it is held down from
+    // the top, then enough again for the shadow to go with it. A bar that leaves
+    // all but a few pixels of itself reads as broken rather than as gone.
+    //   The spring is what keeps this from reading as a switch. It is the one
+    // element on the page whose movement the reader did not ask for, which is
+    // the argument for it being the gentlest: low stiffness and heavy damping,
+    // so it withdraws and returns without a bounce at either end.
+    <motion.header
+      className="site-header"
+      ref={ref}
+      onFocus={() => setAway(false)}
+      // An open menu is the nav being used, so the bar is held wherever it is
+      // rather than being taken away mid-reach — read here rather than synced
+      // into `away`, which would be storing something already known.
+      animate={{ y: away && !menuOpen ? "calc(-100% - 30px)" : 0 }}
+      transition={still ? { duration: 0 } : { type: "spring", stiffness: 110, damping: 26, mass: 1.1 }}
+    >
       <a href={home ? "#top" : "/"} className="wordmark" aria-label="New York Garden Flower Wholesale home">
         NYGF
       </a>
@@ -38,13 +95,30 @@ export function SiteHeader({ home = false }: { home?: boolean }) {
         <a className="nav-contact" href="/contact" onClick={() => setMenuOpen(false)}>Contact us</a>
       </nav>
       <a className="header-cta" href="/contact">Contact us</a>
-    </header>
+    </motion.header>
   );
 }
 
 export function SiteFooter({ home = false }: { home?: boolean }) {
+  const ref = useRef<HTMLElement>(null);
+  const still = useReducedMotion();
+  // Read against the footer's own approach: 0 with its top edge at the foot of
+  // the window, 1 once that edge has climbed to the middle of it. The panel is
+  // taller than that stretch on every page, so it is fully settled well before
+  // the page runs out of scroll — which is what keeps it flush at the very
+  // bottom instead of leaving a strip of ground under it.
+  const { scrollYProgress } = useScroll({ target: ref, offset: ["start end", "start center"] });
+  const rise = useTransform(scrollYProgress, [0, 1], [90, 0]);
+  const grow = useTransform(scrollYProgress, [0, 1], [0.93, 1]);
+
   return (
-    <footer>
+    // Anchored at the bottom edge, so the growth reads as the panel opening
+    // upward out of the foot of the window rather than swelling from its middle
+    // — the bottom is the one edge that is already where it belongs.
+    <motion.footer
+      ref={ref}
+      style={still ? undefined : { y: rise, scale: grow, transformOrigin: "center bottom" }}
+    >
       <div className="footer-brand">
         <a href={home ? "#top" : "/"} className="wordmark wordmark-full">New York Garden Flower Wholesale Inc.</a>
         <p className="footer-tagline">Direct-Import Wholesale Cut Flowers</p>
@@ -87,6 +161,6 @@ export function SiteFooter({ home = false }: { home?: boolean }) {
       <div className="footer-base">
         <span>© 2026 New York Garden Flower Wholesale, Inc.</span>
       </div>
-    </footer>
+    </motion.footer>
   );
 }
