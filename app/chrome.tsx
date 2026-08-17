@@ -99,6 +99,12 @@ export function SiteHeader({ home = false }: { home?: boolean }) {
   );
 }
 
+// How far the panel travels on its way in. The footer also overlaps the band
+// above it by this much plus its own corner radius, so its top edge is inside
+// that band for the whole of the travel and the corners are cut out of a colour
+// the whole time rather than only once it has landed.
+const FOOTER_RISE = 90;
+
 export function SiteFooter({ home = false }: { home?: boolean }) {
   const ref = useRef<HTMLElement>(null);
   const still = useReducedMotion();
@@ -108,7 +114,7 @@ export function SiteFooter({ home = false }: { home?: boolean }) {
   // the page runs out of scroll — which is what keeps it flush at the very
   // bottom instead of leaving a strip of ground under it.
   const { scrollYProgress } = useScroll({ target: ref, offset: ["start end", "start center"] });
-  const rise = useTransform(scrollYProgress, [0, 1], [90, 0]);
+  const rise = useTransform(scrollYProgress, [0, 1], [FOOTER_RISE, 0]);
   const grow = useTransform(scrollYProgress, [0, 1], [0.93, 1]);
 
   return (
@@ -117,7 +123,10 @@ export function SiteFooter({ home = false }: { home?: boolean }) {
     // — the bottom is the one edge that is already where it belongs.
     <motion.footer
       ref={ref}
-      style={still ? undefined : { y: rise, scale: grow, transformOrigin: "center bottom" }}
+      style={{
+        marginTop: `calc(-1 * (var(--card-radius) + ${FOOTER_RISE}px))`,
+        ...(still ? null : { y: rise, scale: grow, transformOrigin: "center bottom" }),
+      }}
     >
       <div className="footer-brand">
         <a href={home ? "#top" : "/"} className="wordmark wordmark-full">New York Garden Flower Wholesale Inc.</a>

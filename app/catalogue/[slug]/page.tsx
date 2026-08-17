@@ -1,3 +1,4 @@
+import type { CSSProperties } from "react";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { Ask } from "../../ask";
@@ -146,7 +147,9 @@ export default async function FlowerPage({ params }: { params: Promise<{ slug: s
   const packingLines = [flower.packingNote, packingAsk].filter(Boolean);
 
   return (
-    <main>
+    // The related row is the last band before the footer where there is one; a
+    // variety with no neighbours to show ends on the page's own paper instead.
+    <main style={{ "--footer-well": related.length ? "var(--band-flowers)" : "var(--paper)" } as CSSProperties}>
       <SiteHeader />
 
       {/* A record with no photograph yet loses the column rather than keeping an

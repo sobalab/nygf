@@ -1,6 +1,6 @@
 "use client";
 
-import { Fragment, useEffect, useId, useMemo, useRef, useState, useSyncExternalStore } from "react";
+import { Fragment, useEffect, useId, useMemo, useRef, useState, useSyncExternalStore, type CSSProperties } from "react";
 import { Ask } from "../ask";
 import { categories, flowers, normalizeQuery, services, type CategoryId } from "../catalogue-data";
 import { Arrow, SiteFooter, SiteHeader } from "../chrome";
@@ -48,6 +48,28 @@ function noHashCategory() {
   return null;
 }
 
+// A screenful of cards rather than the whole cooler at once. Divisible by 4, 3
+// and 2, which are the column counts the grid steps through, so a full page is
+// always whole rows at every width — a remainder row of one card reads as the
+// list having been cut off rather than paged.
+const PER_PAGE = 36;
+
+// The numbers to draw. Every page while there are few enough of them, and the
+// ends plus the neighbours of the current one once there are not: a reader
+// needs the way to the far end and the way one step either side, and the run in
+// between is a list nobody reads.
+function pageNumbers(current: number, total: number): (number | "gap")[] {
+  if (total <= 7) return Array.from({ length: total }, (_, i) => i + 1);
+  const from = Math.max(2, current - 1);
+  const to = Math.min(total - 1, current + 1);
+  const out: (number | "gap")[] = [1];
+  if (from > 2) out.push("gap");
+  for (let i = from; i <= to; i++) out.push(i);
+  if (to < total - 1) out.push("gap");
+  out.push(total);
+  return out;
+}
+
 export default function Catalogue() {
   const searchId = useId();
   const searchRef = useRef<HTMLInputElement>(null);
@@ -80,6 +102,34 @@ export default function Catalogue() {
 
   const narrowed = active !== null || query !== "";
 
+  const [page, setPage] = useState(1);
+  const pageCount = Math.max(1, Math.ceil(visibleFlowers.length / PER_PAGE));
+  // Narrowing the list puts the reader back at the front of it. Compared during
+  // the render and corrected there rather than synced in an effect: the page
+  // number is derived from the filter, so it should be right before anything is
+  // drawn, not after a first pass has drawn page 4 of a list that now has one.
+  // React re-runs this component immediately and nothing reaches the screen in
+  // between. The hash can change the category too, which is why this watches
+  // the resolved filter rather than sitting in the chip handlers.
+  const filterKey = `${active ?? ""}|${needle}`;
+  const [lastFilter, setLastFilter] = useState(filterKey);
+  if (lastFilter !== filterKey) {
+    setLastFilter(filterKey);
+    setPage(1);
+  }
+  const current = Math.min(page, pageCount);
+  const start = (current - 1) * PER_PAGE;
+  const pageFlowers = visibleFlowers.slice(start, start + PER_PAGE);
+
+  // The grid is what changed, so the grid is what the reader is put back to —
+  // not the top of the document, which would make them scroll past the filters
+  // they had just set to see the result of pressing a number.
+  const gridRef = useRef<HTMLDivElement>(null);
+  function goTo(next: number) {
+    setPage(next);
+    gridRef.current?.scrollIntoView({ block: "start" });
+  }
+
   function clearSearch() {
     setQuery("");
     setTerm("");
@@ -91,7 +141,9 @@ export default function Catalogue() {
   }
 
   return (
-    <main>
+    // The offerings band is the last thing before the footer, so it is what
+    // the footer lifts off — see the --footer-well note in globals.css.
+    <main style={{ "--footer-well": "var(--band-trade)" } as CSSProperties}>
       <SiteHeader />
 
       <section className="page-head section-pad">
@@ -155,7 +207,11 @@ export default function Catalogue() {
             {/* Reads itself out as it changes, and holds its width while it does
                 — the figures are tabular, so the line doesn't shuffle sideways
                 between 8 and 11. */}
-            <p className="result-count" role="status">{visibleFlowers.length} of {flowers.length} varieties</p>
+            <p className="result-count" role="status">
+              {visibleFlowers.length > PER_PAGE
+                ? `${start + 1}\u2013${start + pageFlowers.length} of ${visibleFlowers.length} varieties`
+                : `${visibleFlowers.length} of ${flowers.length} varieties`}
+            </p>
             {narrowed ? <button type="button" className="clear-all" onClick={clearAll}>Clear</button> : null}
           </div>
         </div>
@@ -173,8 +229,13 @@ export default function Catalogue() {
             </p>
           </div>
         ) : (
-          <div className="flower-grid">
-            {visibleFlowers.map((flower, index) => {
+          <div className="flower-grid" ref={gridRef}>
+            {pageFlowers.map((flower, offset) => {
+              // Numbered against the whole filtered list, not against the page:
+              // the break below asks what came before this card, and on the
+              // second page of bouquets what came before the first card is
+              // another bouquet, on the page turned away from.
+              const index = start + offset;
               // Bouquets close the list, and the break that opens them names them
               // rather than only parting them from the stems. It falls once, on
               // the first of them, however the grid has been narrowed — where a
@@ -196,6 +257,41 @@ export default function Catalogue() {
             })}
           </div>
         )}
+
+        {pageCount > 1 ? (
+          // A nav rather than a row of buttons: it is a set of links between
+          // parts of one list, and naming it is what tells a screen reader
+          // reaching it that the list has more than what was just read.
+          <nav className="pagination" aria-label="Catalogue pages">
+            <button type="button" className="page-step" onClick={() => goTo(current - 1)} disabled={current === 1}>
+              <span aria-hidden="true">&larr;</span> Previous
+            </button>
+            <div className="page-numbers">
+              {pageNumbers(current, pageCount).map((entry, i) =>
+                entry === "gap" ? (
+                  // Not a button and not read out: it stands for the pages
+                  // between, and a screen reader announcing an ellipsis in a
+                  // list of numbers is announcing punctuation.
+                  <span className="page-gap" key={`gap${i}`} aria-hidden="true">&hellip;</span>
+                ) : (
+                  <button
+                    type="button"
+                    key={entry}
+                    className="page-number"
+                    aria-current={entry === current ? "page" : undefined}
+                    aria-label={`Page ${entry}`}
+                    onClick={() => goTo(entry)}
+                  >
+                    {entry}
+                  </button>
+                ),
+              )}
+            </div>
+            <button type="button" className="page-step" onClick={() => goTo(current + 1)} disabled={current === pageCount}>
+              Next <span aria-hidden="true">&rarr;</span>
+            </button>
+          </nav>
+        ) : null}
 
         <Ask className="solid-button" message={AVAILABILITY_ASK} inquiry="/contact">Ask About Availability</Ask>
       </section>

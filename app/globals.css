@@ -30,6 +30,21 @@
 * { box-sizing:border-box; }
 html { scroll-behavior:smooth; }
 body { margin:0; background:var(--paper); color:var(--ink); font-family:var(--sans); }
+/* The ground the footer lifts off. The panel shrinks a little as it rises, and
+   what shows either side of it while it does has to be the band it is rising
+   from — on paper it would be a paper card on a paper ground and the movement
+   would simply not be visible, which is the whole of the effect.
+     It sits on main because main's box runs behind every section and behind the
+   footer, so the only place it is ever seen is exactly that margin. Each page
+   names its own band, because which band the page ends on is the page's fact
+   and not something the stylesheet can work out.
+     The home page is held out of it rather than left unset, and that is not
+   tidiness: its band layer is fixed at a negative z-index, which paints above
+   the canvas but below the background of any block in the flow — so a colour on
+   main, even paper, would cover the layer outright and take every band fade on
+   the page with it. Home has no background here at all, and the layer it does
+   have is the thing the footer lifts off. */
+main:not(.home) { background:var(--footer-well,var(--paper)); }
 a { color:inherit; text-decoration:none; }
 button { color:inherit; font:inherit; }
 img { display:block; width:100%; }
@@ -48,14 +63,19 @@ img { display:block; width:100%; }
 /* The bands are the ground on every other page and a window onto it here. The
    type colours are untouched — only the fill goes. */
 .home > .flower-field,.home > .story,.home > .trade,.home > .contact { background:none; }
+/* A landing on a page that reads as a document stops a header's worth short, so
+   the heading it was aimed at is not sitting under the bar when it gets there. */
 section[id] { scroll-margin-top:102px; }
-/* Our Story is the exception: it is a scroll track with a stage that pins to the
-   very top of it, so the header's worth of offset would drop a reader in just
-   short of the pin — the scene sits a header lower than it is about to, then
-   jumps up the moment they scroll. Landing flush engages the pin on arrival,
-   and the stage centres its own content well clear of the bar. Specific enough
-   to outrank the narrow-screen section[id] rule further down. */
-section[id].story { scroll-margin-top:0; }
+/* The home page's bands do not want that, and Our Story never did. A band here
+   is a screenful with its content centred inside it, so landing a header short
+   costs twice: the band below the last one shows along the top edge, and the
+   content it centred so carefully sits that much low for as long as the reader
+   stays on it. Landing flush puts the band exactly where it was built to be.
+     The bar is not an argument against it either, not any more. It takes itself
+   away on the way down, and the centred content clears it even while it is
+   there. Both selectors outrank the narrow-screen section[id] rule further
+   down, so the flush landing holds at every width. */
+.home > section[id],section[id].story { scroll-margin-top:0; }
 /* One mark, two forms: the NYGF monogram carries the header, and the name it
    stands for is spelled out in full in the footer and on the splash. All three
    are set in Baskervville SC, whose drawn small caps hold their weight against
@@ -390,6 +410,25 @@ html[data-splash="off"] { --hero-start:.15s; }
 /* Set in the sentence it sits in rather than at the status row's size. */
 .catalogue-empty .clear-all { font-size:inherit; line-height:inherit; }
 .flower-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:42px 18px; }
+/* Drawn in the same hand as the filter chips above the grid — same hairline,
+   same radius, same pressed state — because they are the same kind of control
+   on the same page: one narrows the list and the other moves through it, and a
+   reader should not have to learn two vocabularies for that. */
+.pagination { display:flex; flex-wrap:wrap; align-items:center; justify-content:center; gap:10px 18px; margin-top:64px; }
+.page-numbers { display:flex; flex-wrap:wrap; gap:8px; }
+.pagination button { border:1px solid rgba(202,203,181,.5); background:none; color:inherit; border-radius:var(--btn-radius); font:500 15px/1.2 var(--sans); cursor:pointer; transition:border-color .3s var(--ease), background-color .3s var(--ease), color .3s var(--ease), opacity .3s var(--ease), transform .3s var(--ease); }
+.page-step { padding:12px 17px; }
+/* Square, and wide enough for three figures without the row shuffling when the
+   count crosses from one page to two. Tabular, for the same reason. */
+.page-number { min-width:46px; padding:12px 10px; font-variant-numeric:tabular-nums; }
+.pagination button:hover:not(:disabled) { border-color:var(--sage); background:rgba(202,203,181,.11); }
+.pagination button:active:not(:disabled) { transform:scale(.98); transition-duration:.09s; }
+.page-number[aria-current="page"] { background:var(--sage); border-color:var(--sage); color:var(--band-flowers); }
+/* Kept in place rather than removed at the ends of the list: a control that
+   disappears takes the row's shape with it, and the two steps would swap sides
+   as the reader moved between the first page and the last. */
+.pagination button:disabled { opacity:.35; cursor:default; }
+.page-gap { opacity:.55; padding:0 2px; align-self:end; }
 /* Where the stems stop and the made-up bouquets start. It takes a whole row of
    the grid rather than sitting inside a column, so the break runs the full
    measure the cards do, and the row gap above and below is the same 42px that
@@ -722,9 +761,16 @@ dialog.ask-dialog[open]::backdrop { animation:ask-fade .45s var(--ease-out); }
    footer up over the last of the section above by exactly the radius, so the
    round is cut out of that band's colour instead of out of the page's own
    background, which on every page is a different colour from the band. Raised
-   above it too, since the two now overlap. */
-footer { padding:96px 6vw 34px; display:flex; flex-direction:column; position:relative; z-index:1; border-radius:var(--card-radius) var(--card-radius) 0 0; margin-top:calc(-1 * var(--card-radius)); }
-.home > footer { background:var(--paper); }
+   above it too, since the two now overlap — and painted rather than left
+   transparent, or the band it overlaps would show straight through the panel
+   instead of only around its corners.
+     The overlap itself is set in chrome.tsx, because it has to be the radius
+   plus the whole distance the panel rises: the panel starts its travel that far
+   down, and an overlap of only the radius would have it sitting clear of the
+   band for the length of the animation, cutting its corners out of the page
+   background instead. Which is to say the rounding would be invisible for
+   exactly as long as it was moving. */
+footer { padding:96px 6vw 34px; display:flex; flex-direction:column; position:relative; z-index:1; border-radius:var(--card-radius) var(--card-radius) 0 0; background:var(--paper); }
 /* Held to a measure so the name always turns before "Wholesale Inc.". The
    max-width is in em, so the break holds wherever the clamp lands. */
 .footer-brand .wordmark-full { display:block; max-width:14em; font-size:clamp(26px,3.7vw,54px); line-height:1.14; }

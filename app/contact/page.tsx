@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState, type FormEvent } from "react";
+import { useEffect, useRef, useState, type CSSProperties, type FormEvent } from "react";
 import { SiteFooter, SiteHeader } from "../chrome";
 import { formServiceConfigured, shop, web3formsAccessKey, whatsappHref } from "../site";
 
@@ -171,7 +171,7 @@ export default function Contact() {
   }
 
   return (
-    <main>
+    <main style={{ "--footer-well": "var(--band-contact)" } as CSSProperties}>
       <SiteHeader />
 
       {/* Everything on this page asks for the list, so once the list is sent
