@@ -764,12 +764,10 @@ dialog.ask-dialog[open]::backdrop { animation:ask-fade .45s var(--ease-out); }
    above it too, since the two now overlap — and painted rather than left
    transparent, or the band it overlaps would show straight through the panel
    instead of only around its corners.
-     The overlap itself is set in chrome.tsx, because it has to be the radius
-   plus the whole distance the panel rises: the panel starts its travel that far
-   down, and an overlap of only the radius would have it sitting clear of the
-   band for the length of the animation, cutting its corners out of the page
-   background instead. Which is to say the rounding would be invisible for
-   exactly as long as it was moving. */
+     The overlap itself is set in chrome.tsx, and is the radius and nothing more
+   — the ground behind the footer carries the band's colour for the whole page,
+   so the corners have something to cut into for the whole of the travel without
+   the panel needing to sit deep enough on the section to arrange that itself. */
 footer { padding:96px 6vw 34px; display:flex; flex-direction:column; position:relative; z-index:1; border-radius:var(--card-radius) var(--card-radius) 0 0; background:var(--paper); }
 /* Held to a measure so the name always turns before "Wholesale Inc.". The
    max-width is in em, so the break holds wherever the clamp lands. */

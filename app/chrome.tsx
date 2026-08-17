@@ -99,10 +99,13 @@ export function SiteHeader({ home = false }: { home?: boolean }) {
   );
 }
 
-// How far the panel travels on its way in. The footer also overlaps the band
-// above it by this much plus its own corner radius, so its top edge is inside
-// that band for the whole of the travel and the corners are cut out of a colour
-// the whole time rather than only once it has landed.
+// How far the panel travels on its way in. It overlaps the band above it by its
+// own corner radius and no more: the ground behind the footer is painted in that
+// band's colour for the whole page (see --footer-well in globals.css), so the
+// corners are cut out of colour for the whole of the travel without the panel
+// having to sit on top of the section to manage it. An overlap deep enough to
+// cover the travel would eat the foot of that section instead, and the gap above
+// the panel would close up.
 const FOOTER_RISE = 90;
 
 export function SiteFooter({ home = false }: { home?: boolean }) {
@@ -124,7 +127,7 @@ export function SiteFooter({ home = false }: { home?: boolean }) {
     <motion.footer
       ref={ref}
       style={{
-        marginTop: `calc(-1 * (var(--card-radius) + ${FOOTER_RISE}px))`,
+        marginTop: `calc(-1 * var(--card-radius))`,
         ...(still ? null : { y: rise, scale: grow, transformOrigin: "center bottom" }),
       }}
     >
