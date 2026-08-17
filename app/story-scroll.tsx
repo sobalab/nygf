@@ -1,7 +1,7 @@
 "use client";
 
 import { createContext, useContext, useEffect, useRef, type ReactNode } from "react";
-import { useMounted } from "./client-env";
+import { useMediaQuery, useMounted } from "./client-env";
 import { motion, useReducedMotion, useScroll, useTransform, type MotionValue } from "motion/react";
 
 // Our Story is a tall scroll track with a stage pinned inside it. Two readings
@@ -19,6 +19,10 @@ import { motion, useReducedMotion, useScroll, useTransform, type MotionValue } f
 // the tree while the reader scrolls.
 type Track = {
   armed: boolean;
+  // The stacked layout, where the plate is about half the width it is beside a
+  // copy column. The deck is measured in pixels, so the narrow stage needs its
+  // own set rather than the wide one applied to a smaller plate.
+  narrow: boolean;
   p: MotionValue<number>;
   enter: MotionValue<number>;
   // One entry per scene, in order. A plate reads its own to arrive and the ones
@@ -60,6 +64,8 @@ export function StoryScroll({ title, children }: { title: string; children: Reac
   // scene that only turns over when the page is scrolled is exactly what the
   // setting is for.
   const armed = useMounted() && !still;
+  // The same breakpoint the stacked layout is written at in globals.css.
+  const narrow = useMediaQuery("(max-width:800px)");
 
   const { scrollYProgress: p } = useScroll({ target: ref, offset: ["start start", "end end"] });
   const { scrollYProgress: enter } = useScroll({ target: ref, offset: ["start end", "start start"] });
@@ -108,7 +114,7 @@ export function StoryScroll({ title, children }: { title: string; children: Reac
     });
   }, [armed]);
 
-  const track: Track = { armed, p, enter, land: [land1, land2, land3], settle: [settle1, settle2, settle3] };
+  const track: Track = { armed, narrow, p, enter, land: [land1, land2, land3], settle: [settle1, settle2, settle3] };
 
   return (
     // Deliberately not .section-pad: that class is padded by a `.home>section`
@@ -136,6 +142,19 @@ const DECK = [
   { x: -4, y: 2, rotate: -1, swing: -6.5 },
 ];
 
+// The same fan on the stacked stage, where the plate is a little over half the
+// width it takes beside a copy column. Offsets in pixels don't carry across
+// that: the wide set spread the three over about a quarter of the plate's own
+// width down here, which read as three photographs dropped separately rather
+// than as one pile. The steps here are even — each plate sits the same distance
+// off the one under it, on both axes and in angle — so the stack reads as a
+// stack at a glance, which is all it gets on a phone.
+const DECK_NARROW = [
+  { x: -14, y: 9, rotate: -3.6, swing: -6.5 },
+  { x: 0, y: 0, rotate: -1.2, swing: 5.5 },
+  { x: 14, y: -9, rotate: 1.2, swing: -5 },
+];
+
 // How far a plate is dimmed by each plate that lands on top of it. A plate
 // darkens as it falls behind, so the pile reads as depth rather than as three
 // photographs competing at the same value, and the one being spoken about is
@@ -143,8 +162,12 @@ const DECK = [
 const BURIED = 0.24;
 const BURIED_AGAIN = 0.14;
 
-// The travel a plate makes on its way in, in pixels.
+// The travel a plate makes on its way in, in pixels. Shorter on the stacked
+// stage for the same reason the deck is tighter — the plate is smaller, and the
+// copy is directly beneath it rather than beside it, so a long run crosses the
+// heading on the way up.
 const RISE = 130;
+const RISE_NARROW = 84;
 
 export function StoryPanel({
   index,
@@ -188,7 +211,9 @@ export function StoryPanel({
   const p = track!.p;
   const land = track!.land[index];
   const settle = track!.settle[index];
-  const spot = DECK[index];
+  const narrow = track!.narrow;
+  const spot = (narrow ? DECK_NARROW : DECK)[index];
+  const rise = narrow ? RISE_NARROW : RISE;
 
   // A plate is thrown onto the deck rather than faded onto it: it comes up from
   // below carrying more tilt than it will keep and unwinds into its resting
@@ -197,7 +222,7 @@ export function StoryPanel({
   // element.
   const plateOpacity = useTransform(land, [0, 0.34], [0, 1]);
   const plateX = spot.x;
-  const plateY = useTransform(settle, (v) => spot.y + (1 - v) * RISE);
+  const plateY = useTransform(settle, (v) => spot.y + (1 - v) * rise);
   const plateRotate = useTransform(settle, (v) => spot.rotate + (1 - v) * spot.swing);
 
   // Dimmed by whatever lands on top. The windows are the arrivals of those

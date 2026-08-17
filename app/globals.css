@@ -350,7 +350,10 @@ html[data-splash="off"] { --hero-start:.15s; }
    buyer uses them. No top margin of its own: the 64px the catalogue band
    already puts above it is the whole gap between the head's copy and the
    controls, which is what the 70px on top of that was overshooting. */
-.catalogue-controls { display:flex; flex-direction:column; gap:24px; margin:0 0 42px; }
+/* Turning a page seats this block at the top of the window, so it carries the
+   same clearance a #section does — the floating header would otherwise sit over
+   the search field the reader was just put back to. */
+.catalogue-controls { display:flex; flex-direction:column; gap:24px; margin:0 0 42px; scroll-margin-top:102px; }
 /* A measure, not the full band: the field is for one variety name, and an input
    running the width of a four-card grid reads as a place to write a paragraph. */
 .catalogue-search { display:block; max-width:400px; }
@@ -666,6 +669,16 @@ html[data-splash="off"] { --hero-start:.15s; }
 /* WebKit hands the date field's picker button a near-black glyph that sits
    heavier than the type beside it, and no way to recolour it — knocking it back
    is all this can do. */
+/* A date field is the one input that will not take the width it is given: iOS
+   Safari draws it at the intrinsic width of its own spinner and ignores the
+   100% above, so on a phone the box ran past the right edge of the band and
+   took the whole document into a sideways scroll with it. Dropping the native
+   appearance is what lets the box be sized, and min-width:0 is what lets it be
+   sized down — an input carries a default min-width from its size attribute
+   that a percentage width alone can't get under. Everything else about the
+   field is ours already, so there is no platform look being given up. */
+.field input[type="date"] { -webkit-appearance:none; appearance:none; min-width:0; max-width:100%; }
+.field input[type="date"]::-webkit-date-and-time-value { text-align:left; }
 .field input[type="date"]::-webkit-calendar-picker-indicator { opacity:.5; cursor:pointer; transition:opacity .3s var(--ease); }
 .field input[type="date"]:hover::-webkit-calendar-picker-indicator { opacity:.8; }
 /* .8, not the .66 this carried on paper: the green underneath is lighter, and
@@ -992,7 +1005,7 @@ a:focus-visible,button:focus-visible,input:focus-visible { outline:2px solid var
 @media (max-width:800px) {
   /* The nav goes absolute below, so the flex row is just wordmark and toggle. */
   .site-header { height:60px; padding:0 18px; top:10px; margin:10px 10px -70px; border-radius:6px; }
-  section[id] { scroll-margin-top:80px; }
+  section[id],.catalogue-controls { scroll-margin-top:80px; }
   .offerings-list { grid-template-columns:1fr; }
   .site-header .wordmark { font-size:20px; }
   .header-cta { display:none; }
@@ -1057,17 +1070,32 @@ a:focus-visible,button:focus-visible,input:focus-visible { outline:2px solid var
      is less window to give, and needed more because stacking puts the copy
      rather than the plate against the bottom of the band. */
   .story-armed .story-stage { padding:32px 6vw; }
-  .story-title { margin-bottom:clamp(36px,5vh,60px); }
+  .story-title { margin-bottom:clamp(32px,4.5vh,56px); }
   /* Stacked, the plate is one of three things sharing the pinned screen rather
      than one of two, so it gives back the most: at 38svh the copy beneath it
-     finished about 20px off the foot of a phone. */
-  .story-image img { height:min(33svh,300px); }
-  /* The middle scene carries about twice the copy of the other two, which is
-     three or four extra lines once the column is stacked — enough to run the
-     scene off the foot of a short phone. Its plate gives that height back, and
-     only its plate: the other two have nothing to spare and nothing to fix. */
-  .origin-setup .story-image img { height:min(28svh,260px); }
-  .story-copy h3 { font-size:29px; margin-bottom:28px; }
+     finished about 20px off the foot of a phone.
+       One height for all three, where the middle scene used to take a shorter
+     plate to buy room for its longer copy. Stacked they are a pile seen from
+     the front, and a pile of three different sizes doesn't read as one — the
+     height it used to save is taken off the heading and the gaps below
+     instead.
+       The height is a share of the window less a fixed subtraction, not a plain
+     share of it: what sits under the plate — a heading and up to eight lines of
+     copy — costs the same on a 640px phone as on a 930px one, so a straight
+     percentage leaves the short screen short by exactly the amount the tall one
+     has spare. Taking the fixed part off the plate is what keeps the copy clear
+     of the foot at the bottom of the range without shrinking the plate on the
+     phones that can carry it. */
+  .story-image img { height:min(calc(34svh - 40px),270px); }
+  /* Packed to the top of the shared cell rather than stretched into it. The
+     three panels sit in the one grid cell, which is as tall as the longest of
+     them; stretched, each spread its two rows to fill that cell, so a scene
+     with less copy placed its plate and its heading somewhere different from
+     the scene before it — the middle one landed its heading over the plate of
+     the two either side of it. Packed, every scene's plate and heading are at
+     the same height, and the pile turns over in place. */
+  .story-armed .story-panel { align-content:start; row-gap:clamp(24px,3.5vh,38px); }
+  .story-copy h3 { font-size:29px; margin-bottom:24px; }
   /* Stacked: the photograph, then everything about the stem. It is first in the
      source too, so this is the column collapsing rather than an order being
      rewritten. Nothing pins down here — a sticky plate on a phone would hold

@@ -596,17 +596,6 @@ const items: CatalogueItem[] = [
     packingNote: "Where in that range a box lands depends on whether the stems are short or long.",
   },
   {
-    name: "Candlelight",
-    slug: "candlelight",
-    category: "roses",
-    image: "/media/candlelight.webp",
-    colour: "beige",
-    packingConfirmed: true,
-    stemsPerBunch: "25",
-    stemsPerBox: "Half box 250 to 300 stems",
-    packingNote: "Where in that range a box lands depends on whether the stems are short or long.",
-  },
-  {
     name: "Andrea",
     slug: "andrea",
     category: "roses",
@@ -763,6 +752,20 @@ const items: CatalogueItem[] = [
     category: "garden",
     image: "/media/kahala.webp",
     colour: "peach",
+    packingConfirmed: true,
+    stemsPerBunch: "25",
+    stemsPerBox: "Half box 250 to 300 stems",
+    packingNote: "Where in that range a box lands depends on whether the stems are short or long.",
+  },
+  // The same move, on the shop's own reading of what lands in the cooler, and
+  // the same terms: photograph, colour and packing all come across, and
+  // /catalogue/candlelight is still where it was.
+  {
+    name: "Candlelight",
+    slug: "candlelight",
+    category: "garden",
+    image: "/media/candlelight.webp",
+    colour: "beige",
     packingConfirmed: true,
     stemsPerBunch: "25",
     stemsPerBox: "Half box 250 to 300 stems",

@@ -121,13 +121,18 @@ export default function Catalogue() {
   const start = (current - 1) * PER_PAGE;
   const pageFlowers = visibleFlowers.slice(start, start + PER_PAGE);
 
-  // The grid is what changed, so the grid is what the reader is put back to —
-  // not the top of the document, which would make them scroll past the filters
-  // they had just set to see the result of pressing a number.
-  const gridRef = useRef<HTMLDivElement>(null);
+  // Turning a page puts the reader back at the controls, not at the top of the
+  // document — the filters they set are what the new page is a page of, and
+  // they should be able to see them and the count that just changed without
+  // scrolling back up. It used to seat the grid itself, which left the search
+  // field and the chips above the top of the window: the page turned and the
+  // first thing on screen was a row of photographs with nothing saying what
+  // list they belonged to. The scroll-margin on the controls is what keeps them
+  // clear of the floating header.
+  const controlsRef = useRef<HTMLDivElement>(null);
   function goTo(next: number) {
     setPage(next);
-    gridRef.current?.scrollIntoView({ block: "start" });
+    controlsRef.current?.scrollIntoView({ block: "start" });
   }
 
   function clearSearch() {
@@ -152,7 +157,7 @@ export default function Catalogue() {
       </section>
 
       <section className="catalogue section-pad" id="catalogue">
-        <div className="catalogue-controls">
+        <div className="catalogue-controls" ref={controlsRef}>
           <search className="catalogue-search">
             {/* The placeholder says what to type; the label says what the box
                 is, and stays said once there is text in it. */}
@@ -229,7 +234,7 @@ export default function Catalogue() {
             </p>
           </div>
         ) : (
-          <div className="flower-grid" ref={gridRef}>
+          <div className="flower-grid">
             {pageFlowers.map((flower, offset) => {
               // Numbered against the whole filtered list, not against the page:
               // the break below asks what came before this card, and on the
