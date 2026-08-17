@@ -776,25 +776,28 @@ const items: CatalogueItem[] = [
   // colours are all here, and Mayra Rose, whose six are all here too. Mayra
   // Peach sits beside them rather than among them: it is its own variety, not
   // the seventh Mayra Rose, however much the name reads like one.
-  //   Aloha, Arya, Champagne, Country Blues, Country Candy, Country Home, Cream
+  //   Aloha, Arya, Country Blues, Country Candy, Country Home, Cream
   // X-pression, Exotix Berry, Garden Spirit, Glitz, Juicy X-pression,
   // Mademoiselle, Mayra Peach, Queen's Crown and Shimmer were filed as standard
   // roses when the supplier lists came in and were moved here on the shop's own
   // reading of them. A supplier list does not always mark which of the two a
   // variety is, and where it doesn't, the shop knowing what lands in the cooler
-  // beats a name.
-  packedRose("All 4 Love", "all-4-love", "garden"),
+  // beats a name. Champagne came here the same way and has since gone on to the
+  // spray chip, which is where it actually belongs.
+  packedRose("All 4 Love", "all-4-love", "garden", "/media/all-4-love.webp"),
   packedRose("Aloha", "aloha", "garden", "/media/aloha.webp"),
   packedRose("Antonia Gardens", "antonia-gardens", "garden"),
   packedRose("Arya", "arya", "garden", "/media/arya.webp"),
   packedRose("Aurora Gardens", "aurora-gardens", "garden"),
-  packedRose("Champagne", "champagne", "garden", "/media/champagne.webp"),
   packedRose("Cotton X-pression", "cotton-x-pression", "garden"),
   packedRose("Country Blues", "country-blues", "garden", "/media/country-blues.webp"),
   packedRose("Country Candy", "country-candy", "garden", "/media/country-candy.webp"),
   packedRose("Country Home", "country-home", "garden", "/media/country-home.webp"),
   packedRose("Cream X-pression", "cream-x-pression", "garden", "/media/cream-x-pression.webp"),
-  packedRose("Creamykiss", "creamykiss", "garden"),
+  // Two words. The slug is left as it was typed: a spelling fix is exactly the
+  // case the note on packedRose is about, and moving the address to match would
+  // break every link already saved to it.
+  packedRose("Creamy Kiss", "creamykiss", "garden"),
   packedRose("Dark X-pression", "dark-x-pression", "garden"),
   packedRose("Dragonfly", "dragonfly", "garden"),
   packedRose("Exotix Berry", "exotix-berry", "garden", "/media/exotix-berry.webp"),
@@ -825,10 +828,13 @@ const items: CatalogueItem[] = [
   // bunch, the three to five heads per stem, the note that small heads open
   // faster — and they are worth putting back on the first named variety the shop
   // photographs. Its photograph is still in public/media.
-  //   The named sprays are all off Fiorentina's list, the only one of the four
-  // that lists sprays by name, so this is one supplier's range rather than the
+  //   The named sprays are off Fiorentina's list, the only one of the four that
+  // lists sprays by name, so this is one supplier's range rather than the
   // market's and the chip will grow when another sends theirs. The Majolika
-  // family runs across four colours.
+  // family runs across four colours. Champagne is the exception and came the
+  // long way round — filed as a standard rose off the supplier lists, moved to
+  // the garden chip on the shop's reading, and moved again to here, which is
+  // the chip the stem it actually is belongs to.
   //   These are the one rose run carrying no counts, and deliberately: the
   // twenty-five-stem bunch and the 250 to 300 half box the rest of the wall is
   // written up with are standard rose figures, and the sheet put a spray at ten
@@ -836,6 +842,12 @@ const items: CatalogueItem[] = [
   // standard count over a spray, they ask — which is what every card without
   // packing on this site does. The moment the shop confirms the spray counts
   // hold for these, they take a packing of their own.
+  // Listed rather than packed, like the rest of this run: the counts it carried
+  // on the garden chip are the standard rose's — 25 to the bunch, 250 to 300 to
+  // the half box — and printing those over a spray is the one thing the note
+  // above says not to do. They come back the moment the shop confirms what a
+  // bunch of these actually holds. The photograph comes across untouched.
+  listedOnly("Champagne", "champagne", "spray", "/media/champagne.webp"),
   listedOnly("Champagne Majolika", "champagne-majolika", "spray"),
   listedOnly("Cream Majolika", "cream-majolika", "spray"),
   listedOnly("Elba", "elba", "spray"),
