@@ -797,36 +797,36 @@ const items: CatalogueItem[] = [
   // the stem it actually is, and Glitz back to the standard roses.
   packedRose("All 4 Love", "all-4-love", "garden", "/media/all-4-love.webp"),
   packedRose("Aloha", "aloha", "garden", "/media/aloha.webp"),
-  packedRose("Antonia Gardens", "antonia-gardens", "garden"),
+  packedRose("Antonia Gardens", "antonia-gardens", "garden", "/media/antonia-gardens.webp"),
   packedRose("Arya", "arya", "garden", "/media/arya.webp"),
-  packedRose("Aurora Gardens", "aurora-gardens", "garden"),
-  packedRose("Cotton X-pression", "cotton-x-pression", "garden"),
+  packedRose("Aurora Gardens", "aurora-gardens", "garden", "/media/aurora-gardens.webp"),
+  packedRose("Cotton X-pression", "cotton-x-pression", "garden", "/media/cotton-x-pression.webp"),
   packedRose("Country Blues", "country-blues", "garden", "/media/country-blues.webp"),
   packedRose("Country Candy", "country-candy", "garden", "/media/country-candy.webp"),
   packedRose("Country Home", "country-home", "garden", "/media/country-home.webp"),
   packedRose("Cream X-pression", "cream-x-pression", "garden", "/media/cream-x-pression.webp"),
-  // Two words. The slug is left as it was typed: a spelling fix is exactly the
-  // case the note on packedRose is about, and moving the address to match would
-  // break every link already saved to it.
-  packedRose("Creamy Kiss", "creamykiss", "garden"),
-  packedRose("Dark X-pression", "dark-x-pression", "garden"),
-  packedRose("Dragonfly", "dragonfly", "garden"),
+  // Two words, and the slug follows the name for the same reason the Mayras'
+  // do: it was listed on the 14th, nothing outside this file has ever pointed at
+  // it, and there is no saved link for the move to break.
+  packedRose("Creamy Kiss", "creamy-kiss", "garden", "/media/creamy-kiss.webp"),
+  packedRose("Dark X-pression", "dark-x-pression", "garden", "/media/dark-x-pression.webp"),
+  packedRose("Dragonfly", "dragonfly", "garden", "/media/dragonfly.webp"),
   packedRose("Exotix Berry", "exotix-berry", "garden", "/media/exotix-berry.webp"),
-  packedRose("Free Spirit", "free-spirit", "garden"),
+  packedRose("Free Spirit", "free-spirit", "garden", "/media/free-spirit.webp"),
   packedRose("Garden Spirit", "garden-spirit", "garden", "/media/garden-spirit.webp"),
-  packedRose("Hearts", "hearts", "garden"),
+  packedRose("Hearts", "hearts", "garden", "/media/hearts.webp"),
   packedRose("Juicy X-pression", "juicy-x-pression", "garden", "/media/juicy-x-pression.webp"),
   packedRose("Mademoiselle", "mademoiselle", "garden", "/media/mademoiselle.webp"),
-  packedRose("Mandarin X-pression", "mandarin-x-pression", "garden"),
-  packedRose("Mayra Hot Pink", "mayra-hot-pink", "garden"),
+  packedRose("Mandarin X-pression", "mandarin-x-pression", "garden", "/media/mandarin-x-pression.webp"),
+  packedRose("Mayra Hot Pink", "mayra-hot-pink", "garden", "/media/mayra-hot-pink.webp"),
   packedRose("Mayra Peach", "mayra-peach", "garden", "/media/mayra-peach.webp"),
-  packedRose("Mayra Bridal Pink", "mayra-bridal-pink", "garden"),
-  packedRose("Mayra Pink", "mayra-pink", "garden"),
-  packedRose("Mayra Red", "mayra-red", "garden"),
-  packedRose("Mayra White", "mayra-white", "garden"),
+  packedRose("Mayra Bridal Pink", "mayra-bridal-pink", "garden", "/media/mayra-bridal-pink.webp"),
+  packedRose("Mayra Pink", "mayra-pink", "garden", "/media/mayra-pink.webp"),
+  packedRose("Mayra Red", "mayra-red", "garden", "/media/mayra-red.webp"),
+  packedRose("Mayra White", "mayra-white", "garden", "/media/mayra-white.webp"),
   packedRose("Queen's Crown", "queens-crown", "garden", "/media/queens-crown.webp"),
   packedRose("Shimmer", "shimmer", "garden", "/media/shimmer.webp"),
-  packedRose("Vicky Gardens", "vicky-gardens", "garden"),
+  packedRose("Vicky Gardens", "vicky-gardens", "garden", "/media/vicky-gardens.webp"),
   // A spray is a different stem rather than a grade of the standard rose — many
   // small heads on one stem, bought by the bunch of ten where a standard rose is
   // bought by the twenty-five — which is what the chip is for.
@@ -840,10 +840,12 @@ const items: CatalogueItem[] = [
   //   The named sprays are off Fiorentina's list, the only one of the four that
   // lists sprays by name, so this is one supplier's range rather than the
   // market's and the chip will grow when another sends theirs. The Majolika
-  // family runs across four colours. Champagne is the exception and came the
-  // long way round — filed as a standard rose off the supplier lists, moved to
-  // the garden chip on the shop's reading, and moved again to here, which is
-  // the chip the stem it actually is belongs to.
+  // family runs across four colours, and Champagne Majolika is one of them —
+  // not the plain Champagne sitting beside it on the chip, which is a different
+  // variety and the one card here that came the long way round: filed as a
+  // standard rose off the supplier lists, moved to the garden chip on the shop's
+  // reading, and moved again to here, which is the chip the stem it actually is
+  // belongs to.
   //   These are the one rose run carrying no counts, and deliberately: the
   // twenty-five-stem bunch and the 250 to 300 half box the rest of the wall is
   // written up with are standard rose figures, and the sheet put a spray at ten
@@ -857,8 +859,8 @@ const items: CatalogueItem[] = [
   // above says not to do. They come back the moment the shop confirms what a
   // bunch of these actually holds. The photograph comes across untouched.
   listedOnly("Champagne", "champagne", "spray", "/media/champagne.webp"),
-  listedOnly("Champagne Majolika", "champagne-majolika", "spray"),
-  listedOnly("Cream Majolika", "cream-majolika", "spray"),
+  listedOnly("Champagne Majolika", "champagne-majolika", "spray", "/media/champagne-majolika.webp"),
+  listedOnly("Cream Majolika", "cream-majolika", "spray", "/media/cream-majolika.webp"),
   listedOnly("Elba", "elba", "spray"),
   listedOnly("Fibonacci", "fibonacci", "spray"),
   listedOnly("Fire Up", "fire-up", "spray"),
