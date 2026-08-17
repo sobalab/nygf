@@ -692,6 +692,10 @@ const items: CatalogueItem[] = [
   packedRose("Fair Lady", "fair-lady", "roses", "/media/fair-lady.webp"),
   packedRose("Faith", "faith", "roses", "/media/faith.webp"),
   packedRose("Friendship", "friendship", "roses", "/media/friendship.webp"),
+  // Filed here off the supplier lists, moved to the garden chip on a reading of
+  // it, and back on a second look. Photograph, packing and address all come
+  // across untouched — the chip is the only thing that has ever changed.
+  packedRose("Glitz", "glitz", "roses", "/media/glitz.webp"),
   packedRose("Goldfinch", "goldfinch", "roses", "/media/goldfinch.webp"),
   packedRose("Gotcha", "gotcha", "roses", "/media/gotcha.webp"),
   packedRose("Govinda", "govinda", "roses", "/media/govinda.webp"),
@@ -772,18 +776,25 @@ const items: CatalogueItem[] = [
     packingNote: "Where in that range a box lands depends on whether the stems are short or long.",
   },
   // The rest of the garden varieties the shop supplies. Two families run through
-  // this chip and their series names are kept whole: X-pression, whose eight
-  // colours are all here, and Mayra Rose, whose six are all here too. Mayra
-  // Peach sits beside them rather than among them: it is its own variety, not
-  // the seventh Mayra Rose, however much the name reads like one.
+  // this chip: X-pression, whose eight colours are all here and all named in
+  // full, and Mayra, whose six are here written the short way the shop asks for
+  // them — Bridal Pink, Hot Pink, Peach, Pink, Red and White, with no Rose in
+  // the middle of the name.
+  //   A seventh, Mayra Rose Peach, was listed beside Mayra Peach and has been
+  // taken out on the shop's word that the one card covers what it sells. It is
+  // gone rather than mislaid, so it is not a gap for somebody to fill back in.
+  //   The slugs were shortened along with the names rather than left on the long
+  // form, which is the one place this file moves an address. It can here because
+  // the six were listed three days before the change and nothing outside this
+  // file has ever pointed at them, so there is no saved link to break.
   //   Aloha, Arya, Country Blues, Country Candy, Country Home, Cream
-  // X-pression, Exotix Berry, Garden Spirit, Glitz, Juicy X-pression,
-  // Mademoiselle, Mayra Peach, Queen's Crown and Shimmer were filed as standard
-  // roses when the supplier lists came in and were moved here on the shop's own
-  // reading of them. A supplier list does not always mark which of the two a
-  // variety is, and where it doesn't, the shop knowing what lands in the cooler
-  // beats a name. Champagne came here the same way and has since gone on to the
-  // spray chip, which is where it actually belongs.
+  // X-pression, Exotix Berry, Garden Spirit, Juicy X-pression, Mademoiselle,
+  // Mayra Peach, Queen's Crown and Shimmer were filed as standard roses when the
+  // supplier lists came in and were moved here on the shop's own reading of
+  // them. A supplier list does not always mark which of the two a variety is,
+  // and where it doesn't, the shop knowing what lands in the cooler beats a
+  // name. Two have since moved on again: Champagne to the spray chip, which is
+  // the stem it actually is, and Glitz back to the standard roses.
   packedRose("All 4 Love", "all-4-love", "garden", "/media/all-4-love.webp"),
   packedRose("Aloha", "aloha", "garden", "/media/aloha.webp"),
   packedRose("Antonia Gardens", "antonia-gardens", "garden"),
@@ -803,18 +814,16 @@ const items: CatalogueItem[] = [
   packedRose("Exotix Berry", "exotix-berry", "garden", "/media/exotix-berry.webp"),
   packedRose("Free Spirit", "free-spirit", "garden"),
   packedRose("Garden Spirit", "garden-spirit", "garden", "/media/garden-spirit.webp"),
-  packedRose("Glitz", "glitz", "garden", "/media/glitz.webp"),
   packedRose("Hearts", "hearts", "garden"),
   packedRose("Juicy X-pression", "juicy-x-pression", "garden", "/media/juicy-x-pression.webp"),
   packedRose("Mademoiselle", "mademoiselle", "garden", "/media/mademoiselle.webp"),
   packedRose("Mandarin X-pression", "mandarin-x-pression", "garden"),
   packedRose("Mayra Hot Pink", "mayra-hot-pink", "garden"),
   packedRose("Mayra Peach", "mayra-peach", "garden", "/media/mayra-peach.webp"),
-  packedRose("Mayra Rose Bridal Pink", "mayra-rose-bridal-pink", "garden"),
-  packedRose("Mayra Rose Peach", "mayra-rose-peach", "garden"),
-  packedRose("Mayra Rose Pink", "mayra-rose-pink", "garden"),
-  packedRose("Mayra Rose Red", "mayra-rose-red", "garden"),
-  packedRose("Mayra Rose White", "mayra-rose-white", "garden"),
+  packedRose("Mayra Bridal Pink", "mayra-bridal-pink", "garden"),
+  packedRose("Mayra Pink", "mayra-pink", "garden"),
+  packedRose("Mayra Red", "mayra-red", "garden"),
+  packedRose("Mayra White", "mayra-white", "garden"),
   packedRose("Queen's Crown", "queens-crown", "garden", "/media/queens-crown.webp"),
   packedRose("Shimmer", "shimmer", "garden", "/media/shimmer.webp"),
   packedRose("Vicky Gardens", "vicky-gardens", "garden"),
