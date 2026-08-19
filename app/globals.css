@@ -395,6 +395,55 @@ html[data-splash="off"] { --hero-start:.15s; }
 .filter-row button:hover { border-color:var(--sage); background:rgba(202,203,181,.11); }
 .filter-row button:active { transform:scale(.98); transition-duration:.09s; }
 .filter-row button[aria-pressed="true"] { background:var(--sage); border-color:var(--sage); color:var(--band-flowers); }
+/* Two toggles on one line, and the tray one of them opens beneath. At rest the
+   whole control is that single row: twenty-one chips between the two filters
+   would otherwise wrap to nine lines on a phone before the first photograph.
+     The toggles are the larger thing and the only outlined thing at rest, so the
+   row reads as two controls rather than as the first two of twenty-three equal
+   buttons — which is what it looked like when every one of them carried the same
+   box, the same size and the same weight. */
+.filter-bar { flex-wrap:wrap; row-gap:0; }
+.filter-disclosure { padding:13px 19px; font-size:16px; }
+.filter-disclosure[aria-expanded="true"] { border-color:var(--sage); }
+.filter-disclosure::after { content:""; display:inline-block; width:7px; height:7px; margin-left:9px; border-right:1.4px solid currentColor; border-bottom:1.4px solid currentColor; transform:translateY(-2px) rotate(45deg); transition:transform .3s var(--ease); }
+.filter-disclosure[aria-expanded="true"]::after { transform:translateY(1px) rotate(-135deg); }
+/* The tray. Its own surface, recessed out of the band, and that containment is
+   what does the work: the row above is the control and everything inside the
+   well is what the control holds. One tray at a time, under one raised toggle,
+   so which belongs to which is answered by position and needs no label saying
+   so a second time. */
+.filter-panel { flex-basis:100%; display:flex; flex-wrap:wrap; gap:8px; margin-top:12px; padding:14px; border-radius:var(--tile-radius); background:rgba(0,0,0,.16); }
+.filter-panel[hidden] { display:none; }
+/* Quieter than the toggles by a step of size and a step of edge: no outline, a
+   fill instead, and the chosen one is the only box in the tray. The row of
+   options should read as a list to scan, not as twelve things each asking to be
+   pressed as hard as the control above them. */
+.filter-panel button { border-color:transparent; background:rgba(202,203,181,.1); padding:11px 15px; font-size:14px; }
+.filter-panel button:hover { border-color:transparent; background:rgba(202,203,181,.2); }
+.filter-panel button[aria-pressed="true"] { background:var(--sage); border-color:var(--sage); color:var(--band-flowers); }
+.filter-panel button:disabled:hover { border-color:transparent; background:rgba(202,203,181,.1); }
+/* A colour with nothing under it in the chip that is already down. Dimmed rather
+   than dropped: a row that reflows under the thumb reaching for it is worse than
+   one that says no. */
+.filter-row button:disabled { opacity:.38; cursor:default; }
+.filter-row button:disabled:hover { border-color:rgba(202,203,181,.5); background:none; }
+/* The swatch is the only place on the site that paints a colour from outside the
+   palette, and it is content rather than chrome — the same licence the
+   photographs have. Nothing else may draw from this set.
+     The inner ring keeps a white dot legible on both grounds the chip has: the
+   dark green band at rest, and the sage fill once it is pressed. */
+.swatch { display:inline-block; width:11px; height:11px; margin-right:8px; border-radius:50%; vertical-align:-1px; box-shadow:inset 0 0 0 1px rgba(23,40,46,.28); }
+.swatch[data-colour="white"] { background:#f7f4ef; }
+.swatch[data-colour="cream"] { background:#ead9b4; }
+.swatch[data-colour="yellow"] { background:#e9c23f; }
+.swatch[data-colour="orange"] { background:#d4762c; }
+.swatch[data-colour="peach"] { background:#eda580; }
+.swatch[data-colour="pink"] { background:#e0779b; }
+.swatch[data-colour="red"] { background:#b03236; }
+.swatch[data-colour="lavender"] { background:#a892c8; }
+.swatch[data-colour="green"] { background:#84a173; }
+/* Two colours on one stem, which is what the chip means. */
+.swatch[data-colour="bicolour"] { background:linear-gradient(135deg,#e9c23f 46%,#b03236 46%); }
 .catalogue-status { display:flex; flex-wrap:wrap; align-items:baseline; gap:6px 22px; }
 /* Tabular figures: the count changes on every keystroke, and proportional ones
    would shift the word after them each time it did. */

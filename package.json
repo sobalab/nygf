@@ -11,7 +11,10 @@
     "start": "next start",
     "test": "npm run build && node --test tests/rendered-html.test.mjs",
     "lint": "eslint .",
-    "media": "bash scripts/optimize-media.sh"
+    "media": "bash scripts/optimize-media.sh",
+    "colours": "node --experimental-strip-types scripts/propose-colours.mjs",
+    "colours:check": "node --experimental-strip-types scripts/propose-colours.mjs --check",
+    "colours:apply": "node --experimental-strip-types scripts/apply-colours.mjs"
   },
   "dependencies": {
     "motion": "^13.1.0",

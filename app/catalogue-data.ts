@@ -35,6 +35,80 @@ export const categories = [
 
 export type CategoryId = (typeof categories)[number]["id"];
 
+// The colour chips, and a second axis the grid narrows on. A category says what
+// a stem is; a colour says what it looks like, and the two compose — "white
+// spray roses" is a real question a buyer asks and neither chip row answers on
+// its own.
+//   These are filter groups and not the words the cards print. The `colour` a
+// record carries is editorial and stays that way: the standard roses run a
+// deliberate three-step pink scale, light to medium to hot, and flattening that
+// into one chip would lose the only thing telling three cards apart. So the
+// scale keeps its words on the card and the chip says Pink, and both are true.
+//   Ordered warm out of white rather than alphabetically, because the row reads
+// as a spectrum and Bicolour is the one that belongs at the end of it.
+export const colourGroups = [
+  { id: "white", label: "White" },
+  { id: "cream", label: "Cream" },
+  { id: "yellow", label: "Yellow" },
+  { id: "orange", label: "Orange" },
+  { id: "peach", label: "Peach" },
+  { id: "pink", label: "Pink" },
+  { id: "red", label: "Red" },
+  { id: "lavender", label: "Lavender" },
+  { id: "green", label: "Green" },
+  { id: "bicolour", label: "Bicolour" },
+] as const;
+
+export type ColourGroupId = (typeof colourGroups)[number]["id"];
+
+// The words a written colour is read for, longest-lived first: every value on
+// the list today is here, plus the ones the shop is likely to reach for next, so
+// a colour typed during a review lands in a chip instead of nowhere.
+//   Matched as words inside the value rather than against the whole string,
+// which is what lets a record say what it actually is: "white and cream" is
+// filed under both White and Cream, and a bicolour written out as "yellow with
+// an orange edge" reaches both its colours. A stem that is two colours is two
+// answers, and a buyer looking for either should find it.
+const colourWords: ReadonlyArray<readonly [string, ColourGroupId]> = [
+  ["bicolor", "bicolour"],
+  ["bicolour", "bicolour"],
+  ["white", "white"],
+  ["ivory", "cream"],
+  ["cream", "cream"],
+  ["beige", "cream"],
+  ["champagne", "cream"],
+  ["yellow", "yellow"],
+  ["gold", "yellow"],
+  ["orange", "orange"],
+  ["peach", "peach"],
+  ["apricot", "peach"],
+  ["coral", "peach"],
+  ["blush", "pink"],
+  ["pink", "pink"],
+  ["burgundy", "red"],
+  ["crimson", "red"],
+  ["red", "red"],
+  ["lavender", "lavender"],
+  ["lilac", "lavender"],
+  ["purple", "lavender"],
+  ["mauve", "lavender"],
+  ["green", "green"],
+];
+
+// The chips a written colour answers to, in the order the row runs in so the
+// same two colours always come back in the same order. An empty array is a
+// colour no chip claims, which the test at the foot of the tests file is there
+// to catch: a value that matches nothing would drop off every chip silently,
+// and silence is the one failure this file can't see.
+export function colourGroupsOf(colour: string): ColourGroupId[] {
+  const haystack = colour.toLowerCase();
+  const found = new Set<ColourGroupId>();
+  for (const [word, id] of colourWords) {
+    if (haystack.includes(word)) found.add(id);
+  }
+  return colourGroups.filter(({ id }) => found.has(id)).map(({ id }) => id);
+}
+
 export type CatalogueItem = {
   name: string;
   // The item's own address, at /catalogue/<slug>. Written down rather than
@@ -172,11 +246,15 @@ const rosePacking = {
 // spelling. The photograph is passed for a plainer reason: it is a file that has
 // to exist, and a path built out of the slug would go on looking right in the
 // source long after the picture behind it stopped being there.
-const packedRose = (name: string, slug: string, category: CategoryId, image?: string): CatalogueItem => ({ name, slug, category, image, ...rosePacking });
+const packedRose = (name: string, slug: string, category: CategoryId, image?: string, colour?: string): CatalogueItem => ({ name, slug, category, image, colour, ...rosePacking });
 
 // The same, minus the counts, for a variety whose packing this file has no
 // business claiming to know.
-const listedOnly = (name: string, slug: string, category: CategoryId, image?: string): CatalogueItem => ({ name, slug, category, image });
+// A colour is the fifth argument on both rather than a spread over the call,
+// which is what Pink Mondial used to need to carry one. With a hundred of these
+// waiting on a colour each, the argument is the difference between a diff that
+// can be read and one that can only be trusted.
+const listedOnly = (name: string, slug: string, category: CategoryId, image?: string, colour?: string): CatalogueItem => ({ name, slug, category, image, colour });
 
 const items: CatalogueItem[] = [
   // The standard roses lead, and the three other rose chips follow them in the
@@ -717,7 +795,7 @@ const items: CatalogueItem[] = [
   // The colour is carried here because the pair is the one place on the wall
   // where a name alone misleads: Mondial is the ivory white, and Pink Mondial is
   // the separate variety this one is. Both cards say which they are.
-  { ...packedRose("Pink Mondial", "pink-mondial", "roses", "/media/pink-mondial.webp"), colour: "light pink" },
+  packedRose("Pink Mondial", "pink-mondial", "roses", "/media/pink-mondial.webp", "light pink"),
   packedRose("Quicksand", "quicksand", "roses", "/media/quicksand.webp"),
   packedRose("Rosita Vendela", "rosita-vendela", "roses", "/media/rosita-vendela.webp"),
   packedRose("Secret Garden", "secret-garden", "roses", "/media/secret-garden.webp"),
@@ -885,24 +963,21 @@ const items: CatalogueItem[] = [
   //   The named tints are mostly holiday lines: Halloween, Christmas, autumn and
   // Easter. BellaRosa runs a full tinted catalogue of its own that has not been
   // sent, so this chip is the short version of what is actually available.
-  packedRose("Candy Cane", "candy-cane", "tinted"),
-  packedRose("Cotton Cloud", "cotton-cloud", "tinted"),
-  packedRose("Fall Hellujah", "fall-hellujah", "tinted"),
-  packedRose("Fall in Love", "fall-in-love", "tinted"),
-  packedRose("Fall Rainbow", "fall-rainbow", "tinted"),
-  packedRose("Fancy Cake", "fancy-cake", "tinted"),
-  packedRose("Fluffy", "fluffy", "tinted"),
-  packedRose("Hallow Queen", "hallow-queen", "tinted"),
-  packedRose("Harvest Delight", "harvest-delight", "tinted"),
-  packedRose("Hopper", "hopper", "tinted"),
-  packedRose("Peeps", "peeps", "tinted"),
-  packedRose("Pumpkin Patch", "pumpkin-patch", "tinted"),
-  packedRose("Santa's Helper", "santas-helper", "tinted"),
-  packedRose("Spooktacular", "spooktacular", "tinted"),
-  packedRose("Stalk The Sun", "stalk-the-sun", "tinted"),
-  packedRose("T-Marshmellow", "t-marshmellow", "tinted"),
-  packedRose("Whisper Mellow Edge", "whisper-mellow-edge", "tinted"),
-  packedRose("X-mas Gift", "x-mas-gift", "tinted"),
+  packedRose("Black Dragon", "black-dragon", "tinted", "/media/black-dragon.webp"),
+  packedRose("Candy Cane Cocktail", "candy-cane", "tinted", "/media/candy-cane.webp"),
+  packedRose("Fall Hellujah", "fall-hellujah", "tinted", "/media/fall-hellujah.webp"),
+  packedRose("Fall in Love", "fall-in-love", "tinted", "/media/fall-in-love.webp"),
+  packedRose("Fluffy", "fluffy", "tinted", "/media/fluffy.webp"),
+  packedRose("Hallow Queen", "hallow-queen", "tinted", "/media/hallow-queen.webp"),
+  packedRose("Harvest Delight", "harvest-delight", "tinted", "/media/harvest-delight.webp"),
+  packedRose("Hopper", "hopper", "tinted", "/media/hopper.webp"),
+  packedRose("Peeps", "peeps", "tinted", "/media/peeps.webp"),
+  packedRose("Pumpkin Patch", "pumpkin-patch", "tinted", "/media/pumpkin-patch.webp"),
+  packedRose("Santa's Helper", "santas-helper", "tinted", "/media/santas-helper.webp"),
+  packedRose("Spooktacular", "spooktacular", "tinted", "/media/spooktacular.webp"),
+  packedRose("Stalk The Sun", "stalk-the-sun", "tinted", "/media/stalk-the-sun.webp"),
+  packedRose("T-Marshmellow", "t-marshmellow", "tinted", "/media/t-marshmallow.webp"),
+  packedRose("X-mas Gift", "x-mas-gift", "tinted", "/media/xmas-gift.webp"),
 
   {
     name: "Select-grade Carnation",
@@ -1652,6 +1727,11 @@ export const flowers = items
   .map((item) => ({
     ...item,
     group: categoryLabels.get(item.category)!,
+    // Read once here rather than parsed per keystroke in the filter, the same
+    // bargain the haystack below makes. A record with no colour gets an empty
+    // array and not a null, so the chip test is one `.some` with no guard in
+    // front of it.
+    colourIds: item.colour ? colourGroupsOf(item.colour) : [],
     href: `/catalogue/${item.slug}`,
     search: normalize([item.name, item.colour, item.korean, item.botanical].filter(Boolean).join(" ")),
   }))
@@ -1671,6 +1751,17 @@ export type Flower = (typeof flowers)[number];
 export const flowerBySlug = new Map<string, Flower>(flowers.map((flower) => [flower.slug, flower]));
 if (flowerBySlug.size !== flowers.length) {
   throw new Error("catalogue-data: two items share a slug");
+}
+
+// A written colour that no chip claims is the one failure the wall cannot show:
+// the card would go on printing the word while the colour row quietly dropped
+// the variety, and a buyer filtering for whites would be told the shop has none
+// of a rose that is sitting two rows above. Taken down here at module load, the
+// same as a repeated slug, because there is no screen it would look wrong on.
+const unfiled = flowers.filter((flower) => flower.colour && flower.colourIds.length === 0);
+if (unfiled.length) {
+  const named = unfiled.map((flower) => `${flower.slug} ("${flower.colour}")`).join(", ");
+  throw new Error(`catalogue-data: colour matches no chip, add the word to colourWords: ${named}`);
 }
 
 // The cards under a detail page. A record that names its own neighbours gets

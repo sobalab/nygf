@@ -2,7 +2,7 @@
 
 import { Fragment, useEffect, useId, useMemo, useRef, useState, useSyncExternalStore, type CSSProperties } from "react";
 import { Ask } from "../ask";
-import { categories, flowers, normalizeQuery, services, type CategoryId } from "../catalogue-data";
+import { categories, colourGroups, flowers, normalizeQuery, services, type CategoryId, type ColourGroupId } from "../catalogue-data";
 import { Arrow, SiteFooter, SiteHeader } from "../chrome";
 import { FlowerCard } from "../flower-card";
 import { shop, whatsappHref } from "../site";
@@ -48,6 +48,47 @@ function noHashCategory() {
   return null;
 }
 
+// Colour rides in the query string rather than the hash, because the hash is
+// already spoken for: it carries the category every variety page links back
+// with, and it is also a real anchor on this page. Two filters, two surfaces,
+// and /catalogue?colour=white#roses says both at once.
+//   Subscribed the same way the hash is, and for the same reason — the URL is
+// the browser's value and not this component's. Read as a string rather than an
+// array because useSyncExternalStore compares snapshots by identity, and a fresh
+// array every read is a new value every render, which is a loop and not a filter.
+function subscribeToSearchParams(onChange: () => void) {
+  window.addEventListener("popstate", onChange);
+  return () => window.removeEventListener("popstate", onChange);
+}
+
+function readSearchColours(): string {
+  const raw = new URLSearchParams(window.location.search).get("colour");
+  if (!raw) return "";
+  // Anything not a chip is dropped rather than obeyed: a typed or stale colour
+  // should leave the reader looking at the whole wall, not an empty one.
+  const wanted = new Set(raw.split(",").map((value) => value.trim()));
+  return colourGroups.filter(({ id }) => wanted.has(id)).map(({ id }) => id).join(",");
+}
+
+function noSearchColours() {
+  return "";
+}
+
+// Written back with replaceState and not pushState. A buyer building a palette
+// presses four chips to get to it, and each one would be a step the back button
+// has to walk out of before it reaches the page they arrived from.
+function writeColourParam(next: readonly ColourGroupId[]) {
+  const url = new URL(window.location.href);
+  if (next.length) url.searchParams.set("colour", next.join(","));
+  else url.searchParams.delete("colour");
+  window.history.replaceState(null, "", url);
+}
+
+// What the chip says, for the toggle above it to repeat while the chips are
+// folded away. Read off the same array the row is drawn from rather than kept as
+// a second copy of the same fact.
+const categoryLabel = (id: CategoryId) => categories.find((category) => category.id === id)!.label;
+
 // A screenful of cards rather than the whole cooler at once. Divisible by 4, 3
 // and 2, which are the column counts the grid steps through, so a full page is
 // always whole rows at every width — a remainder row of one card reads as the
@@ -72,6 +113,8 @@ function pageNumbers(current: number, total: number): (number | "gap")[] {
 
 export default function Catalogue() {
   const searchId = useId();
+  const colourPanelId = useId();
+  const typePanelId = useId();
   const searchRef = useRef<HTMLInputElement>(null);
   const hashCategory = useSyncExternalStore(subscribeToHash, readHashCategory, noHashCategory);
   // Three states rather than two, and the third is the point: `undefined` is a
@@ -81,6 +124,42 @@ export default function Catalogue() {
   // pressing the chip that is already down comes back here.
   const [chosen, setChosen] = useState<CategoryId | null | undefined>(undefined);
   const active = chosen === undefined ? hashCategory : chosen;
+
+  // The same bargain for colour: untouched defers to the URL, and a reader who
+  // has pressed a chip keeps what they pressed. Memoised because it is an array
+  // the filter below depends on, and a new one each render would rebuild the
+  // grid on every keystroke aimed at the search box.
+  const urlColours = useSyncExternalStore(subscribeToSearchParams, readSearchColours, noSearchColours);
+  const [chosenColours, setChosenColours] = useState<ColourGroupId[] | undefined>(undefined);
+  const colours = useMemo(
+    () => chosenColours ?? (urlColours ? (urlColours.split(",") as ColourGroupId[]) : []),
+    [chosenColours, urlColours],
+  );
+
+  // One panel at a time, and that is what makes the tray beneath legible: with
+  // both open there were two trays under two toggles and nothing saying which
+  // belonged to which. One open panel sits under one raised toggle and the
+  // question is answered by position.
+  //   Nothing is hidden by closing the other: each toggle carries its own
+  // selection, so a reader can see both filters at once while only editing one.
+  //   Shut unless the reader arrived with a filter already set, in which case
+  // its chips are what the page has to explain — a variety page's back link
+  // carries /catalogue#roses, which is exactly the path where somebody returns
+  // to a wall that is already narrowed. Type wins when both arrive at once,
+  // being the first of the two.
+  const [panel, setPanel] = useState<"type" | "colour" | null | undefined>(undefined);
+  const openPanel = panel !== undefined ? panel : hashCategory !== null ? "type" : urlColours !== "" ? "colour" : null;
+  const typesShown = openPanel === "type";
+  const coloursShown = openPanel === "colour";
+
+  function toggleColour(id: ColourGroupId) {
+    const next = colours.includes(id) ? colours.filter((colour) => colour !== id) : [...colours, id];
+    // Held in the row's own order rather than the order they were pressed in, so
+    // the same two colours always write the same URL.
+    const ordered = colourGroups.filter((group) => next.includes(group.id)).map((group) => group.id);
+    setChosenColours(ordered);
+    writeColourParam(ordered);
+  }
   // Two pieces of state for one field. `query` is what the input shows and has
   // to update on every keystroke; `term` is what the grid reads, and follows a
   // beat behind so a buyer typing a name doesn't rebuild 37 cards per letter.
@@ -93,14 +172,36 @@ export default function Catalogue() {
   }, [query]);
 
   const needle = normalizeQuery(term);
-  // Category AND search, not or: a chip narrows the list the query is run
-  // against, so the two compose rather than replacing one another.
+  // Category AND colour AND search, not or: each narrows the list the next is run
+  // against, so the three compose rather than replacing one another. Within
+  // colour it is or — a buyer picking blush and peach and cream is describing one
+  // palette, not asking for a stem that is somehow all three.
   const visibleFlowers = useMemo(
-    () => flowers.filter((flower) => (active === null || flower.category === active) && (needle === "" || flower.search.includes(needle))),
-    [active, needle],
+    () =>
+      flowers.filter(
+        (flower) =>
+          (active === null || flower.category === active) &&
+          (colours.length === 0 || flower.colourIds.some((id) => colours.includes(id))) &&
+          (needle === "" || flower.search.includes(needle)),
+      ),
+    [active, colours, needle],
   );
 
-  const narrowed = active !== null || query !== "";
+  // What each colour would leave on the wall, given everything else already set.
+  // A chip that would empty the grid is turned off rather than removed: taking it
+  // out reflows the row under the thumb about to press it, and a reader watching
+  // chips appear and vanish learns less than one watching them dim.
+  const colourCounts = useMemo(() => {
+    const counts = new Map<ColourGroupId, number>();
+    for (const flower of flowers) {
+      if (active !== null && flower.category !== active) continue;
+      if (needle !== "" && !flower.search.includes(needle)) continue;
+      for (const id of flower.colourIds) counts.set(id, (counts.get(id) ?? 0) + 1);
+    }
+    return counts;
+  }, [active, needle]);
+
+  const narrowed = active !== null || colours.length > 0 || query !== "";
 
   const [page, setPage] = useState(1);
   const pageCount = Math.max(1, Math.ceil(visibleFlowers.length / PER_PAGE));
@@ -111,7 +212,7 @@ export default function Catalogue() {
   // React re-runs this component immediately and nothing reaches the screen in
   // between. The hash can change the category too, which is why this watches
   // the resolved filter rather than sitting in the chip handlers.
-  const filterKey = `${active ?? ""}|${needle}`;
+  const filterKey = `${active ?? ""}|${colours.join(",")}|${needle}`;
   const [lastFilter, setLastFilter] = useState(filterKey);
   if (lastFilter !== filterKey) {
     setLastFilter(filterKey);
@@ -142,6 +243,8 @@ export default function Catalogue() {
 
   function clearAll() {
     setChosen(null);
+    setChosenColours([]);
+    writeColourParam([]);
     clearSearch();
   }
 
@@ -191,21 +294,92 @@ export default function Catalogue() {
             </div>
           </search>
 
-          <div className="filter-row" role="group" aria-label="Filter flowers by category">
-            {/* The way back to the whole list, and the state the page opens in.
-                It doesn't toggle off the way the ones below it do: there is
-                nowhere for it to go, since it is already the resting state. */}
-            <button type="button" aria-pressed={active === null} onClick={() => setChosen(null)}>
-              All Flowers
+          {/* Both filters are shut at rest, and the two toggles sit on one line
+              so the whole control is a single row until a reader asks it for
+              more. Eleven type chips and ten colour chips wrap to nine lines
+              between them on a phone, which would put the first photograph off
+              the bottom of the screen on the page whose whole job is
+              photographs.
+                They open independently rather than one closing the other: they
+              are two questions about the same wall and a buyer narrowing by both
+              should be able to see both answers.
+                Each toggle carries its own selection, because a panel can be
+              shut over a filter that is still on — without that the grid would
+              be short for a reason the page had folded away. The type says which
+              one, since only one can be down; the colour says how many, since
+              several can. */}
+          <div className="filter-row filter-bar">
+            <button
+              type="button"
+              className="filter-disclosure"
+              aria-expanded={typesShown}
+              aria-controls={typePanelId}
+              aria-pressed={active !== null}
+              onClick={() => setPanel(typesShown ? null : "type")}
+            >
+              {active !== null ? `Flower Type: ${categoryLabel(active)}` : "Flower Type"}
             </button>
-            {categories.map((category) => {
-              const pressed = active === category.id;
-              return (
-                <button key={category.id} type="button" aria-pressed={pressed} onClick={() => setChosen(pressed ? null : category.id)}>
-                  {category.label}
-                </button>
-              );
-            })}
+            <button
+              type="button"
+              className="filter-disclosure"
+              aria-expanded={coloursShown}
+              aria-controls={colourPanelId}
+              aria-pressed={colours.length > 0}
+              onClick={() => setPanel(coloursShown ? null : "colour")}
+            >
+              {colours.length > 0 ? `Colour (${colours.length})` : "Colour"}
+            </button>
+
+            <div
+              id={typePanelId}
+              className="filter-panel"
+              role="group"
+              aria-label="Filter flowers by category"
+              hidden={!typesShown}
+            >
+              {/* The way back to the whole list, and the state the page opens in.
+                  It doesn't toggle off the way the ones after it do: there is
+                  nowhere for it to go, since it is already the resting state. */}
+              <button type="button" aria-pressed={active === null} onClick={() => setChosen(null)}>
+                All Flowers
+              </button>
+              {categories.map((category) => {
+                const pressed = active === category.id;
+                return (
+                  <button key={category.id} type="button" aria-pressed={pressed} onClick={() => setChosen(pressed ? null : category.id)}>
+                    {category.label}
+                  </button>
+                );
+              })}
+            </div>
+
+            <div
+              id={colourPanelId}
+              className="filter-panel"
+              role="group"
+              aria-label="Filter flowers by colour"
+              hidden={!coloursShown}
+            >
+              {colourGroups.map((group) => {
+                const pressed = colours.includes(group.id);
+                const count = colourCounts.get(group.id) ?? 0;
+                return (
+                  <button
+                    key={group.id}
+                    type="button"
+                    aria-pressed={pressed}
+                    disabled={count === 0 && !pressed}
+                    onClick={() => toggleColour(group.id)}
+                  >
+                    {/* The dot is what makes this row legible as colour at a
+                        glance. It is decoration and the word beside it is the
+                        name, so it is not read out twice. */}
+                    <span className="swatch" data-colour={group.id} aria-hidden="true" />
+                    {group.label}
+                  </button>
+                );
+              })}
+            </div>
           </div>
 
           <div className="catalogue-status">
