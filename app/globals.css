@@ -1124,6 +1124,19 @@ a:focus-visible,button:focus-visible,input:focus-visible { outline:2px solid var
   }
   .page-head:has(+ .catalogue),.catalogue:not(.flower-field) { padding-inline:max(6vw,calc((100% - var(--grid-cap)) / 2)); }
   .catalogue .flower-grid,.catalogue .pagination { max-width:var(--grid-cap); }
+  /* Search and filters on one line, since there is room for them on one line:
+     they are the same act — narrowing the wall — and stacked they took a third
+     of the window's height to say so. The field sits at the left edge of the
+     grid and the toggles at its right edge, a column apart, so the row reads as
+     two controls at the ends of the wall rather than as four things in a
+     huddle. The field takes what is left between them, up to the measure it
+     already had. The count keeps its own line under both, and the menus still
+     hang from the toggles into the slot of no height under them, so they open
+     over the grid rather than moving it. */
+  .catalogue-controls { flex-direction:row; flex-wrap:wrap; align-items:center; justify-content:space-between; gap:24px 44px; }
+  .catalogue-search { flex:1 1 260px; max-width:400px; }
+  .catalogue-controls .filter-bar { flex:none; flex-wrap:nowrap; }
+  .catalogue-status { flex:1 0 100%; }
 }
 
 @media (max-width:1000px) {
