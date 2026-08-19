@@ -361,7 +361,7 @@ export default function Catalogue() {
               className="filter-panel"
               role="group"
               aria-label="Filter flowers by category"
-              hidden={!typesShown}
+              data-open={typesShown}
             >
               {/* The way back to the whole list, and the state the page opens in.
                   It doesn't toggle off the way the ones after it do: there is
@@ -398,7 +398,7 @@ export default function Catalogue() {
               className="filter-panel"
               role="group"
               aria-label="Filter flowers by colour"
-              hidden={!coloursShown}
+              data-open={coloursShown}
             >
               {colourGroups.map((group) => {
                 const pressed = colours.includes(group.id);

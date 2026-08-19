@@ -435,7 +435,13 @@ html[data-splash="off"] { --hero-start:.15s; }
      The ground is opaque rather than a wash of black over the band, because it
    has flowers behind it now and a tint would let them through. */
 .filter-panel { position:relative; z-index:15; margin-top:10px; display:flex; flex-direction:column; align-items:stretch; gap:6px; padding:12px; border-radius:var(--tile-radius); background:linear-gradient(rgba(0,0,0,.18),rgba(0,0,0,.18)),var(--band-flowers); box-shadow:0 12px 30px rgba(0,0,0,.4), 0 0 0 1px rgba(202,203,181,.13); }
-.filter-panel[hidden] { display:none; }
+/* Shut, the tray is still laid out — invisible, untabbable and unreadable to a
+   screen reader, but measured — so the column keeps the width of the list it
+   opens and the toggle is the same size shut as open. It is held shut with an
+   attribute of its own rather than with hidden, because hidden carries a
+   display:none the page cannot outvote, and out of the flow the toggle snapped
+   back to the width of its label and the row jumped on every press. */
+.filter-panel[data-open="false"] { visibility:hidden; }
 /* Quieter than the toggles by a step of size and a step of edge: no outline, a
    fill instead, and the chosen one is the only box in the tray. The row of
    options should read as a list to scan, not as twelve things each asking to be
@@ -1216,6 +1222,11 @@ a:focus-visible,button:focus-visible,input:focus-visible { outline:2px solid var
 }
 
 @media (max-width:440px) {
+  /* The tray is what sets its toggle's width now, so a few pixels off the tray
+     is a few pixels off the row — enough for both toggles to stay on one line
+     on a 375-wide phone rather than stacking. */
+  .filter-panel { padding:9px; }
+  .filter-panel button { padding:10px 12px; }
   .hero h1 { font-size:13vw; }
   .hero-button { font-size:11px; letter-spacing:.9px; }
   .flower-grid { grid-template-columns:1fr; }
