@@ -1087,6 +1087,45 @@ a:focus-visible,button:focus-visible,input:focus-visible { outline:2px solid var
   .home>.trade { display:flex; flex-direction:column; justify-content:center; }
 }
 
+/* Two rows of the grid in the window, on any desktop screen. A catalogue whose
+   first row fills the screen reads as one flower at a time; two rows is what
+   makes it a list to look down, and the second row is also what tells a reader
+   there is more under the fold at all.
+     So the card is sized from the height there is for it rather than from the
+   width: half of what the window has left under the floating header, less the
+   two lines of words, and the photograph's own 3:4 turns that height into the
+   column's width. Four columns throughout — the grid narrows on a short screen
+   instead of splitting into more and smaller cards, and the cap is set at the
+   width the cards already had, so a tall screen keeps exactly what it has now.
+     The narrowed grid takes the page with it: the title, the copy, the search and
+   the filters all measure to the same column and the column sits in the middle
+   of the band, so the page is one centred thing rather than a full-width band
+   with its contents pushed against the left edge. The pagination takes the cap
+   for the same reason. */
+@media (min-width:1001px) {
+  :root {
+    /* The header floats over the band, so its height is a reserve rather than
+       something the flow has already paid for; the rest is air over the first
+       photograph.
+         --card-words is the name and the category under it, and it is set a
+       line taller than those two lines usually come out: at this width one card
+       in a page or so has a long colour after its category, or a name in
+       brackets, and takes a second line for it. Budgeting for the short version
+       and letting the long one push the row is what puts the second row's words
+       under the fold on the pages that have one. */
+    --grid-reserve:104px;
+    --card-words:111px;
+    --grid-row:calc((100svh - var(--grid-reserve) - 42px) / 2);
+    /* The floor is where a card stops being worth shrinking. The sum works out
+       so that it starts to bind at a window about 770 tall, which is where the
+       page gives up the second row rather than going on to thumbnails. The ceiling is the width
+       the cards already had, so nothing changes on a tall screen. */
+    --grid-cap:calc(clamp(150px, (var(--grid-row) - var(--card-words)) * 3 / 4, 300px) * 4 + 54px);
+  }
+  .page-head:has(+ .catalogue),.catalogue:not(.flower-field) { padding-inline:max(6vw,calc((100% - var(--grid-cap)) / 2)); }
+  .catalogue .flower-grid,.catalogue .pagination { max-width:var(--grid-cap); }
+}
+
 @media (max-width:1000px) {
   .flower-grid { grid-template-columns:repeat(3,1fr); }
 }
