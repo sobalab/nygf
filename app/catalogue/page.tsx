@@ -136,21 +136,45 @@ export default function Catalogue() {
     [chosenColours, urlColours],
   );
 
-  // One panel at a time, and that is what makes the tray beneath legible: with
-  // both open there were two trays under two toggles and nothing saying which
-  // belonged to which. One open panel sits under one raised toggle and the
-  // question is answered by position.
-  //   Nothing is hidden by closing the other: each toggle carries its own
-  // selection, so a reader can see both filters at once while only editing one.
-  //   Shut unless the reader arrived with a filter already set, in which case
-  // its chips are what the page has to explain — a variety page's back link
-  // carries /catalogue#roses, which is exactly the path where somebody returns
-  // to a wall that is already narrowed. Type wins when both arrive at once,
-  // being the first of the two.
-  const [panel, setPanel] = useState<"type" | "colour" | null | undefined>(undefined);
-  const openPanel = panel !== undefined ? panel : hashCategory !== null ? "type" : urlColours !== "" ? "colour" : null;
-  const typesShown = openPanel === "type";
-  const coloursShown = openPanel === "colour";
+  // Opened and shut independently, so a buyer narrowing by both can see both
+  // sets of chips at once. Two trays stacked needs no label saying which is
+  // which: one holds the names of flowers and the other holds ten colours each
+  // carrying its own dot, and nobody reads Garden Roses as a colour.
+  //   Shut unless the reader arrived with that filter already set, in which case
+  // its chips are what the page has to explain and folding them away would hide
+  // the reason the list is short. A variety page's back link carries
+  // /catalogue#roses, which is exactly the path where somebody returns to a wall
+  // that is already narrowed.
+  const [typeOpen, setTypeOpen] = useState<boolean | undefined>(undefined);
+  const typesShown = typeOpen ?? hashCategory !== null;
+  const [colourOpen, setColourOpen] = useState<boolean | undefined>(undefined);
+  const coloursShown = colourOpen ?? urlColours !== "";
+
+  // A menu that lies over the wall has to be dismissible from outside itself: the
+  // toggle that opened it is a small target and it is behind the thing covering
+  // the page. Escape and a press anywhere else both shut them, which is what a
+  // reader who has finished with a menu will already try.
+  const filterBarRef = useRef<HTMLDivElement>(null);
+  const anyPanelOpen = typesShown || coloursShown;
+  useEffect(() => {
+    if (!anyPanelOpen) return;
+    const closeAll = () => {
+      setTypeOpen(false);
+      setColourOpen(false);
+    };
+    const onPointerDown = (event: PointerEvent) => {
+      if (!filterBarRef.current?.contains(event.target as Node)) closeAll();
+    };
+    const onKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Escape") closeAll();
+    };
+    document.addEventListener("pointerdown", onPointerDown);
+    document.addEventListener("keydown", onKeyDown);
+    return () => {
+      document.removeEventListener("pointerdown", onPointerDown);
+      document.removeEventListener("keydown", onKeyDown);
+    };
+  }, [anyPanelOpen]);
 
   function toggleColour(id: ColourGroupId) {
     const next = colours.includes(id) ? colours.filter((colour) => colour !== id) : [...colours, id];
@@ -305,32 +329,34 @@ export default function Catalogue() {
               should be able to see both answers.
                 Each toggle carries its own selection, because a panel can be
               shut over a filter that is still on — without that the grid would
-              be short for a reason the page had folded away. The type says which
-              one, since only one can be down; the colour says how many, since
-              several can. */}
-          <div className="filter-row filter-bar">
-            <button
+              be short for a reason the page had folded away. The type toggle says
+              which one, since only one can be down, and it names the chip rather
+              than the question: shut and unfiltered it reads All Flowers, which
+              is the chip that is down and the state the page opens in, and not a
+              heading for a row that is not on screen. The colour says how many,
+              since several can be. */}
+          <div className="filter-row filter-bar" ref={filterBarRef}>
+            {/* Toggle and menu in one column each. The menu sits in the flow so
+                it can set the column's width — which is what makes the toggle
+                come out the same width as the list it opens — inside a slot of
+                no height, so it hangs over the wall rather than pushing 36
+                photographs down the page and back up again.
+                  It also settles where the menus go: a column as wide as its own
+                menu cannot run under its neighbour, which is what happened when
+                the toggles were only as wide as their labels. */}
+            <div className="filter-group">
+              <button
               type="button"
               className="filter-disclosure"
               aria-expanded={typesShown}
               aria-controls={typePanelId}
               aria-pressed={active !== null}
-              onClick={() => setPanel(typesShown ? null : "type")}
+              onClick={() => setTypeOpen(!typesShown)}
             >
-              {active !== null ? `Flower Type: ${categoryLabel(active)}` : "Flower Type"}
+              {active !== null ? categoryLabel(active) : "All Flowers"}
             </button>
-            <button
-              type="button"
-              className="filter-disclosure"
-              aria-expanded={coloursShown}
-              aria-controls={colourPanelId}
-              aria-pressed={colours.length > 0}
-              onClick={() => setPanel(coloursShown ? null : "colour")}
-            >
-              {colours.length > 0 ? `Colour (${colours.length})` : "Colour"}
-            </button>
-
-            <div
+              <div className="filter-menu">
+                <div
               id={typePanelId}
               className="filter-panel"
               role="group"
@@ -352,8 +378,22 @@ export default function Catalogue() {
                 );
               })}
             </div>
+              </div>
+            </div>
 
-            <div
+            <div className="filter-group">
+              <button
+              type="button"
+              className="filter-disclosure"
+              aria-expanded={coloursShown}
+              aria-controls={colourPanelId}
+              aria-pressed={colours.length > 0}
+              onClick={() => setColourOpen(!coloursShown)}
+            >
+              {colours.length > 0 ? `Colour (${colours.length})` : "Colour"}
+            </button>
+              <div className="filter-menu">
+                <div
               id={colourPanelId}
               className="filter-panel"
               role="group"
@@ -379,6 +419,8 @@ export default function Catalogue() {
                   </button>
                 );
               })}
+            </div>
+              </div>
             </div>
           </div>
 

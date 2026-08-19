@@ -408,23 +408,39 @@ html[data-splash="off"] { --hero-start:.15s; }
    row reads as two controls rather than as the first two of twenty-three equal
    buttons — which is what it looked like when every one of them carried the same
    box, the same size and the same weight. */
-.filter-bar { flex-wrap:wrap; row-gap:0; }
+.filter-bar { position:relative; flex-wrap:wrap; align-items:flex-start; column-gap:14px; row-gap:16px; }
+/* A toggle and the menu it opens, in one column, the column as wide as the wider
+   of the two. Which is the whole trick: the menu is laid out in the flow, so its
+   width sets the column's and the toggle stretches to match the list it opens.
+     The slot around it is what keeps that width without the height. Zero tall
+   and never clipped, so the menu it holds is measured by the column and then
+   hangs straight out of the bottom of it over the wall. Absolute positioning
+   would take the menu out of the flow entirely and the column would go back to
+   being as narrow as its label. */
+.filter-group { position:relative; display:flex; flex-direction:column; align-items:stretch; }
+.filter-menu { height:0; overflow:visible; }
 .filter-disclosure { padding:13px 19px; font-size:16px; }
 .filter-disclosure[aria-expanded="true"] { border-color:var(--sage); }
 .filter-disclosure::after { content:""; display:inline-block; width:7px; height:7px; margin-left:9px; border-right:1.4px solid currentColor; border-bottom:1.4px solid currentColor; transform:translateY(-2px) rotate(45deg); transition:transform .3s var(--ease); }
 .filter-disclosure[aria-expanded="true"]::after { transform:translateY(1px) rotate(-135deg); }
 /* The tray. Its own surface, recessed out of the band, and that containment is
    what does the work: the row above is the control and everything inside the
-   well is what the control holds. One tray at a time, under one raised toggle,
-   so which belongs to which is answered by position and needs no label saying
-   so a second time. */
-.filter-panel { flex-basis:100%; display:flex; flex-wrap:wrap; gap:8px; margin-top:12px; padding:14px; border-radius:var(--tile-radius); background:rgba(0,0,0,.16); }
+   well is what the control holds. Both can be open, and the trays stack in the
+   order their toggles run in — what each one holds says which it belongs to
+   without a label repeating the toggle's word underneath it. */
+/* One option to a line. Read down rather than across: eleven types wrapping over
+   two rows of a full-width band gave no column to run an eye along, and left the
+   right half of the row empty to do it. The tray takes the width of its longest
+   option and no more.
+     The ground is opaque rather than a wash of black over the band, because it
+   has flowers behind it now and a tint would let them through. */
+.filter-panel { position:relative; z-index:15; margin-top:10px; display:flex; flex-direction:column; align-items:stretch; gap:6px; padding:12px; border-radius:var(--tile-radius); background:linear-gradient(rgba(0,0,0,.18),rgba(0,0,0,.18)),var(--band-flowers); box-shadow:0 12px 30px rgba(0,0,0,.4), 0 0 0 1px rgba(202,203,181,.13); }
 .filter-panel[hidden] { display:none; }
 /* Quieter than the toggles by a step of size and a step of edge: no outline, a
    fill instead, and the chosen one is the only box in the tray. The row of
    options should read as a list to scan, not as twelve things each asking to be
    pressed as hard as the control above them. */
-.filter-panel button { border-color:transparent; background:rgba(202,203,181,.1); padding:11px 15px; font-size:14px; }
+.filter-panel button { border-color:transparent; background:rgba(202,203,181,.1); padding:10px 14px; font-size:14px; text-align:left; justify-content:flex-start; white-space:nowrap; }
 .filter-panel button:hover { border-color:transparent; background:rgba(202,203,181,.2); }
 .filter-panel button[aria-pressed="true"] { background:var(--sage); border-color:var(--sage); color:var(--band-flowers); }
 .filter-panel button:disabled:hover { border-color:transparent; background:rgba(202,203,181,.1); }
