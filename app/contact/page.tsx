@@ -41,7 +41,7 @@ function summarise(form: typeof EMPTY) {
     `Name: ${form.name}`,
     form.business && `Business: ${form.business}`,
     `Phone: ${form.phone}`,
-    form.email && `Email: ${form.email}`,
+    `Email: ${form.email}`,
     `Service: ${form.service}`,
     form.fulfilment && `Pickup or delivery: ${form.fulfilment}`,
     form.address && `Delivery address: ${[form.address, form.city, [form.state, form.zip].filter(Boolean).join(" ")].filter(Boolean).join(", ")}`,
@@ -239,12 +239,16 @@ export default function Contact() {
 
               <div className="field-row">
                 <div className="field">
-                  <label htmlFor="phone">Phone or Text<span className="req" aria-hidden="true">*</span></label>
+                  <label htmlFor="phone">Phone<span className="req" aria-hidden="true">*</span></label>
                   <input id="phone" name="phone" type="tel" required autoComplete="tel" placeholder="212-555-0123" value={form.phone} onChange={(e) => set("phone", e.target.value)} />
                 </div>
                 <div className="field">
-                  <label htmlFor="email">Email <em>optional</em></label>
-                  <input id="email" name="email" type="email" autoComplete="email" value={form.email} onChange={(e) => set("email", e.target.value)} />
+                  {/* Required now. The shop works by phone, so this used to be
+                      the spare way to reach someone — but an invoice needs an
+                      address to go to, and asking for it at the point of billing
+                      means asking a buyer who has already ordered. */}
+                  <label htmlFor="email">Email<span className="req" aria-hidden="true">*</span></label>
+                  <input id="email" name="email" type="email" required autoComplete="email" value={form.email} onChange={(e) => set("email", e.target.value)} />
                 </div>
               </div>
 
@@ -363,15 +367,15 @@ export default function Contact() {
           <h2>Or Just Call.</h2>
           <p className="section-note">Most orders are settled in a two minute phone call. We answer in English and Korean.</p>
           <div className="enquiry-details">
-            {/* The cell first, because it is the one that answers: it takes
-                iMessage and SMS and the store line takes voice, and a buyer
-                sending a list is on the cell. That it opens a message rather
-                than a call is left to the link's accessible name, the way the
-                footer does it, rather than being spelled out in a label that
-                now says which number to try first. */}
+            {/* Both numbers dial. This card is headed "Or Just Call." and a
+                number under that heading that opened a message instead was the
+                one thing on it doing something other than what it said.
+                  The cell is still first, because it is the one that answers,
+                and the footer still offers it as a message — that is a list of
+                ways to reach the shop, where this is the call. */}
             <p>
               <span>Cell (Primary Orders)</span>
-              <a href={shop.smsHref} aria-label={`Text ${shop.ownerPhone}`}>{shop.ownerPhone}</a>
+              <a href={shop.ownerPhoneHref} aria-label={`Call ${shop.ownerPhone}`}>{shop.ownerPhone}</a>
             </p>
             <p>
               <span>Store (General)</span>

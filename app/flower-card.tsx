@@ -34,10 +34,16 @@ export function FlowerCard({ flower }: { flower: Flower }) {
           />
         ))}
       </div>
-      {/* The chip's own label, then the colour group where the record carries
-          one. The category stays said either way: a search crosses the chips, so
-          a card found by name has to place itself without one being pressed. */}
-      <div className="flower-meta"><h3>{flower.name}</h3><p>{flower.colour ? `${flower.group}, ${flower.colour}` : flower.group}</p></div>
+      {/* The chip's own label, and only that. The category stays said whatever
+          else is on the card: a search crosses the chips, so a card found by
+          name has to place itself without one being pressed.
+            The colour used to follow it here. It came off once the varieties
+          started carrying more than one — "Standard Roses, orange, pink and
+          bicolour" is three lines under a card two to a phone screen, and it
+          told a reader what they are already looking at. The colour is still on
+          the record, still what the chips filter on and still in the search
+          haystack; it just isn't printed under the photograph of itself. */}
+      <div className="flower-meta"><h3>{flower.name}</h3><p>{flower.group}</p></div>
     </a>
   );
 }

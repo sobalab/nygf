@@ -194,6 +194,17 @@ html[data-splash="off"] { --hero-start:.15s; }
    second column off to the right, which left the title stranded against a lot
    of empty band. Compounded with .section-pad so the zeroed bottom padding
    isn't undone by the mobile .section-pad shorthand further down. */
+/* The bar floats: .site-header carries a negative bottom margin of exactly its
+   own height plus its inset, so the band under it starts at the top of the
+   screen and the bar is drawn over it. A lead band's top padding is therefore
+   spent on the bar before any of it is visible — the shared 130px left 42px
+   showing under it on a wide screen and the phone's 90px left 20px, which read
+   as a title stuck to the bar rather than a page starting.
+     Written as the overlap plus the gap that should show, so the two numbers say
+   what they are: change the bar's height and only --bar-overlap moves. Home is
+   not in here — its lead is the hero, which is meant to run under the bar. */
+:root { --bar-overlap:88px; --bar-clear:76px; }
+.page-head.section-pad,.item.section-pad { padding-top:calc(var(--bar-overlap) + var(--bar-clear)); }
 .page-head.section-pad { background:var(--sage); padding-bottom:0; display:flex; flex-direction:column; align-items:flex-start; gap:28px; }
 /* Larger than the shared heading floor, which left this one at 30px across the
    whole phone range. Raising the floor rather than the vw term keeps it
@@ -285,6 +296,15 @@ html[data-splash="off"] { --hero-start:.15s; }
 .enquiry-details p,.footer-details p,.field-hint,.field-error,.flower-meta p,
 .result-count,.footer-base,.footer-origin,.ask-dialog>p { font:400 16px/1.6 var(--sans); }
 .text-link { position:relative; display:inline-flex; gap:22px; border-bottom:1px solid var(--line); padding:18px 0 8px; text-transform:uppercase; letter-spacing:1.3px; font-size:12px; }
+/* The catalogue and the variety pages sit on a darker ground than the rest of
+   the site. Set as the band token rather than as a background, so everything
+   drawn from it follows: the head above the grid, the related row under a
+   variety, the filter tray's own fill, the colour a pressed chip prints its
+   label in, and the well the footer lifts off. Painting the sections alone
+   would have left all five of those on the old green.
+     The home page keeps the original: its bands are a window onto the photograph
+   behind them rather than a fill, and this one is nearly black against it. */
+main:has(> .item),main:has(> .catalogue:not(.flower-field)) { --band-flowers:#01211b; }
 .catalogue { background:var(--band-flowers); color:var(--sage); }
 /* Past roughly 1440px the 6vw gutters stop holding the page in, and the cards
    stretch wider than a stem photo wants to be. The gutter grows to whatever it
@@ -608,6 +628,17 @@ html[data-splash="off"] { --hero-start:.15s; }
    page's service cards are the same object on the same green, so they share
    these rules rather than keeping a second copy that drifts. */
 .service-list article,.offering { background:rgba(255,255,255,.15); border-radius:var(--card-radius); padding:46px 34px 42px; display:flex; flex-direction:column; text-align:center; }
+/* The catalogue's three carry a photograph under the fill, which makes them
+   objects rather than a lightened patch of the band — and an object with no
+   shadow sits in the band instead of on it. Two layers, the same shape the
+   photographs use: a tight one that draws the card's own edge and a wide soft
+   one that gives it the height. Cast in ink rather than black, which is what
+   the header and the tiles do, so the shadow belongs to this palette instead of
+   greying the green underneath it.
+     Only the catalogue's. The home page's service cards are the flat lift the
+   comment above describes and are meant to stay that way — nothing sits under
+   them to be lifted off. */
+.offering { box-shadow:0 2px 6px rgba(23,40,46,.20), 0 14px 30px rgba(23,40,46,.28); }
 /* --paper, where the copy below takes white: the heading is large enough to
    clear AA on this green at 3.7:1, and the warmer white sets it apart from the
    copy without a second size doing the work. */
@@ -667,7 +698,17 @@ html[data-splash="off"] { --hero-start:.15s; }
 .story-copy .story-oneline { white-space:nowrap; font-size:min(clamp(24px,3vw,46px),8.4cqw); }
 /* A step back from the heading without an alpha, which would fade against the
    band and cost contrast the mix keeps (5:1 on this green). */
-.story-copy>p { max-width:540px; margin:0; color:color-mix(in srgb, var(--paper) 88%, var(--band-story)); }
+/* Set to an even rag rather than to the measure. These three sit centred under
+   their photographs on a narrow screen and left against them on a wide one, and
+   centred copy shows its rag from both ends at once — the last line of the third
+   panel was breaking to a 27px fragment sitting on its own under three full
+   ones, which reads as a mistake rather than as a paragraph ending.
+     Balanced, the same three run within about 30px of each other end to end.
+   The browser stops balancing past a handful of lines, so the middle panel goes
+   unbalanced on a phone where it runs to eight; it is the evenest of the three
+   to begin with, and it comes back inside the limit at every width where the
+   copy is beside its photograph rather than under it. */
+.story-copy>p { max-width:540px; margin:0; text-wrap:balance; color:color-mix(in srgb, var(--paper) 88%, var(--band-story)); }
 
 /* Doubled up on .story so the narrow-screen padding further down, which is a
    later rule of equal weight, can't put the padding back — it would push the
@@ -720,7 +761,17 @@ html[data-splash="off"] { --hero-start:.15s; }
    and the aside takes what is left. Both start where the head's copy starts —
    the band carries the same content margin the rest of the site does, so the
    title, the paragraph and the first label line up. */
-.enquiry { background:var(--band-contact); display:grid; grid-template-columns:minmax(0,620px) minmax(0,1fr); gap:8vw; align-items:start; }
+/* The band is sized to the two things standing in it rather than to the site's
+   own measure. The form is capped at 620 and the card is the width of its own
+   heading, so on a wide screen the site's 1280 left a third of the band as gap
+   between them — the card was hard against the right edge because that is what
+   keeps the page centred, and the space it was holding open all landed in the
+   middle. Narrowing the band closes that gap without moving either of them off
+   the edges they are aligned to. */
+main:has(> .enquiry) { --content-max:1035px; }
+/* Capped rather than a plain 8vw, which was 144px by the time the band stopped
+   growing and is the other half of the gap above. */
+.enquiry { background:var(--band-contact); display:grid; grid-template-columns:minmax(0,620px) minmax(0,1fr); column-gap:min(8vw,88px); row-gap:8vw; align-items:start; }
 /* Sent, the band holds one thing, so the two-column split collapses and the
    message takes the middle. Everything inside it is centred from here rather
    than in the markup: the panel is the same element either way, and it is only
@@ -801,7 +852,11 @@ html[data-splash="off"] { --hero-start:.15s; }
 .choice span:active { transform:scale(.98); transition-duration:.09s; }
 .choice input:checked + span { background:var(--ink); border-color:var(--ink); color:var(--paper); }
 .choice input:focus-visible + span { box-shadow:0 0 0 2px var(--paper), 0 0 0 4px var(--ink); }
-.enquiry-submit { width:fit-content; background:var(--ink); color:var(--paper); border:0; padding:18px 34px; border-radius:var(--btn-radius); font:500 12px var(--sans); text-transform:uppercase; letter-spacing:1.2px; cursor:pointer; }
+/* The width of the form rather than the width of the words on it. It is the one
+   thing on the page there is to press, and it comes after a column of full-width
+   fields — a button sized to its own label reads as one more control in that
+   column instead of the end of it. */
+.enquiry-submit { width:100%; background:var(--ink); color:var(--paper); border:0; padding:18px 34px; border-radius:var(--btn-radius); font:500 12px var(--sans); text-transform:uppercase; letter-spacing:1.2px; cursor:pointer; }
 .enquiry-submit:disabled { opacity:.5; cursor:default; }
 /* Closes the form's 34px gap to the button it introduces, the way each field's
    description sits close to the input under it. */
@@ -823,8 +878,38 @@ html[data-splash="off"] { --hero-start:.15s; }
      It holds the numbers and nothing else. The address and the opening hours
    are the footer's, on every page including this one, and printed here as well
    they made the card a second footer sitting beside the form. */
-.enquiry-aside { position:sticky; top:110px; width:fit-content; background:var(--paper); border-radius:var(--card-radius); padding:38px 34px 40px; box-shadow:0 2px 14px rgba(23,40,46,.13), 0 0 0 1px rgba(23,40,46,.07); }
+/* The card is the width of what is in it, and it is pushed to the far edge of
+   the band rather than left at the start of its own column. Those two together
+   are what centre the page: the card takes only the width of its longest phone
+   number, and the slack that leaves goes into the gap between the form and the
+   card instead of piling up outside it, so the margin to the right of the card
+   is the margin to the left of the form.
+     Ended rather than the grid being centred, because centring the tracks would
+   have moved the form off the line it shares with the title and the first label
+   above it, which is the one alignment this page keeps. */
+/* Level with the title rather than with the first field. The head and the form
+   are two sections and the card lives in the second of them, so it starts a
+   whole heading and its paragraph below the top of the page while the band to
+   the right of them sits empty. It is lifted back by exactly what is above it:
+   the title's own line box, the head's gap, its four capped lines of copy, and
+   the padding the form band opens with. Written out as those four rather than as
+   one number so it is clear what would move it — the title is a clamp and is
+   read as one, and the copy is a fixed sentence held to a 520px measure, so its
+   four lines hold across the whole range this two-column layout covers.
+     Only where there are two columns. Stacked, the card follows the form and
+   there is nothing to lift it past. */
+.enquiry-aside { margin-top:calc(-1 * (clamp(38px,3.6vw,54px) * 1.12 + 28px + 112px + 64px)); }
+.enquiry-aside { position:sticky; top:110px; width:fit-content; justify-self:end; background:var(--paper); border-radius:var(--card-radius); padding:38px 34px 40px; box-shadow:0 2px 14px rgba(23,40,46,.13), 0 0 0 1px rgba(23,40,46,.07); }
 .enquiry-aside h2 { font:400 clamp(28px,2.8vw,40px)/1.16 var(--display); letter-spacing:.015em; margin:0 0 18px; }
+/* The line under the heading takes the heading's measure. The card is shrunk to
+   fit its contents, so whichever child wants the most room sets the width — and
+   that was this sentence, which pushed the card 107px wider than the words "Or
+   Just Call." above it and left the heading floating in a box built for the
+   small print. Zero width takes the sentence out of that reckoning and the
+   percentage minimum puts it back afterwards: percentages are ignored while a
+   shrink-to-fit width is being worked out, so the heading is what the card is
+   measured on and the sentence wraps inside the answer. */
+.enquiry-aside>.section-note { width:0; min-width:100%; }
 /* The numbers are set off from the line above them by the space alone: inside
    a card of their own they are already parted from everything else, and a rule
    across it as well was drawing a second box inside the first. */
@@ -965,7 +1050,26 @@ footer { padding:96px 6vw 34px; display:flex; flex-direction:column; position:re
    it runs the full height of its box and the floating bar sits on the same
    margin of band that frames it on the catalogue and on contact. */
 .item { background:var(--band-flowers); color:var(--paper); }
-.item { --item-gap:clamp(38px,5vw,88px); --photo-note:76px; --photo-max:500px; --photo-fit:min(calc((100svh - 154px - var(--photo-note)) * 3 / 4),var(--photo-max)); display:grid; grid-template-columns:minmax(0,min(calc((100% - var(--item-gap)) / 2),var(--photo-fit))) minmax(0,1fr); gap:var(--item-gap); align-items:start; }
+/* A narrower measure than the rest of the site works to. The band is centred
+   either way, but the page is two columns of a fixed size — a photograph capped
+   at --photo-max and a column of counts capped at 540 — so on a wide screen the
+   site's own 1280 left the copy column half again as wide as anything in it and
+   the pair read as pushed to the left of a room they did not fill. Sized to what
+   the two columns and the gap between them actually come to, so the content is
+   centred because it is the width of the band rather than because it was told
+   to be. */
+.item { --content-max:1130px; }
+.item { --item-gap:clamp(38px,5vw,88px); --photo-note:76px; --photo-max:500px; --photo-fit:min(calc((100svh - 154px - var(--photo-note)) * 3 / 4),var(--photo-max)); display:grid; grid-template-columns:minmax(0,min(calc((100% - var(--item-gap)) / 2),var(--photo-fit))) minmax(0,1fr); column-gap:var(--item-gap); row-gap:0; grid-template-rows:auto 1fr; align-items:start; }
+/* Three blocks in the source — name, photograph, copy — laid into two columns
+   here and left to stack in their own order on a phone. The photograph takes
+   the whole of the left column and the other two share the right, which is why
+   the rows carry no gap of their own: the space between the name and the copy
+   under it is the copy's own top margin, the same one it had when the two were
+   a single column, rather than a grid row that would open the gap to the width
+   of the one between the columns. */
+.item-head { grid-column:2; grid-row:1; display:flex; flex-direction:column; align-items:flex-start; }
+.item-photo { grid-column:1; grid-row:1 / span 2; }
+.item-info { grid-column:2; grid-row:2; }
 /* A bouquet's column is the lead plate, the 12px gap and a row of square
    thumbnails half the column wide, so it stands 11/6 of its own width tall
    rather than 4/3 — same fit, solved for the taller stack. The 6px is what is
@@ -976,7 +1080,7 @@ footer { padding:96px 6vw 34px; display:flex; flex-direction:column; position:re
    two crops. Sticky, because the right column is the long one: on a record with
    care notes and a full set of counts the photograph would otherwise scroll away
    from the copy describing it. */
-.item-photo { position:sticky; top:110px; display:grid; gap:12px; }
+.item-photo { position:sticky; top:110px; display:grid; gap:12px; align-self:start; }
 .item-photo img { aspect-ratio:3/4; object-fit:cover; background:var(--mist); filter:saturate(.82); border-radius:var(--tile-radius); box-shadow:var(--photo-shadow); }
 /* Bouquets carry three frames rather than one, and unlike the card, which turns
    them over on a timer, the page lays the rest out under the lead: a reader who
@@ -995,6 +1099,9 @@ footer { padding:96px 6vw 34px; display:flex; flex-direction:column; position:re
    column back on its own. */
 .item-bare { grid-template-columns:minmax(0,1fr); }
 .item-bare .item-info { max-width:660px; }
+/* With no photograph there is no left column to place anything against, so the
+   two blocks fall back into the single one in source order. */
+.item-bare .item-head,.item-bare .item-info { grid-column:1; grid-row:auto; }
 .item-info { display:flex; flex-direction:column; align-items:flex-start; }
 /* Back to the grid with this category already narrowed to. Small and grey: it is
    the way out, not the first thing on the page. */
@@ -1188,8 +1295,28 @@ a:focus-visible,button:focus-visible,input:focus-visible { outline:2px solid var
   .header-cta { display:none; }
   .nav-contact { display:block; }
   .menu-toggle { display:flex; }
-  .nav { display:none; position:absolute; top:calc(100% + 6px); left:0; right:0; background:var(--paper); padding:24px 18px; flex-direction:column; gap:25px; border-radius:6px; }
-  .nav.open { display:flex; }
+  /* The panel is the bar's own surface carried down the screen, so it takes the
+     bar's shadow and hairline too. Without them it is a paper rectangle that
+     vanishes the moment it is opened over the footer, which is the same paper —
+     the ring is what draws its edge on its own colour, and the shadow is what
+     says it is in front rather than part of it. */
+  .nav { position:absolute; top:calc(100% + 6px); left:0; right:0; background:var(--paper); padding:24px 18px; display:flex; flex-direction:column; gap:25px; border-radius:6px; box-shadow:0 6px 20px rgba(23,40,46,.16), 0 0 0 1px rgba(23,40,46,.07); }
+  /* Opened and closed rather than shown and hidden: it is one surface growing
+     down out of the bar and folding back up into it, so it is anchored at its
+     top edge and leaves the way it arrived. Held closed with visibility rather
+     than display, which is what lets the transition run at all and still keeps
+     the links out of the tab order while they are folded away — the visibility
+     switch waits out the movement on the way closed and happens immediately on
+     the way open, so nothing is ever animating something nobody can see. */
+  .nav { transform-origin:top; opacity:0; visibility:hidden; transform:translateY(-6px) scaleY(.96);
+         transition:opacity .2s var(--ease), transform .3s var(--ease-out), visibility 0s linear .3s; }
+  .nav.open { opacity:1; visibility:visible; transform:none;
+              transition:opacity .22s var(--ease), transform .34s var(--ease-out), visibility 0s; }
+  /* Stacked, a link is a flex item and a flex item fills its line, which handed
+     the underline the width of the panel instead of the width of the word. The
+     rule is drawn edge to edge of the element it is on, so the element is what
+     has to stop at the text. */
+  .nav a { align-self:flex-start; }
   .hero,.hero-copy { min-height:100svh; }
   .hero-copy { padding:14vh 6vw 6vh; gap:30px; }
   .hero h1 { font-size:12vw; }
@@ -1197,6 +1324,10 @@ a:focus-visible,button:focus-visible,input:focus-visible { outline:2px solid var
   .hero-bottom>p { max-width:100%; }
   .hero-button { padding:15px 24px; }
   .section-pad { padding:90px 6vw; }
+  /* The bar loses 14px of height and 4px of inset down here, and the gap under
+     it comes down with the rest of the page's rhythm rather than staying at the
+     desktop figure. */
+  :root { --bar-overlap:70px; --bar-clear:44px; }
   .service-list,.story-panel { grid-template-columns:1fr; }
   /* Stacked, the photo and the copy have no column edge left to line up on, so
      they take the centre instead — a left rag against a full-width photo reads
@@ -1277,7 +1408,16 @@ a:focus-visible,button:focus-visible,input:focus-visible { outline:2px solid var
      source too, so this is the column collapsing rather than an order being
      rewritten. Nothing pins down here — a sticky plate on a phone would hold
      the top half of the screen for the whole length of the copy. */
-  .item { grid-template-columns:1fr; gap:38px; }
+  /* Stacked, the three blocks run in the order they are written: where am I and
+     what is this, then the photograph, then what it costs you to buy. The
+     placements above are undone rather than overridden one at a time — on one
+     column there is no second to place into — and the row gap comes back,
+     since there is no longer a copy margin doing that job between them. */
+  .item { grid-template-columns:1fr; column-gap:0; row-gap:30px; }
+  .item-head,.item-photo,.item-info { grid-column:1; grid-row:auto; }
+  /* The gap above the copy is the grid's now, so the first line in it drops the
+     top margin it carries on the wide layout. */
+  .item-info>:first-child { margin-top:0; }
   .item-photo { position:static; }
   /* Stacked, the plate is as wide as the phone and a 3/4 crop of that is most of
      a screen on its own — which left the line under it below the fold, and the
@@ -1285,12 +1425,23 @@ a:focus-visible,button:focus-visible,input:focus-visible { outline:2px solid var
      still looking at it. So the frame is capped by height here rather than by
      the column width: same plate, shorter crop, and the caption lands on the
      same screen at every phone size. */
+  /* Given the whole column, the plate is most of a tablet screen on its own and
+     the name above it and the counts below are both pushed off. Capped to a
+     width instead of a height so the crop is the same 3/4 the card and the wide
+     layout use — a phone is under the cap and is unaffected, and it is only the
+     wider stacked screens that pull the plate back to a readable size. */
+  .item-photo { max-width:min(100%,420px); }
   .item-photo img { max-height:min(58svh,540px); }
   /* A bouquet's stack is the lead frame, two square thumbnails and then the
      line, so the lead gives up more to leave room for what follows it. */
   .item:has(.item-gallery) .item-photo>img { max-height:min(40svh,380px); }
   .item-facts { max-width:none; }
-  .item-actions { gap:12px; }
+  /* The buttons were already full width of their row, but the row itself was
+     shrink-to-fit: .item-info packs its children to the start rather than
+     stretching them, so the pair sat at the width of the longer label instead
+     of the width of the copy above it. Stretching the row is what the buttons
+     were measuring against all along. */
+  .item-actions { gap:12px; align-self:stretch; }
   .item-action { width:100%; }
   /* Side by side the two steps have the measure to sit at opposite ends of the
      band; stacked they don't, and a right-ragged block under a left-ragged one
@@ -1302,7 +1453,7 @@ a:focus-visible,button:focus-visible,input:focus-visible { outline:2px solid var
   /* State and ZIP are short enough to keep sharing a line down here. */
   .field-row-address { grid-template-columns:1fr 1fr; gap:26px; }
   .field-row-address>.field:first-child { grid-column:1 / -1; }
-  .enquiry-aside { position:static; }
+  .enquiry-aside { position:static; margin-top:0; }
   footer { padding:70px 6vw 30px; }
   .footer-tagline { margin-top:22px; }
   /* Columns fold on their own from the base rule; only the rhythm tightens. */
@@ -1331,7 +1482,14 @@ a:focus-visible,button:focus-visible,input:focus-visible { outline:2px solid var
   .swatch { margin-right:6px; }
   .hero h1 { font-size:13vw; }
   .hero-button { font-size:11px; letter-spacing:.9px; }
-  .flower-grid { grid-template-columns:1fr; }
+  /* The grid stays two up down here rather than falling to one. A single column
+     on a phone gives each stem most of a screen, which sounds generous and
+     reads as a slideshow — a buyer scanning a wall of roses is comparing them,
+     and comparing is what a second column is for. The cards get narrow enough
+     that the name and the line under it need pulling in a step to match. */
+  .flower-grid { gap:30px 12px; }
+  .flower-meta { padding-top:10px; margin-top:10px; }
+  .flower-meta h3 { font-size:18px; }
   .contact h2 { font-size:13vw; }
 }
 

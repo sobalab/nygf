@@ -156,13 +156,18 @@ export type CatalogueItem = {
   // the owner fills one in.
   korean?: string;
   botanical?: string;
-  // The colour group a variety is bought by. Only the named roses carry one so
-  // far, and they are the reason it exists: "Roses" is what the chip says, and
-  // between ten of them the colour is the thing that actually tells one card
-  // from the next. It reads as the second half of the card's meta line and goes
-  // into the search haystack below, so typing "white" reaches Vendela and
-  // Mondial. Written in the case it reads in mid-sentence, since that is the
-  // only place it appears.
+  // The colour a variety is bought by, and the roses are the reason it exists:
+  // "Roses" is what the chip says, and between a hundred and fifty of them the
+  // colour is the thing that tells one from the next.
+  //   It is filter data rather than card copy. It feeds colourIds above, which
+  // is what the chips narrow on, and the search haystack below, so typing
+  // "white" reaches Vendela and Mondial — but it is not printed anywhere a
+  // reader can see the photograph it describes. A stem can be more than one
+  // colour, and the phrase for three of them is longer than the name of the
+  // flower.
+  //   Still written as running words rather than as ids, because that is what
+  // colourGroupsOf reads: "white and cream" is two chips, and a bicolour
+  // written out as "yellow with an orange edge" reaches both of its colours.
   colour?: string;
 
   // ------------------------------------------------------------------------

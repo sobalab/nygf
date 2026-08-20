@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState, type MouseEvent, type ReactNode } from "react";
+import { createPortal } from "react-dom";
 import { motion, useReducedMotion } from "motion/react";
 import { shop, smsDraftHref } from "./site";
 
@@ -98,6 +99,91 @@ export function Ask({
             <span aria-hidden="true">×</span>
           </button>
         </motion.dialog>
+      ) : null}
+    </>
+  );
+}
+
+// The cell offered as the two things it actually is. The call card on the
+// contact page dials, because a card headed "Or Just Call." has already said
+// which of the two it means — but the footer is a list of ways to reach the
+// shop with no such heading, and the cell is read by text and answered by
+// voice. Guessing there picks for the reader; asking costs one tap.
+//
+// Built on the same bones as Ask above and for the same reasons: the trigger is
+// an anchor with a working href, so it still reaches the number with the script
+// gone, a copied link address is the number rather than nothing, and the native
+// <dialog> brings the backdrop, Escape, the focus loop and the inert page with
+// it. The fallback href dials, which is what the primary action in the panel
+// does too — the two agree, so a reader who never sees the panel lands where
+// the panel would have sent them by default.
+export function CallOrText({ className, children }: { className?: string; children: ReactNode }) {
+  const ref = useRef<HTMLDialogElement>(null);
+  const still = useReducedMotion();
+  const [asked, setAsked] = useState(false);
+
+  useEffect(() => {
+    if (asked) ref.current?.showModal();
+  }, [asked]);
+
+  function open(event: MouseEvent<HTMLAnchorElement>) {
+    if (event.metaKey || event.ctrlKey || event.shiftKey || event.altKey || event.button !== 0) return;
+    event.preventDefault();
+    setAsked(true);
+  }
+
+  function go(href: string) {
+    ref.current?.close();
+    window.location.href = href;
+  }
+
+  return (
+    <>
+      <a className={className} href={shop.ownerPhoneHref} onClick={open}>
+        {children}
+      </a>
+      {/* Portalled to the end of the body rather than left where it is written.
+          This one is called from inside the footer's contact paragraph, and a
+          <dialog> — or the <p> and the <div> inside it — cannot be a descendant
+          of a <p>: the parser closes the paragraph early, the server and the
+          browser build different trees, and React fails the hydration. A modal
+          covers the page rather than belonging to the line that opened it, so
+          the top of the body is where it should have been either way. */}
+      {asked ? createPortal(
+        <motion.dialog
+          className="ask-dialog"
+          ref={ref}
+          onClose={() => setAsked(false)}
+          initial={still ? false : { opacity: 0, y: 14, scale: 0.97 }}
+          animate={{ opacity: 1, y: 0, scale: 1 }}
+          transition={{ duration: still ? 0 : 0.45, ease: [0.16, 1, 0.3, 1] }}
+        >
+          <h2>Call or Text?</h2>
+          <p>
+            {shop.ownerPhone} is the owner&apos;s cell. It rings, and it takes a text. A list is easier to send
+            written down, and a question is usually quicker asked out loud.
+          </p>
+          <div className="ask-actions">
+            <a
+              className="solid-button"
+              href={shop.ownerPhoneHref}
+              onClick={(event) => { event.preventDefault(); go(shop.ownerPhoneHref); }}
+            >
+              Call the cell
+            </a>
+            <a
+              className="ask-quiet"
+              href={shop.smsHref}
+              onClick={(event) => { event.preventDefault(); go(shop.smsHref); }}
+            >
+              Send a text
+            </a>
+          </div>
+          <button type="button" className="ask-close" onClick={() => ref.current?.close()} aria-label="Close">
+            <span aria-hidden="true">×</span>
+          </button>
+        </motion.dialog>,
+        document.body,
       ) : null}
     </>
   );

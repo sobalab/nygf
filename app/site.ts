@@ -18,11 +18,14 @@ export const siteUrl =
 export const shop = {
   storePhone: "718-886-1190",
   storePhoneHref: "tel:+17188861190",
-  // The owner's cell, and the number the shop works from. It takes iMessage and
-  // SMS rather than voice, so every link to it on the site is an sms: one: a
-  // thread the owner reads on the phone that is already in their hand.
+  // The owner's cell, and the number the shop works from. Most links to it are
+  // sms: ones — a thread the owner reads on the phone already in their hand —
+  // but it is a phone and it is answered, so the contact page's call card dials
+  // it. Both hrefs are kept: the one to use is whether the surface is offering a
+  // message or a call, and neither should be built by hand at the call site.
   ownerPhone: "201-815-1040",
   smsHref: "sms:+12018151040",
+  ownerPhoneHref: "tel:+12018151040",
   email: "nyflowergarden@hotmail.com",
   address: "171-10 39th Ave\nFlushing, NY 11358",
   mapsHref: "https://maps.google.com/?q=171-10+39th+Ave+Flushing+NY+11358",

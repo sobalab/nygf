@@ -18,8 +18,22 @@ old README also states hours and delivery zones are confirmed values.
 | Street | 171-10 39th Ave |
 | City / State / ZIP | Flushing, NY 11358 |
 | Store landline (voice only) | 718-886-1190 → `tel:+17188861190` |
-| Owner cell (WhatsApp + SMS) | 201-815-1040 → wa `12018151040`, sms `+12018151040` |
+| Owner cell (voice + SMS) | 201-815-1040 → `tel:+12018151040`, sms `+12018151040` |
 | Email | nyflowergarden@hotmail.com |
+
+The cell was previously written down here as WhatsApp + SMS, and every link to it
+on the site opened a message. It is answered by voice as well, so both hrefs are
+kept on `shop` in `app/site.ts` and the surface decides which it means:
+
+- The contact page's call card **dials** it. The card is headed "Or Just Call.",
+  so it has already said which of the two it is offering.
+- The footer **asks**, since it is a plain list of ways to reach the shop with
+  no such heading. Tapping the number opens a call-or-text choice.
+- Everywhere an "ask" button appears, the text draft is still the offer, because
+  the point of those is to send a list.
+
+No WhatsApp link exists anywhere on the site. If the shop wants one, it needs
+adding to `shop` first rather than being written by hand at the call site.
 
 **Hours**
 

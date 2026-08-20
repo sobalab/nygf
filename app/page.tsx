@@ -127,7 +127,7 @@ export default function Home() {
         {/* The reach/visit/hours columns that used to sit under this live in the
             footer, which is directly beneath — they were the same three columns
             twice in one screenful. */}
-        <Ask className="contact-button" message="Hello, I'd like to ask about today's flowers." inquiry="/contact">Contact Us</Ask>
+        <Ask className="contact-button" message="Hello, I'd like to ask about today's flowers." inquiry="/contact">Send an Inquiry</Ask>
       </section>
 
       <SiteFooter home />

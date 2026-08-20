@@ -3,6 +3,7 @@
 import { Fragment, useRef, useState } from "react";
 import { motion, useMotionValueEvent, useReducedMotion, useScroll, useTransform } from "motion/react";
 import { shop } from "./site";
+import { CallOrText } from "./ask";
 
 // The address and hours are stored as single strings with newlines, so they read
 // correctly in a text draft too. Break them for the page.
@@ -149,20 +150,23 @@ export function SiteFooter({ home = false }: { home?: boolean }) {
           <span>Contact</span>
           <a href={`mailto:${shop.email}?subject=Wholesale%20flower%20inquiry`}>{shop.email}</a>
           <br />
+          {/* The cell first: it is the number the shop works from and the one
+              that answers, and the store line is the general one. The contact
+              page's call card lists them the same way round.
+                It asks rather than picking. The card there dials, because its
+              heading has already said so — here there is no heading, and the
+              cell is read by text as often as it is answered by voice, so the
+              tap opens the choice. */}
+          <i>Cell: </i>
+          <CallOrText>{shop.ownerPhone}</CallOrText>
+          <br />
           <i>Store: </i>
           <a href={shop.storePhoneHref}>{shop.storePhone}</a>
-          <br />
-          {/* The cell takes iMessage and SMS but not voice, so it can't be a
-              tel: link. It opens a message to the number instead, which is what
-              the accessible name says rather than the column, where it would
-              crowd the number. */}
-          <i>Cell: </i>
-          <a href={shop.smsHref} aria-label={`Text ${shop.ownerPhone}`}>{shop.ownerPhone}</a>
         </p>
         <p>
           {/* The address reads as an address, so it carries no standing rule —
               the map link is there on hover for anyone who reaches for it. */}
-          <span>Visit &amp; pickup</span>
+          <span>Store Location</span>
           <a className="plain" href={shop.mapsHref} target="_blank" rel="noreferrer"><Lines text={shop.address} /></a>
         </p>
         <p>

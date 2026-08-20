@@ -158,9 +158,25 @@ export default async function FlowerPage({ params }: { params: Promise<{ slug: s
           reads as a broken image rather than as a picture nobody has taken. The
           copy takes the width instead, capped to a measure. */}
       <article className={frames.length > 0 ? "item section-pad" : "item item-bare section-pad"}>
-        {/* Photo first in the source as well as on screen, so the stacked phone
-            order falls out of the document rather than out of a reordering
-            property a screen reader wouldn't follow. */}
+        {/* The way out and the name of the thing, before the photograph of it.
+            Stacked on a phone this is the order the page reads in — where am I,
+            what is this, here it is, here is what it costs you to buy — and the
+            order is the document's rather than a reordering property's, which is
+            what keeps a screen reader and a pair of eyes on the same page.
+              On the wide layout the photograph takes the left column across both
+            rows and these two sit above the copy in the right, so the same three
+            blocks make the two-column page without moving in the source. */}
+        <div className="item-head">
+          {/* Back to the grid with the chip for this category already pressed —
+              /catalogue reads the hash on arrival. The category is named here
+              rather than sitting above the heading as a label of its own. */}
+          <a className="item-back" href={`/catalogue#${flower.category}`}>
+            <span aria-hidden="true">←</span> Back to {flower.group}
+          </a>
+
+          <h1>{flower.name}</h1>
+        </div>
+
         {frames.length > 0 ? (
           <div className="item-photo">
             <img src={frames[0]} alt={photoAlt(flower, 0)} />
@@ -187,15 +203,6 @@ export default async function FlowerPage({ params }: { params: Promise<{ slug: s
         ) : null}
 
         <div className="item-info">
-          {/* Back to the grid with the chip for this category already pressed —
-              /catalogue reads the hash on arrival. The category is named here
-              rather than sitting above the heading as a label of its own. */}
-          <a className="item-back" href={`/catalogue#${flower.category}`}>
-            <span aria-hidden="true">←</span> Back to {flower.group}
-          </a>
-
-          <h1>{flower.name}</h1>
-
           {flower.description ? <p className="item-lede">{flower.description}</p> : null}
 
           {hasFacts || packingLines.length > 0 ? (
