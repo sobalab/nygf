@@ -1,3 +1,5 @@
+import { normalize } from "./lib/text";
+
 // The filter chips, in the order they render. The stem chips were sized so none
 // of them came back with only two or three cards, which is the failure this
 // replaced — a new stem category had to be able to carry a grid before it earned
@@ -1738,17 +1740,11 @@ export const services = [
 
 const categoryLabels = new Map<CategoryId, string>(categories.map(({ id, label }) => [id, label]));
 
-// One spelling for both sides of the search: lower case, and accents pulled off
-// the letters they sit on, so "peonies" finds Peony's neighbours and a typed
-// "e" still reaches an "é". The query runs through the same function, so the two
-// strings are always compared in the same form.
-function normalize(value: string) {
-  return value.normalize("NFD").replace(/\p{Diacritic}/gu, "").toLowerCase();
-}
-
-export function normalizeQuery(value: string) {
-  return normalize(value.trim());
-}
+// The search spelling rule moved to app/lib/text.ts so the admin cooler can
+// share it without importing this file — see the note over it. Re-exported here
+// because the catalogue page has always imported it from this module, and the
+// rule is still as much a fact about this list as it is about that search box.
+export { normalizeQuery } from "./lib/text";
 
 // Where a chip sits in the row, which is where its cards sit in the grid.
 const categoryOrder = new Map<CategoryId, number>(categories.map(({ id }, index) => [id, index]));
@@ -1847,8 +1843,19 @@ export function categoryNeighbours(flower: Flower) {
 
 // The home field leads with photographed stems rather than grey placeholders.
 // Order matters: PLACEMENT in flower-field.tsx scatters them by index.
-// These are names, so renaming an item above means renaming it here too — the
-// lookup below asserts the match rather than checking it, and a miss would take
-// the home page down rather than dropping one stem out of the field.
+// These are names, so renaming an item above means renaming it here too, and a
+// miss takes the home page down rather than dropping one stem out of the field.
+//   That was the intent from the start and the `!` below never delivered it: a
+// non-null assertion is a claim to the type checker and nothing at all at run
+// time, so a renamed flower put `undefined` into the array and the field broke
+// later, somewhere else, with a stack that pointed at the wrong file. Named here
+// instead, beside the two invariants above, which is where the answer to "what
+// did I just break" belongs.
 const previewNames = ["Vendela", "Premium Hydrangea", "Premium Lilies", "Peony", "Tulips", "Ranunculus", "Sunflowers", "Calla Lilies", "Anemone"];
-export const previewFlowers = previewNames.map((name) => flowers.find((flower) => flower.name === name)!);
+export const previewFlowers = previewNames.map((name) => {
+  const match = flowers.find((flower) => flower.name === name);
+  if (!match) {
+    throw new Error(`catalogue-data: previewFlowers names a flower that is not on the list: "${name}"`);
+  }
+  return match;
+});

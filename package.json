@@ -17,6 +17,8 @@
     "colours:apply": "node --experimental-strip-types scripts/apply-colours.mjs"
   },
   "dependencies": {
+    "@neondatabase/serverless": "^1.1.0",
+    "drizzle-orm": "^0.45.2",
     "motion": "^13.1.0",
     "next": "16.3.0",
     "react": "19.2.6",
@@ -29,6 +31,7 @@
     "@types/node": "22.19.19",
     "@types/react": "19.2.14",
     "@types/react-dom": "19.2.3",
+    "drizzle-kit": "^0.31.10",
     "eslint": "9.39.4",
     "eslint-plugin-jsx-a11y": "6.10.2",
     "eslint-plugin-react": "7.37.5",

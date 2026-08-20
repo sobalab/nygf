@@ -60,3 +60,22 @@ test("serves a 404 for unknown routes", async () => {
   const response = await fetch(`${BASE}/not-a-real-page`);
   assert.equal(response.status, 404);
 });
+
+// The catalogue is the whole site's SEO surface and every page of it is
+// prerendered. That is a property of the code rather than of the config: one
+// `cookies()` call, one session read in a shared component, or `cacheComponents`
+// being switched on quietly turns 200 CDN-served files into 200 function
+// invocations, and nothing about the rendered page looks any different.
+//   Asserted off the build manifest rather than off a response, because a
+// dynamic page still returns the same HTML with the same 200 — the difference
+// only shows in how it got there. The count is deliberately a floor and not an
+// equality: adding a flower should not fail this, losing the whole mechanism
+// should.
+test("every catalogue page is still prerendered", async () => {
+  const manifest = await import("../.next/prerender-manifest.json", { with: { type: "json" } });
+  const slugs = Object.keys(manifest.default.routes).filter((route) => route.startsWith("/catalogue/"));
+  assert.ok(
+    slugs.length >= 200,
+    `expected the catalogue to be prerendered, found ${slugs.length} static paths`,
+  );
+});
