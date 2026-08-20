@@ -5,7 +5,7 @@ import { motion, useMotionValueEvent, useReducedMotion, useScroll, useTransform 
 import { shop } from "./site";
 
 // The address and hours are stored as single strings with newlines, so they read
-// correctly in the WhatsApp draft too. Break them for the page.
+// correctly in a text draft too. Break them for the page.
 function Lines({ text }: { text: string }) {
   return text.split("\n").map((line, index) => (
     <Fragment key={line}>
@@ -152,11 +152,12 @@ export function SiteFooter({ home = false }: { home?: boolean }) {
           <i>Store: </i>
           <a href={shop.storePhoneHref}>{shop.storePhone}</a>
           <br />
-          {/* The cell takes WhatsApp and SMS but not voice, so it can't be a
-              tel: link. Which app opens is left to the accessible name rather
-              than set in the column, where it would crowd the number. */}
+          {/* The cell takes iMessage and SMS but not voice, so it can't be a
+              tel: link. It opens a message to the number instead, which is what
+              the accessible name says rather than the column, where it would
+              crowd the number. */}
           <i>Cell: </i>
-          <a href={`https://wa.me/${shop.whatsappNumber}`} target="_blank" rel="noreferrer" aria-label={`${shop.ownerPhone} on WhatsApp`}>{shop.ownerPhone}</a>
+          <a href={shop.smsHref} aria-label={`Text ${shop.ownerPhone}`}>{shop.ownerPhone}</a>
         </p>
         <p>
           {/* The address reads as an address, so it carries no standing rule —

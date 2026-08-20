@@ -291,7 +291,7 @@ html[data-splash="off"] { --hero-start:.15s; }
    takes to keep the content at --content-max, so the bands stay full-bleed
    while the heading, filters and grid all stop on the same measure. The home
    band is exempt — its stems are meant to run the full width. */
-.page-head,.catalogue:not(.flower-field),.offerings,.item,.item-related { padding-inline:max(6vw,calc((100% - var(--content-max)) / 2)); }
+.page-head,.catalogue:not(.flower-field),.offerings,.item,.item-related,.enquiry { padding-inline:max(6vw,calc((100% - var(--content-max)) / 2)); }
 /* Home catalogue: instead of a grid, the stems are scattered across the whole
    band and drift against the pointer, with the copy holding the middle. Each
    card carries its own position, size, aspect and depth as custom properties
@@ -455,6 +455,18 @@ html[data-splash="off"] { --hero-start:.15s; }
    one that says no. */
 .filter-row button:disabled { opacity:.38; cursor:default; }
 .filter-row button:disabled:hover { border-color:rgba(202,203,181,.5); background:none; }
+/* Several colours can be on at once and only one type can, and the box in front
+   of every colour is what says so before a reader has pressed anything: a column
+   of empty boxes reads as a list to check off, where a fill alone reads as one
+   row being the current one.
+     The fill stays behind it. The box is the answer while the tray is open, and
+   the fill is what the toggle above carries back once it is shut.
+     Drawn rather than set as a glyph, out of the same two borders the tray's own
+   arrow is made of, so the tick takes the row's colour on both grounds: sage on
+   the dark tray, and the tray's own green once the row is filled. */
+.filter-panel .check { display:inline-block; position:relative; width:14px; height:14px; margin-right:9px; border:1.4px solid currentColor; border-radius:3px; opacity:.42; vertical-align:-3px; transition:opacity .3s var(--ease); }
+.filter-panel button[aria-pressed="true"] .check { opacity:1; }
+.filter-panel button[aria-pressed="true"] .check::after { content:""; position:absolute; left:3.6px; top:0; width:4px; height:8px; border-right:1.7px solid currentColor; border-bottom:1.7px solid currentColor; transform:rotate(42deg); }
 /* The swatch is the only place on the site that paints a colour from outside the
    palette, and it is content rather than chrome — the same licence the
    photographs have. Nothing else may draw from this set.
@@ -469,9 +481,13 @@ html[data-splash="off"] { --hero-start:.15s; }
 .swatch[data-colour="pink"] { background:#e0779b; }
 .swatch[data-colour="red"] { background:#b03236; }
 .swatch[data-colour="lavender"] { background:#a892c8; }
+.swatch[data-colour="blue"] { background:#5f8fbe; }
 .swatch[data-colour="green"] { background:#84a173; }
 /* Two colours on one stem, which is what the chip means. */
 .swatch[data-colour="bicolour"] { background:linear-gradient(135deg,#e9c23f 46%,#b03236 46%); }
+/* Other is the absence of an answer, not an eleventh colour, so it is drawn as
+   an empty ring — the one dot in the row with nothing painted inside it. */
+.swatch[data-colour="other"] { background:none; box-shadow:inset 0 0 0 1.4px currentColor; opacity:.5; }
 .catalogue-status { display:flex; flex-wrap:wrap; align-items:baseline; gap:6px 22px; }
 /* Tabular figures: the count changes on every keystroke, and proportional ones
    would shift the word after them each time it did. */
@@ -696,7 +712,15 @@ html[data-splash="off"] { --hero-start:.15s; }
    the warm cream they used to carry was a page's worth of off-white that had
    arrived from the paper they no longer sit on, and against this green it read
    as a stack of slabs cut out of the section. */
-.enquiry { background:var(--band-contact); display:grid; grid-template-columns:1.25fr .75fr; gap:8vw; align-items:start; }
+/* The form is a measure rather than a share of the band: fields that run the
+   width of a wide screen make a two-line question look like a form to be
+   filled in for an hour, and the label above each one ends up a long way from
+   the far end of its own box. Held near the measure the head's own paragraph
+   takes, with the two-up rows still wide enough to type a phone number into,
+   and the aside takes what is left. Both start where the head's copy starts —
+   the band carries the same content margin the rest of the site does, so the
+   title, the paragraph and the first label line up. */
+.enquiry { background:var(--band-contact); display:grid; grid-template-columns:minmax(0,620px) minmax(0,1fr); gap:8vw; align-items:start; }
 /* Sent, the band holds one thing, so the two-column split collapses and the
    message takes the middle. Everything inside it is centred from here rather
    than in the markup: the panel is the same element either way, and it is only
@@ -790,9 +814,21 @@ html[data-splash="off"] { --hero-start:.15s; }
 .enquiry-reset { display:block; margin-top:34px; border:0; background:none; padding:0; font:500 12px var(--sans); text-transform:uppercase; letter-spacing:1.3px; text-decoration:underline; text-underline-offset:5px; cursor:pointer; opacity:.6; }
 .enquiry-reset { transition:opacity .3s var(--ease); }
 .enquiry-reset:hover { opacity:1; }
-.enquiry-aside { position:sticky; top:110px; }
+/* The other half of the page is a card on the band rather than more type set
+   straight onto it: the form is the page's work and the phone is the way past
+   it, and a reader glancing right should see one object offering that rather
+   than a second column to read. Paper, the site's own panel ground — the same
+   surface the header and the footer are, and the only other thing on this page
+   that is not the band itself.
+     It holds the numbers and nothing else. The address and the opening hours
+   are the footer's, on every page including this one, and printed here as well
+   they made the card a second footer sitting beside the form. */
+.enquiry-aside { position:sticky; top:110px; width:fit-content; background:var(--paper); border-radius:var(--card-radius); padding:38px 34px 40px; box-shadow:0 2px 14px rgba(23,40,46,.13), 0 0 0 1px rgba(23,40,46,.07); }
 .enquiry-aside h2 { font:400 clamp(28px,2.8vw,40px)/1.16 var(--display); letter-spacing:.015em; margin:0 0 18px; }
-.enquiry-details { display:flex; flex-direction:column; gap:26px; border-top:1px solid var(--line); margin-top:40px; padding-top:28px; }
+/* The numbers are set off from the line above them by the space alone: inside
+   a card of their own they are already parted from everything else, and a rule
+   across it as well was drawing a second box inside the first. */
+.enquiry-details { display:flex; flex-direction:column; gap:26px; margin-top:36px; }
 .enquiry-details p { margin:0; }
 /* Likewise — the footer's matching labels stay at .55 on their paper. */
 .enquiry-details span { display:block; font:500 11px var(--sans); text-transform:uppercase; letter-spacing:1.5px; margin-bottom:10px; opacity:.8; }
@@ -984,7 +1020,7 @@ footer { padding:96px 6vw 34px; display:flex; flex-direction:column; position:re
 .item-note h2 { font:400 21px/1.3 var(--serif); margin:0 0 9px; }
 .item-note p { font:400 16px/1.6 var(--sans); margin:0; }
 /* The point of the page. Prices move daily and are never posted, so there is
-   nothing to add to an order here: both controls end in a person. The WhatsApp
+   nothing to add to an order here: both controls end in a person. The text
    draft leads and the store line follows it as an outline of the same shape. */
 .item-actions { display:flex; flex-wrap:wrap; gap:14px; margin-top:48px; }
 /* Inverted for the band: the fill is the paper and the type is the ink, which is
@@ -1273,12 +1309,26 @@ a:focus-visible,button:focus-visible,input:focus-visible { outline:2px solid var
   .footer-details { gap:32px 24px; margin:56px 0 48px; }
 }
 
+/* Stacked, the plate and the copy under it are two separate things rather than
+   one column edge, so the gap above has to read as a break and not as leading.
+   It is bought rather than assumed: the scene has to clear the pin in one
+   screen, and on a short phone the eight-line panel already spends every pixel
+   of it. So the wider gap waits for a window tall enough to pay for it, and
+   anything shorter keeps the tight one from the block above. */
+@media (max-width:800px) and (min-height:700px) {
+  .story-armed .story-panel { row-gap:clamp(38px,6vh,58px); }
+}
+
 @media (max-width:440px) {
   /* The tray is what sets its toggle's width now, so a few pixels off the tray
      is a few pixels off the row — enough for both toggles to stay on one line
-     on a 375-wide phone rather than stacking. */
-  .filter-panel { padding:9px; }
-  .filter-panel button { padding:10px 12px; }
+     on a 375-wide phone rather than stacking. The box and the dot give up a
+     couple each for the same reason: on this screen the row they sit in is
+     worth more than the air around them. */
+  .filter-panel { padding:8px; }
+  .filter-panel button { padding:10px; }
+  .filter-panel .check { width:12px; height:12px; margin-right:6px; vertical-align:-2px; }
+  .swatch { margin-right:6px; }
   .hero h1 { font-size:13vw; }
   .hero-button { font-size:11px; letter-spacing:.9px; }
   .flower-grid { grid-template-columns:1fr; }

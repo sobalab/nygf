@@ -1,140 +1,74 @@
-slug	name	category	current	proposed	alt	conf	confirmed
-3d	3D	roses		pink	orange 16%	0.72	
-absolut-in-pink	Absolut in Pink	roses		pink	peach 16%	0.73	
-amnesia	Amnesia	roses		pink	white 29%	0.56	
-amsterdam	Amsterdam	roses		pink	red 7%	0.88	
-arctica	Arctica	roses		white	green 9%	0.80	
-barista	Barista	roses		pink	red 6%	0.88	
-bikini	Bikini	roses		yellow	orange 19%	0.79	
-blush	Blush	roses		pink	white 7%	0.82	
-born-free	Born Free	roses		red	pink 19%	0.80	
-brighton	Brighton	roses		yellow	orange 17%	0.81	
-cherry-brandy	Cherry Brandy	roses		pink	orange 23%	0.49	
-coffee-break	Coffee Break	roses		pink	red 26%	0.54	
-deep-purple	Deep Purple	roses		lavender	red 4%	0.88	
-engagement	Engagement	roses		pink	orange 2%	0.92	
-escimo	Escimo	roses		white	yellow 2%	0.96	
-esperance	Esperance	roses		pink	white 38%	0.41	
-fair-lady	Fair Lady	roses		pink	lavender 21%	0.54	
-faith	Faith	roses		lavender	pink 21%	0.58	
-friendship	Friendship	roses		pink	red 17%	0.52	
-glitz	Glitz	roses		orange	yellow 47%	0.51	
-goldfinch	Goldfinch	roses		yellow	orange 16%	0.82	
-gotcha	Gotcha	roses		pink	red 41%	0.52	
-govinda	Govinda	roses		pink	lavender 40%	0.48	
-green-romance	Green Romance	roses		yellow	white 44%	0.56	
-high-and-candy	High & Candy	roses		pink	lavender 3%	0.94	
-high-and-yellow-magic	High & Yellow Magic	roses		orange	yellow 31%	0.45	
-hot-lady	Hot Lady	roses		pink	red 7%	0.83	
-hot-spot	Hot Spot	roses		red	pink 36%	0.57	
-iguazu	Iguazu	roses		pink	red 17%	0.78	
-jessica	Jessica	roses		pink	yellow 5%	0.92	
-lemonade	Lemonade	roses		yellow	white 62%	0.37	
-luciano	Luciano	roses		pink	white 6%	0.90	
-malibu	Malibú	roses		pink	white 26%	0.46	
-mango-tango	Mango Tango	roses		pink	orange 34%	0.60	
-menta	Menta	roses		lavender	pink 27%	0.61	
-mother-of-pearl	Mother of Pearl	roses		pink	orange 24%	0.53	
-nina	Nina	roses		orange	pink 37%	0.45	
-phoenix	Phoenix	roses		orange	peach 33%	0.42	
-quicksand	Quicksand	roses		peach	white 12%	0.85	
-rosita-vendela	Rosita Vendela	roses		pink	white 4%	0.90	
-secret-garden	Secret Garden	roses		pink	lavender 14%	0.74	
-shocking-blue	Shocking Blue	roses		lavender	white 10%	0.89	
-silantoi	Silantoi	roses		orange	pink 22%	0.62	
-stardust	Stardust	roses		yellow	white 14%	0.81	
-sweet-akito	Sweet Akito	roses		pink	lavender 24%	0.52	
-sweet-cake	Sweet Cake	roses		pink	lavender 57%	0.36	
-sweet-escimo	Sweet Escimo	roses		pink	lavender 22%	0.69	
-sweet-lady	Sweet Lady	roses		pink	lavender 47%	0.48	
-toffee	Toffee	roses		peach	orange 35%	0.59	
-all-4-love	All 4 Love	garden		lavender	pink 10%	0.87	
-aloha	Aloha	garden		lavender	pink 23%	0.71	
-antonia-gardens	Antonia Gardens	garden		white	orange 15%	0.65	
-arya	Arya	garden		lavender	pink 4%	0.94	
-aurora-gardens	Aurora Gardens	garden		white	yellow 20%	0.77	
-candy-x-pression	Candy X-pression	garden		pink	red 2%	0.94	
-cotton-x-pression	Cotton X-pression	garden		white	peach 29%	0.70	
-country-blues	Country Blues	garden		pink	red 8%	0.89	
-country-candy	Country Candy	garden		peach	pink 33%	0.51	
-country-home	Country Home	garden		pink	white 6%	0.86	
-cream-x-pression	Cream X-pression	garden		orange	white 31%	0.48	
-creamy-kiss	Creamy Kiss	garden		white	yellow 40%	0.59	
-dark-x-pression	Dark X-pression	garden		pink	red 18%	0.79	
-dragonfly	Dragonfly	garden		pink	orange 49%	0.48	
-exotix-berry	Exotix Berry	garden		pink	red 25%	0.72	
-free-spirit	Free Spirit	garden		pink	orange 51%	0.45	
-garden-spirit	Garden Spirit	garden		peach	white 52%	0.40	
-hearts	Hearts	garden		red	pink 20%	0.77	
-juicy-x-pression	Juicy X-pression	garden		pink	orange 35%	0.53	
-mademoiselle	Mademoiselle	garden		pink	yellow 3%	0.97	
-mandarin-x-pression	Mandarin X-pression	garden		pink	orange 5%	0.90	
-mayra-bridal-pink	Mayra Bridal Pink	garden		pink	white 10%	0.83	
-mayra-hot-pink	Mayra Hot Pink	garden		red	pink 41%	0.58	
-mayra-peach	Mayra Peach	garden		orange	peach 33%	0.53	
-mayra-pink	Mayra Pink	garden		pink	lavender 5%	0.93	
-mayra-red	Mayra Red	garden		red	pink 13%	0.86	
-mayra-white	Mayra White	garden		white	yellow 5%	0.93	
-melon-x-pression	Melon X-pression	garden		peach	pink 20%	0.43	
-pink-ohara	Pink O'Hara	garden		pink	lavender 48%	0.48	
-pink-x-pression	Pink X-pression	garden		pink	lavender 5%	0.93	
-queens-crown	Queen's Crown	garden		pink	lavender 23%	0.70	
-shimmer	Shimmer	garden		pink	peach 24%	0.38	
-vicky-gardens	Vicky Gardens	garden		white	peach 23%	0.55	
-white-ohara	White O'Hara	garden		white	peach 26%	0.72	
-champagne	Champagne	spray		white	peach 41%	0.57	
-champagne-majolika	Champagne Majolika	spray		white	peach 40%	0.56	
-cream-majolika	Cream Majolika	spray		white	yellow 29%	0.67	
-elba	Elba	spray		pink	peach 6%	0.90	
-fibonacci	Fibonacci	spray		orange	peach 20%	0.77	
-fire-up	Fire Up	spray		pink	red 24%	0.48	
-golden-blossom	Golden Blossom	spray		yellow	orange 14%	0.85	
-morning-star	Morning Star	spray		white	pink 17%	0.63	
-pink-majolika	Pink Majolika	spray		pink	yellow 4%	0.93	
-portrait	Portrait	spray		peach	pink 26%	0.46	
-rubicon	Rubicon	spray		red	pink 28%	0.61	
-shining-star	Shining Star	spray		white	yellow 5%	0.93	
-star-blush	Star Blush	spray		pink	white 23%	0.55	
-suspiro	Suspiro	spray		pink	lavender 16%	0.76	
-sweet-dreams	Sweet Dreams	spray		white	lavender 6%	0.90	
-white-majolika	White Majolika	spray		white	lavender 5%	0.89	
-mini-carnation	Mini Carnation	carnations		white	pink 25%	0.43	
-select-grade-carnation	Select-grade Carnation	carnations		white	peach 28%	0.35	
-asiatic-lily	Asiatic Lily	lilies		white	peach 28%	0.41	
-calla-lilies	Calla Lilies	lilies		white	yellow 28%	0.62	
-hybrid-lilies	Hybrid Lilies	lilies		pink	white 18%	0.71	
-mini-calla-lilies	Mini Calla Lilies	lilies		white	pink 22%	0.48	
-oriental-lily	Oriental Lily	lilies		white	pink 13%	0.65	
-premium-lilies	Premium Lilies	lilies		white	yellow 19%	0.67	
-bird-of-paradise	Bird of Paradise	orchids		white	orange 15%	0.51	
-cymbidium-orchid	Cymbidium Orchid	orchids		white	pink 27%	0.43	
-dendrobium	Dendrobium	orchids		white	yellow 23%	0.49	
-phalaenopsis	Phalaenopsis (Moth Orchid)	orchids		lavender	white 20%	0.62	
-alstroemeria	Alstroemeria	seasonal		peach	yellow 25%	0.29	
-anemone	Anemone	seasonal		pink	white 30%	0.43	
-butterfly-ranunculus	Butterfly Ranunculus	seasonal		pink	white 25%	0.48	
-chrysanthemum	Chrysanthemum	seasonal		pink	lavender 26%	0.66	
-daisy	Daisy	seasonal		white	yellow 37%	0.59	
-delphinium	Delphinium	seasonal		lavender	white 12%	0.78	
-gerbera	Gerbera	seasonal		pink	white 32%	0.40	
-lisianthus	Lisianthus	seasonal		white	lavender 23%	0.54	
-molucella	Molucella	seasonal		white	yellow 54%	0.46	
-peony	Peony	seasonal		white	pink 33%	0.52	
-premium-hydrangea	Premium Hydrangea	seasonal		lavender	white 29%	0.43	
-ranunculus	Ranunculus	seasonal		white	peach 26%	0.40	
-snapdragon	Snapdragon	seasonal		white	peach 27%	0.49	
-spider-chrysanthemum	Spider Chrysanthemum	seasonal		pink	white 22%	0.56	
-stock	Stock	seasonal		lavender	white 28%	0.55	
-sunflowers	Sunflowers	seasonal		yellow	orange 23%	0.54	
-sweet-pea	Sweet Pea	seasonal		lavender	white 14%	0.80	
-tulips	Tulips	seasonal		white	pink 30%	0.36	
-babys-breath	Baby's Breath	greens		white	yellow 14%	0.84	
-eucalyptus	Eucalyptus	greens		white	green 60%	0.38	
-hanging-amaranthus	Hanging Amaranthus	greens		pink	yellow 28%	0.36	
-israeli-ruscus	Israeli Ruscus	greens		green	red 9%	0.84	
-lepidium	Lepidium	greens		yellow	white 53%	0.44	
-limonium	Limonium	greens		white	lavender 18%	0.80	
-queen-of-lace	Queen of Lace	greens		white	yellow 13%	0.80	
-solidago	Solidago	greens		yellow	white 25%	0.67	
-statice	Statice	greens		white	lavender 39%	0.48	
-wax-flower	Wax Flower	greens		white	peach 14%	0.64	
+slug	name	confirmed
+3d	3D	orange, pink and bicolour
+amsterdam	Amsterdam	orange and peach
+blush	Blush	peach, pink and bicolour
+cherry-brandy	Cherry Brandy	orange, peach, pink and bicolour
+coffee-break	Coffee Break	orange
+deep-purple	Deep Purple	pink and lavender
+engagement	Engagement	peach
+esperance	Esperance	pink and green
+friendship	Friendship	yellow, red and bicolour
+glitz	Glitz	yellow
+govinda	Govinda	lavender
+green-romance	Green Romance	green
+high-and-candy	High & Candy	pink and bicolour
+high-and-magic	High & Magic	yellow, orange and bicolour
+high-and-orange-magic	High & Orange Magic	orange and bicolour
+high-and-yellow-magic	High & Yellow Magic	yellow, orange and bicolour
+hot-spot	Hot Spot	pink
+iguazu	Iguazu	red
+lemonade	Lemonade	green
+malibu	Malibú	pink and bicolour
+mango-tango	Mango Tango	orange and bicolour
+mondial	Mondial	white and cream
+mother-of-pearl	Mother of Pearl	cream and peach
+nina	Nina	orange
+phoenix	Phoenix	peach
+poma-rosa	Poma Rosa	cream and pink
+proud	Proud	white and cream
+sweet-cake	Sweet Cake	pink
+sweet-lady	Sweet Lady	pink
+sweetness	Sweetness	red and bicolour
+vendela	Vendela	cream
+all-4-love	All 4 Love	pink
+aloha	Aloha	pink and lavender
+antonia-gardens	Antonia Gardens	peach
+aurora-gardens	Aurora Gardens	cream
+candy-x-pression	Candy X-pression	orange and peach
+cotton-x-pression	Cotton X-pression	cream and peach
+country-candy	Country Candy	peach, red and bicolour
+country-home	Country Home	peach and pink
+cream-x-pression	Cream X-pression	cream and peach
+creamy-kiss	Creamy Kiss	white and cream
+dragonfly	Dragonfly	orange and peach
+free-spirit	Free Spirit	orange, peach, pink and bicolour
+garden-spirit	Garden Spirit	cream and peach
+juicy-x-pression	Juicy X-pression	orange and peach
+mayra-hot-pink	Mayra Hot Pink	pink
+mayra-peach	Mayra Peach	orange and peach
+melon-x-pression	Melon X-pression	peach
+pink-ohara	Pink O'Hara	pink
+shimmer	Shimmer	peach
+vicky-gardens	Vicky Gardens	cream
+champagne	Champagne	white and cream
+champagne-majolika	Champagne Majolika	white and cream
+cream-majolika	Cream Majolika	white and cream
+fibonacci	Fibonacci	orange and peach
+fire-up	Fire Up	pink
+morning-star	Morning Star	cream and peach
+portrait	Portrait	cream and peach
+shining-star	Shining Star	white and cream
+sweet-dreams	Sweet Dreams	white and cream
+candy-cane	Candy Cane Cocktail	cream, red and bicolour
+dark-blue	Dark Blue	none
+fall-hellujah	Fall Hellujah	orange, red and bicolour
+fluffy	Fluffy	lavender and bicolour
+hallow-queen	Hallow Queen	orange, red and bicolour
+harvest-delight	Harvest Delight	none
+hopper	Hopper	cream, lavender and bicolour
+light-blue	Light Blue	none
+peeps	Peeps	orange, peach, pink and bicolour
+santas-helper	Santa's Helper	red, green and bicolour
+spooktacular	Spooktacular	orange and bicolour
+t-marshmellow	T-Marshmellow	bicolour
+x-mas-gift	X-mas Gift	red and bicolour

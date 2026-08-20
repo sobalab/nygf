@@ -67,7 +67,7 @@ export default function Home() {
           copyAt={[0, 0.18]}
           heading={<>Direct From the Farm,<br />Closer to Your Needs.</>}
         >
-          We opened in Flushing in 1990 and started importing direct from the beginning. Today we bring flowers in from several farms located in Ecuador, Colombia, Costa Rica, Mexico, Poland, Canada, and more.
+          We opened in Flushing in 1990 and started importing direct from the beginning. Today we bring flowers in from several farms located in Ecuador, Colombia, Costa Rica, Mexico, Holland, Canada, and more.
         </StoryPanel>
 
         <StoryPanel
@@ -83,9 +83,9 @@ export default function Home() {
           headingAt={[0.28, 0.54]}
           copyAt={[0.3, 0.52]}
           headingClassName="story-oneline"
-          heading="Fusagasugá to Flushing."
+          heading="Colombia to Flushing."
         >
-          Being a direct importer means more than skipping the middleman. We employ our own procurement staff in Colombia, based in Fusagasugá, in the Cundinamarca flower belt where most of the country&apos;s cut flowers are grown. They are at the farms, and we are on the floor in Flushing. Nobody in between.
+          Being a direct importer means more than skipping the middleman. We employ our own procurement staff in Colombia, working the two belts that grow most of the country&apos;s cut flowers, the Sabana de Bogotá in Cundinamarca and the Oriente Antioqueño in Antioquia. They are at the farms, and we are on the floor in Flushing. Nobody in between.
         </StoryPanel>
 
         <StoryPanel

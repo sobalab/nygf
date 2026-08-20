@@ -57,7 +57,7 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   // for a fact the data file doesn't hold.
   const description =
     flower.description ??
-    `${flower.name}, wholesale ${groupPhrase(flower)} from New York Garden Flower Wholesale, a direct importer in Flushing, New York. Call the store or message on WhatsApp for the day's availability and pricing.`;
+    `${flower.name}, wholesale ${groupPhrase(flower)} from New York Garden Flower Wholesale, a direct importer in Flushing, New York. Call the store or text the owner for the day's availability and pricing.`;
   const photo = flower.images?.[0] ?? flower.image;
 
   return {

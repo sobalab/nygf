@@ -18,9 +18,10 @@ export const siteUrl =
 export const shop = {
   storePhone: "718-886-1190",
   storePhoneHref: "tel:+17188861190",
-  // The owner's cell. WhatsApp and SMS both land here.
+  // The owner's cell, and the number the shop works from. It takes iMessage and
+  // SMS rather than voice, so every link to it on the site is an sms: one: a
+  // thread the owner reads on the phone that is already in their hand.
   ownerPhone: "201-815-1040",
-  whatsappNumber: "12018151040",
   smsHref: "sms:+12018151040",
   email: "nyflowergarden@hotmail.com",
   address: "171-10 39th Ave\nFlushing, NY 11358",
@@ -31,13 +32,25 @@ export const shop = {
 // Web3Forms delivers the contact form to the shop inbox. It is free and needs
 // no server: sign up at https://web3forms.com with nyflowergarden@hotmail.com,
 // paste the access key it emails you here, and redeploy. Until then the form
-// still works — it opens the WhatsApp draft and offers a one-tap email copy
+// still works — it opens the text draft and offers a one-tap email copy
 // instead of sending one automatically.
 export const web3formsAccessKey = "f6e3c1b7-6a30-4046-9b9b-77706f80f1cb";
 
 export const formServiceConfigured =
   web3formsAccessKey.length > 0 && !web3formsAccessKey.startsWith("YOUR_");
 
-export function whatsappHref(message: string) {
-  return `https://wa.me/${shop.whatsappNumber}?text=${encodeURIComponent(message)}`;
+// A text draft to the owner's cell, written out and waiting to be sent. It is
+// where an inquiry is actually read: the cell takes iMessage and SMS, and that
+// is the thread the shop works from.
+//   The separator before the body is the one part of sms: that platforms
+// disagree on. RFC 5724 says "?", which is what Android wants; Apple's Messages
+// fills the body only when it is "&" and drops it silently otherwise, which is
+// the worst of the two failures — a draft that opens addressed to the right
+// number with nothing written in it.
+//   Read the agent off navigator rather than off a build-time constant, and
+// only ever call this from a click: the answer differs between the server and
+// the browser, so a value rendered into markup would be a hydration mismatch.
+export function smsDraftHref(message: string) {
+  const apple = typeof navigator !== "undefined" && /iPhone|iPad|iPod|Macintosh/.test(navigator.userAgent);
+  return `${shop.smsHref}${apple ? "&" : "?"}body=${encodeURIComponent(message)}`;
 }

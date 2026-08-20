@@ -5,7 +5,7 @@ import { Ask } from "../ask";
 import { categories, colourGroups, flowers, normalizeQuery, services, type CategoryId, type ColourGroupId } from "../catalogue-data";
 import { Arrow, SiteFooter, SiteHeader } from "../chrome";
 import { FlowerCard } from "../flower-card";
-import { shop, whatsappHref } from "../site";
+import { shop, smsDraftHref } from "../site";
 
 const AVAILABILITY_ASK = "Hello, could you send me today's flower availability and pricing?";
 const SERVICES_ASK = "Hello, I'd like to ask about your services.";
@@ -411,6 +411,12 @@ export default function Catalogue() {
                     disabled={count === 0 && !pressed}
                     onClick={() => toggleColour(group.id)}
                   >
+                    {/* The box says the tray takes more than one answer, which
+                        is the thing the colour tray has to say and the type tray
+                        must not. Both it and the dot are decoration: the state
+                        is on the button as aria-pressed and the name is the word
+                        beside them, so neither is read out. */}
+                    <span className="check" aria-hidden="true" />
                     {/* The dot is what makes this row legible as colour at a
                         glance. It is decoration and the word beside it is the
                         name, so it is not read out twice. */}
@@ -445,8 +451,11 @@ export default function Catalogue() {
             <p>Nothing on this list matches that, and the cooler often holds more than the list does.</p>
             <p>
               <button type="button" className="clear-all" onClick={clearAll}>Clear the filter</button> to see the list again, or ask what came in this week: call{" "}
-              <a href={shop.storePhoneHref}>{shop.storePhone}</a> or message{" "}
-              <a href={whatsappHref(AVAILABILITY_ASK)} target="_blank" rel="noreferrer">{shop.ownerPhone} on WhatsApp</a>.
+              <a href={shop.storePhoneHref}>{shop.storePhone}</a> or text{" "}
+              {/* The number in the markup, the written-out draft on the click:
+                  what a text draft has to say to carry a body differs between
+                  a phone and everything else, so it is only knowable here. */}
+              <a href={shop.smsHref} onClick={(event) => { event.preventDefault(); window.location.href = smsDraftHref(AVAILABILITY_ASK); }}>{shop.ownerPhone}</a>.
             </p>
           </div>
         ) : (

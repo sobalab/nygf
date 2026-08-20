@@ -113,7 +113,10 @@ function classify({ h, s, l }) {
   }
 
   if (h >= 75 && h < 170) return "green";
-  if (h >= 170 && h < 260) return "lavender";    // blue only ever turns up dyed
+  // Blue is a dye and lavender is a rose, and the two do not meet: the three
+  // dyed blues read 201, 217 and 220, and the lavenders run 283 to 348 with
+  // nothing in between. The boundary sits in that gap rather than on a number.
+  if (h >= 170 && h < 260) return "blue";
   if (h >= 260 && h < 335) return "lavender";
 
   // The rose seam, hue 335 round through 0 to 8.
@@ -256,11 +259,16 @@ const altShare = (alt, second) => (alt ? `${alt} ${Math.round(second * 100)}%` :
 
 const checking = process.argv.includes("--check");
 
-// Tinted roses are left out on purpose and not for want of a photograph: the data
-// file calls a tint a treatment rather than a colour group, "which is what makes
-// the range of them unlimited". A chip would claim the shop stocks one dye when
-// it stocks whatever the farm ran.
-const SKIP_CATEGORIES = new Set(["tinted"]);
+// Tinted roses were left out of the first pass on the grounds that the data file
+// calls a tint a treatment rather than a colour group, "which is what makes the
+// range of them unlimited" — a chip would claim the shop stocks one dye when it
+// stocks whatever the farm ran that week.
+//   They are read now by the shop's decision: a buyer filtering the wall is
+// asking what is in the cooler today, and the tinted stems in it are the colour
+// they were dyed. The objection above is still true and is what the review
+// column is for — a tint confirmed here is a colour this batch came in, not a
+// standing claim about what can be ordered.
+const SKIP_CATEGORIES = new Set();
 
 const rows = [];
 for (const flower of flowers) {

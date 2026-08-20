@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState, type CSSProperties, type FormEvent } from "react";
 import { SiteFooter, SiteHeader } from "../chrome";
-import { formServiceConfigured, shop, web3formsAccessKey, whatsappHref } from "../site";
+import { formServiceConfigured, shop, smsDraftHref, web3formsAccessKey } from "../site";
 
 type Status = "idle" | "sending" | "sent" | "error";
 
@@ -54,10 +54,6 @@ function summarise(form: typeof EMPTY) {
 export default function Contact() {
   const [form, setForm] = useState(EMPTY);
   const [status, setStatus] = useState<Status>("idle");
-  // Whether the WhatsApp tab actually opened on submit. An inquiry is meant to
-  // land in both of the shop's inboxes, and this is the half that a browser can
-  // refuse without telling anyone.
-  const [drafted, setDrafted] = useState(true);
   const honeypot = useRef<HTMLInputElement>(null);
 
   // /contact?sent — the confirmation without sending anything, so the panel can
@@ -100,8 +96,14 @@ export default function Contact() {
 
   const sent = status === "sent";
   const message = summarise(form);
-  const waUrl = whatsappHref(message);
   const mailtoUrl = `mailto:${shop.email}?subject=${encodeURIComponent(`Wholesale flower inquiry — ${form.name}`)}&body=${encodeURIComponent(message)}`;
+
+  // The draft is opened rather than linked to, because the address it needs is
+  // only knowable in the browser. Every control that offers it carries the bare
+  // sms: link in its markup and swaps in the written-out one on the click.
+  function openTextDraft() {
+    window.location.href = smsDraftHref(message);
+  }
 
   function set(key: keyof typeof EMPTY, value: string) {
     setForm((current) => ({ ...current, [key]: value }));
@@ -124,44 +126,47 @@ export default function Contact() {
     event.preventDefault();
     if (honeypot.current?.value) return; // a bot filled the hidden field
 
-    // Open the WhatsApp draft inside the click gesture, before any await, or the
-    // browser treats it as an unrequested popup and blocks it.
-    //   The handle is what says whether it opened: a blocked popup hands back
-    // null, and the confirmation below has to be able to tell, because promising
-    // a tab that was never allowed is how the WhatsApp half of an inquiry gets
-    // quietly dropped. Which is also why the window is opened bare and its
-    // opener cut afterwards rather than being asked for with "noopener" — that
-    // feature makes the call return null whether it worked or not.
-    const draft = window.open(waUrl, "_blank");
-    if (draft) draft.opener = null;
-    setDrafted(Boolean(draft));
+    // One inquiry, two places, and the order matters. The email request goes
+    // out first and is left in flight rather than awaited, so it has already
+    // left the browser before the page hands itself to Messages: on a phone the
+    // switch backgrounds the tab, and a request that had not been made yet is
+    // one that may never be.
+    const emailed = formServiceConfigured
+      ? fetch("https://api.web3forms.com/submit", {
+          method: "POST",
+          headers: { "Content-Type": "application/json", Accept: "application/json" },
+          body: JSON.stringify({
+            access_key: web3formsAccessKey,
+            subject: `Wholesale flower inquiry — ${form.name}`,
+            from_name: form.name,
+            replyto: form.email || undefined,
+            name: form.name,
+            phone: form.phone,
+            email: form.email,
+            business: form.business,
+            service: form.service,
+            pickup_or_delivery: form.fulfilment,
+            delivery_address: [form.address, form.city, [form.state, form.zip].filter(Boolean).join(" ")].filter(Boolean).join(", "),
+            needed_by: readableDate(form.needBy),
+            message: form.needs,
+          }),
+        })
+      : null;
 
-    if (!formServiceConfigured) {
+    // Then the text, still inside the click: the same list, addressed to the
+    // cell the owner reads. It is the browser's own send button that finishes
+    // it, which is the whole of what a page is allowed to do here — nothing on
+    // this side can put a message on someone's phone without them seeing it.
+    openTextDraft();
+
+    if (!emailed) {
       confirm();
       return;
     }
 
     setStatus("sending");
     try {
-      const response = await fetch("https://api.web3forms.com/submit", {
-        method: "POST",
-        headers: { "Content-Type": "application/json", Accept: "application/json" },
-        body: JSON.stringify({
-          access_key: web3formsAccessKey,
-          subject: `Wholesale flower inquiry — ${form.name}`,
-          from_name: form.name,
-          replyto: form.email || undefined,
-          name: form.name,
-          phone: form.phone,
-          email: form.email,
-          business: form.business,
-          service: form.service,
-          pickup_or_delivery: form.fulfilment,
-          delivery_address: [form.address, form.city, [form.state, form.zip].filter(Boolean).join(" ")].filter(Boolean).join(", "),
-          needed_by: readableDate(form.needBy),
-          message: form.needs,
-        }),
-      });
+      const response = await emailed;
       const data = (await response.json()) as { success?: boolean };
       if (data.success) confirm();
       else setStatus("error");
@@ -183,8 +188,8 @@ export default function Contact() {
         <section className="page-head section-pad">
           <h1>Tell Us What You Need</h1>
           <p className="section-note">
-            Prices move with the market daily and are never posted, so we can answer any questions by email, phone or
-            WhatsApp. Send your list and we will come back with what is in the cooler and what it costs.
+            Prices move with the market daily and are never posted, so we can answer any questions by text, email or
+            phone. Send your list and we will come back with what is in the cooler and what it costs.
           </p>
         </section>
       )}
@@ -194,23 +199,23 @@ export default function Contact() {
           {sent ? (
             <div className="enquiry-sent" role="status" aria-live="polite">
               <h2>Thank You, {form.name.split(" ")[0] || "we have it"}.</h2>
-              {/* Three things can be true here and the reader is owed the right
-                  one: the email either went or there is no service to send it
-                  with, and the WhatsApp draft either opened or the browser held
-                  the tab back. The second half is a step still to take either
-                  way, so it keeps the solid button under whichever line runs. */}
+              {/* The email half is done and said so. The text half is a step
+                  still to take, and it is the half the shop actually reads, so
+                  it is what the button under the line offers either way. Not
+                  worded as though the draft is certainly open: a device with no
+                  messaging app to hand it to says nothing, and a page that
+                  promised otherwise would be the reason a list went nowhere. */}
               <p>
                 {formServiceConfigured
-                  ? drafted
-                    ? "Your list is on its way to the shop by email, and a WhatsApp draft is open in another tab. Send that too and the owner has the thread as well as the inbox copy."
-                    : "Your list is on its way to the shop by email. Your browser held back the WhatsApp tab, so open the draft below and send it to reach the owner directly as well."
-                  : drafted
-                    ? "A WhatsApp draft is open in another tab with your list already written out. Send it, and email the same copy so the shop has it both ways."
-                    : "Your browser held back the WhatsApp tab. Open the draft below and send it, and email the same copy so the shop has it both ways."}
+                  ? "Your list is on its way to the shop by email, and the same list is written out as a text to the owner's cell, which is where it gets read first. Send that too and it lands both ways."
+                  : "Your list is written out as a text to the owner's cell, which is where it gets read first. Send it, and email the same copy so the shop has it both ways."}
               </p>
               <div className="enquiry-actions">
-                <a className="solid-button" href={waUrl} target="_blank" rel="noreferrer">
-                  {drafted ? "Open WhatsApp again" : "Open the WhatsApp draft"}
+                {/* The bare number in the markup, the written-out draft on the
+                    click: the address the draft needs is only knowable in the
+                    browser, and rendering it would differ from the server's. */}
+                <a className="solid-button" href={shop.smsHref} onClick={(event) => { event.preventDefault(); openTextDraft(); }}>
+                  Open the text draft
                 </a>
                 {formServiceConfigured ? null : (
                   <a className="text-link" href={mailtoUrl}>
@@ -218,7 +223,7 @@ export default function Contact() {
                   </a>
                 )}
               </div>
-              <button type="button" className="enquiry-reset" onClick={() => { setForm(EMPTY); setStatus("idle"); setDrafted(true); }}>
+              <button type="button" className="enquiry-reset" onClick={() => { setForm(EMPTY); setStatus("idle"); }}>
                 Send another list
               </button>
             </div>
@@ -234,7 +239,7 @@ export default function Contact() {
 
               <div className="field-row">
                 <div className="field">
-                  <label htmlFor="phone">Phone or WhatsApp<span className="req" aria-hidden="true">*</span></label>
+                  <label htmlFor="phone">Phone or Text<span className="req" aria-hidden="true">*</span></label>
                   <input id="phone" name="phone" type="tel" required autoComplete="tel" placeholder="212-555-0123" value={form.phone} onChange={(e) => set("phone", e.target.value)} />
                 </div>
                 <div className="field">
@@ -338,14 +343,14 @@ export default function Contact() {
 
               {status === "error" ? (
                 <p className="field-error" role="alert">
-                  That did not send. Your WhatsApp draft should still be open, or <a href={mailtoUrl}>email the list</a> instead.
+                  The email did not send. The text draft has your list in it, or <a href={mailtoUrl}>email the list</a> instead.
                 </p>
               ) : null}
 
               {/* Above the button for the same reason every hint above sits above
                   its input: it says what the control will do, so it is read
                   before the control rather than after it. */}
-              <p className="field-hint enquiry-note">Sending emails your list to the shop and opens a WhatsApp draft, so it reaches us both ways.</p>
+              <p className="field-hint enquiry-note">Sending emails your list to the shop and opens a text to the owner with the same list in it, so it reaches us both ways.</p>
               <button type="submit" className="enquiry-submit" disabled={status === "sending"}>
                 {status === "sending" ? "Sending" : "Send inquiry"}
               </button>
@@ -358,27 +363,19 @@ export default function Contact() {
           <h2>Or Just Call.</h2>
           <p className="section-note">Most orders are settled in a two minute phone call. We answer in English and Korean.</p>
           <div className="enquiry-details">
+            {/* The cell first, because it is the one that answers: it takes
+                iMessage and SMS and the store line takes voice, and a buyer
+                sending a list is on the cell. That it opens a message rather
+                than a call is left to the link's accessible name, the way the
+                footer does it, rather than being spelled out in a label that
+                now says which number to try first. */}
             <p>
-              <span>Store phone (voice only)</span>
+              <span>Cell (Primary Orders)</span>
+              <a href={shop.smsHref} aria-label={`Text ${shop.ownerPhone}`}>{shop.ownerPhone}</a>
+            </p>
+            <p>
+              <span>Store (General)</span>
               <a href={shop.storePhoneHref}>{shop.storePhone}</a>
-            </p>
-            <p>
-              <span>Owner (WhatsApp or SMS)</span>
-              <a href={`https://wa.me/${shop.whatsappNumber}`} target="_blank" rel="noreferrer">{shop.ownerPhone}</a>
-              <br />
-              <a href={shop.smsHref}>Send SMS</a>
-            </p>
-            <p>
-              <span>Email</span>
-              <a href={`mailto:${shop.email}?subject=Wholesale%20flower%20inquiry`}>{shop.email}</a>
-            </p>
-            <p>
-              <span>Visit / Pickup</span>
-              <a href={shop.mapsHref} target="_blank" rel="noreferrer">171-10 39th Ave<br />Flushing, NY 11358</a>
-            </p>
-            <p>
-              <span>Hours</span>
-              Mon–Sat, 6 AM–2 PM<br />Sunday, 6 AM–12 PM
             </p>
           </div>
         </aside>

@@ -47,6 +47,13 @@ old README also states hours and delivery zones are confirmed values.
 Ecuador, Colombia, Costa Rica, Mexico, Holland, Canada. Importing direct since
 1990.
 
+Colombian farms sit in two belts: the Sabana de Bogotá (Funza, Facatativá, El
+Rosal, Chía, Tocancipá) in Cundinamarca, and the Oriente Antioqueño (La Ceja,
+Rionegro, La Unión, El Carmen de Viboral) in Antioquia. The procurement office
+is in Fusagasugá, Cundinamarca, which is near Bogotá but is **not** a
+cut-flower belt — it grows dendrobium orchids and bromeliads. Do not call it
+one in copy.
+
 **Who they supply**
 
 Florists, event and wedding planners, restaurants and hotels, walk-ins and

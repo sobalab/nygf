@@ -45,7 +45,12 @@ export type CategoryId = (typeof categories)[number]["id"];
 // into one chip would lose the only thing telling three cards apart. So the
 // scale keeps its words on the card and the chip says Pink, and both are true.
 //   Ordered warm out of white rather than alphabetically, because the row reads
-// as a spectrum and Bicolour is the one that belongs at the end of it.
+// as a spectrum. The two at the end are not points on it: Bicolour is a stem
+// that is two of the colours above, and Other is a stem that is none of them.
+//   Blue is only ever a dye on a rose — the three that read it are all tinted,
+// and the stems named for it that grew that way, Shocking Blue and Moody Blue,
+// are lavenders. It earns a chip anyway, because a buyer asking for blue is
+// asking for the dyed ones and Lavender is not where they would look.
 export const colourGroups = [
   { id: "white", label: "White" },
   { id: "cream", label: "Cream" },
@@ -55,11 +60,19 @@ export const colourGroups = [
   { id: "pink", label: "Pink" },
   { id: "red", label: "Red" },
   { id: "lavender", label: "Lavender" },
+  { id: "blue", label: "Blue" },
   { id: "green", label: "Green" },
   { id: "bicolour", label: "Bicolour" },
+  { id: "other", label: "Other" },
 ] as const;
 
 export type ColourGroupId = (typeof colourGroups)[number]["id"];
+
+// The four categories the colour filter covers. Colour is a rose question here:
+// the named varieties are one cultivar and one colour, while a lily or a gerbera
+// is bought in whatever the crop ran, so a chip on those would be a claim about
+// one photograph rather than about stock.
+const roseCategories = new Set<CategoryId>(["roses", "garden", "spray", "tinted"]);
 
 // The words a written colour is read for, longest-lived first: every value on
 // the list today is here, plus the ones the shop is likely to reach for next, so
@@ -72,6 +85,7 @@ export type ColourGroupId = (typeof colourGroups)[number]["id"];
 const colourWords: ReadonlyArray<readonly [string, ColourGroupId]> = [
   ["bicolor", "bicolour"],
   ["bicolour", "bicolour"],
+  ["rainbow", "bicolour"],
   ["white", "white"],
   ["ivory", "cream"],
   ["cream", "cream"],
@@ -89,6 +103,8 @@ const colourWords: ReadonlyArray<readonly [string, ColourGroupId]> = [
   ["crimson", "red"],
   ["red", "red"],
   ["lavender", "lavender"],
+  // Before the purples, so a written "blue" is never swallowed by them.
+  ["blue", "blue"],
   ["lilac", "lavender"],
   ["purple", "lavender"],
   ["mauve", "lavender"],
@@ -283,7 +299,7 @@ const items: CatalogueItem[] = [
     slug: "vendela",
     category: "roses",
     image: "/media/vendela.webp",
-    colour: "white and cream",
+    colour: "cream",
     packingConfirmed: true,
     description: "Cream to ivory with a faint blush, a medium head and exceptionally clean form. One of the most specified wedding roses in the world, and the default when a warm white is wanted rather than a stark one.",
     colours: "Cream, ivory, very pale blush",
@@ -300,7 +316,7 @@ const items: CatalogueItem[] = [
     slug: "mondial",
     category: "roses",
     image: "/media/mondial.webp",
-    colour: "white",
+    colour: "white and cream",
     packingConfirmed: true,
     description: "A large full head with strong, mostly thornless stems and a high petal count. Mondial carries a green cast on the outer petals at bud stage that fades as the bloom opens.",
     colours: "Ivory white with green guard petals. Pink Mondial is a separate variety in soft light pink",
@@ -351,7 +367,7 @@ const items: CatalogueItem[] = [
     slug: "high-and-magic",
     category: "roses",
     image: "/media/high-and-magic.webp",
-    colour: "bicolor",
+    colour: "yellow, orange and bicolour",
     packingConfirmed: true,
     description: "A bicolour rose, yellow petals with an orange to red edge that deepens as the bloom opens. Highly recognisable and consistently popular, and one of the stronger performers in the vase.",
     colours: "Yellow with an orange or red edge",
@@ -511,7 +527,7 @@ const items: CatalogueItem[] = [
     slug: "poma-rosa",
     category: "roses",
     image: "/media/poma-rosa.webp",
-    colour: "hot pink",
+    colour: "cream and pink",
     packingConfirmed: true,
     stemsPerBunch: "25",
     stemsPerBox: "Half box 250 to 300 stems",
@@ -601,7 +617,7 @@ const items: CatalogueItem[] = [
     slug: "high-and-orange-magic",
     category: "roses",
     image: "/media/high-and-orange-magic.webp",
-    colour: "bicolor",
+    colour: "orange and bicolour",
     packingConfirmed: true,
     stemsPerBunch: "25",
     stemsPerBox: "Half box 250 to 300 stems",
@@ -612,7 +628,7 @@ const items: CatalogueItem[] = [
     slug: "sweetness",
     category: "roses",
     image: "/media/sweetness.webp",
-    colour: "bicolor",
+    colour: "red and bicolour",
     packingConfirmed: true,
     stemsPerBunch: "25",
     stemsPerBox: "Half box 250 to 300 stems",
@@ -645,7 +661,7 @@ const items: CatalogueItem[] = [
     slug: "proud",
     category: "roses",
     image: "/media/proud.webp",
-    colour: "white",
+    colour: "white and cream",
     packingConfirmed: true,
     stemsPerBunch: "25",
     stemsPerBox: "Half box 250 to 300 stems",
@@ -751,62 +767,62 @@ const items: CatalogueItem[] = [
   // Fall Hellujah and T-Marshmellow under the tinted chip, Malibú and Menta
   // here. That is what is printed on the order sheet a buyer is reading from, so
   // it is what the card says.
-  packedRose("3D", "3d", "roses", "/media/3d.webp"),
-  packedRose("Absolut in Pink", "absolut-in-pink", "roses", "/media/absolut-in-pink.webp"),
-  packedRose("Amnesia", "amnesia", "roses", "/media/amnesia.webp"),
-  packedRose("Amsterdam", "amsterdam", "roses", "/media/amsterdam.webp"),
-  packedRose("Arctica", "arctica", "roses", "/media/arctica.webp"),
-  packedRose("Barista", "barista", "roses", "/media/barista.webp"),
-  packedRose("Bikini", "bikini", "roses", "/media/bikini.webp"),
-  packedRose("Blush", "blush", "roses", "/media/blush.webp"),
-  packedRose("Born Free", "born-free", "roses", "/media/born-free.webp"),
-  packedRose("Brighton", "brighton", "roses", "/media/brighton.webp"),
-  packedRose("Cherry Brandy", "cherry-brandy", "roses", "/media/cherry-brandy.webp"),
-  packedRose("Coffee Break", "coffee-break", "roses", "/media/coffee-break.webp"),
-  packedRose("Deep Purple", "deep-purple", "roses", "/media/deep-purple.webp"),
-  packedRose("Engagement", "engagement", "roses", "/media/engagement.webp"),
-  packedRose("Escimo", "escimo", "roses", "/media/escimo.webp"),
-  packedRose("Esperance", "esperance", "roses", "/media/esperance.webp"),
-  packedRose("Fair Lady", "fair-lady", "roses", "/media/fair-lady.webp"),
-  packedRose("Faith", "faith", "roses", "/media/faith.webp"),
-  packedRose("Friendship", "friendship", "roses", "/media/friendship.webp"),
+  packedRose("3D", "3d", "roses", "/media/3d.webp", "orange, pink and bicolour"),
+  packedRose("Absolut in Pink", "absolut-in-pink", "roses", "/media/absolut-in-pink.webp", "pink"),
+  packedRose("Amnesia", "amnesia", "roses", "/media/amnesia.webp", "pink"),
+  packedRose("Amsterdam", "amsterdam", "roses", "/media/amsterdam.webp", "orange and peach"),
+  packedRose("Arctica", "arctica", "roses", "/media/arctica.webp", "white"),
+  packedRose("Barista", "barista", "roses", "/media/barista.webp", "pink"),
+  packedRose("Bikini", "bikini", "roses", "/media/bikini.webp", "yellow"),
+  packedRose("Blush", "blush", "roses", "/media/blush.webp", "peach, pink and bicolour"),
+  packedRose("Born Free", "born-free", "roses", "/media/born-free.webp", "red"),
+  packedRose("Brighton", "brighton", "roses", "/media/brighton.webp", "yellow"),
+  packedRose("Cherry Brandy", "cherry-brandy", "roses", "/media/cherry-brandy.webp", "orange, peach, pink and bicolour"),
+  packedRose("Coffee Break", "coffee-break", "roses", "/media/coffee-break.webp", "orange"),
+  packedRose("Deep Purple", "deep-purple", "roses", "/media/deep-purple.webp", "pink and lavender"),
+  packedRose("Engagement", "engagement", "roses", "/media/engagement.webp", "peach"),
+  packedRose("Escimo", "escimo", "roses", "/media/escimo.webp", "white"),
+  packedRose("Esperance", "esperance", "roses", "/media/esperance.webp", "pink and green"),
+  packedRose("Fair Lady", "fair-lady", "roses", "/media/fair-lady.webp", "pink"),
+  packedRose("Faith", "faith", "roses", "/media/faith.webp", "lavender"),
+  packedRose("Friendship", "friendship", "roses", "/media/friendship.webp", "yellow, red and bicolour"),
   // Filed here off the supplier lists, moved to the garden chip on a reading of
   // it, and back on a second look. Photograph, packing and address all come
   // across untouched — the chip is the only thing that has ever changed.
-  packedRose("Glitz", "glitz", "roses", "/media/glitz.webp"),
-  packedRose("Goldfinch", "goldfinch", "roses", "/media/goldfinch.webp"),
-  packedRose("Gotcha", "gotcha", "roses", "/media/gotcha.webp"),
-  packedRose("Govinda", "govinda", "roses", "/media/govinda.webp"),
-  packedRose("Green Romance", "green-romance", "roses", "/media/green-romance.webp"),
-  packedRose("High & Candy", "high-and-candy", "roses", "/media/high-and-candy.webp"),
-  packedRose("High & Yellow Magic", "high-and-yellow-magic", "roses", "/media/high-and-yellow-magic.webp"),
-  packedRose("Hot Lady", "hot-lady", "roses", "/media/hot-lady.webp"),
-  packedRose("Hot Spot", "hot-spot", "roses", "/media/hot-spot.webp"),
-  packedRose("Iguazu", "iguazu", "roses", "/media/iguazu.webp"),
-  packedRose("Jessica", "jessica", "roses", "/media/jessica.webp"),
-  packedRose("Lemonade", "lemonade", "roses", "/media/lemonade.webp"),
-  packedRose("Luciano", "luciano", "roses", "/media/luciano.webp"),
-  packedRose("Malibú", "malibu", "roses", "/media/malibu.webp"),
-  packedRose("Mango Tango", "mango-tango", "roses", "/media/mango-tango.webp"),
-  packedRose("Menta", "menta", "roses", "/media/menta.webp"),
-  packedRose("Mother of Pearl", "mother-of-pearl", "roses", "/media/mother-of-pearl.webp"),
-  packedRose("Nina", "nina", "roses", "/media/nina.webp"),
-  packedRose("Phoenix", "phoenix", "roses", "/media/phoenix.webp"),
+  packedRose("Glitz", "glitz", "roses", "/media/glitz.webp", "yellow"),
+  packedRose("Goldfinch", "goldfinch", "roses", "/media/goldfinch.webp", "yellow"),
+  packedRose("Gotcha", "gotcha", "roses", "/media/gotcha.webp", "pink"),
+  packedRose("Govinda", "govinda", "roses", "/media/govinda.webp", "lavender"),
+  packedRose("Green Romance", "green-romance", "roses", "/media/green-romance.webp", "green"),
+  packedRose("High & Candy", "high-and-candy", "roses", "/media/high-and-candy.webp", "pink and bicolour"),
+  packedRose("High & Yellow Magic", "high-and-yellow-magic", "roses", "/media/high-and-yellow-magic.webp", "yellow, orange and bicolour"),
+  packedRose("Hot Lady", "hot-lady", "roses", "/media/hot-lady.webp", "pink"),
+  packedRose("Hot Spot", "hot-spot", "roses", "/media/hot-spot.webp", "pink"),
+  packedRose("Iguazu", "iguazu", "roses", "/media/iguazu.webp", "red"),
+  packedRose("Jessica", "jessica", "roses", "/media/jessica.webp", "pink"),
+  packedRose("Lemonade", "lemonade", "roses", "/media/lemonade.webp", "green"),
+  packedRose("Luciano", "luciano", "roses", "/media/luciano.webp", "pink"),
+  packedRose("Malibú", "malibu", "roses", "/media/malibu.webp", "pink and bicolour"),
+  packedRose("Mango Tango", "mango-tango", "roses", "/media/mango-tango.webp", "orange and bicolour"),
+  packedRose("Menta", "menta", "roses", "/media/menta.webp", "lavender"),
+  packedRose("Mother of Pearl", "mother-of-pearl", "roses", "/media/mother-of-pearl.webp", "cream and peach"),
+  packedRose("Nina", "nina", "roses", "/media/nina.webp", "orange"),
+  packedRose("Phoenix", "phoenix", "roses", "/media/phoenix.webp", "peach"),
   // The colour is carried here because the pair is the one place on the wall
   // where a name alone misleads: Mondial is the ivory white, and Pink Mondial is
   // the separate variety this one is. Both cards say which they are.
   packedRose("Pink Mondial", "pink-mondial", "roses", "/media/pink-mondial.webp", "light pink"),
-  packedRose("Quicksand", "quicksand", "roses", "/media/quicksand.webp"),
-  packedRose("Rosita Vendela", "rosita-vendela", "roses", "/media/rosita-vendela.webp"),
-  packedRose("Secret Garden", "secret-garden", "roses", "/media/secret-garden.webp"),
-  packedRose("Shocking Blue", "shocking-blue", "roses", "/media/shocking-blue.webp"),
-  packedRose("Silantoi", "silantoi", "roses", "/media/silantoi.webp"),
-  packedRose("Stardust", "stardust", "roses", "/media/stardust.webp"),
-  packedRose("Sweet Akito", "sweet-akito", "roses", "/media/sweet-akito.webp"),
-  packedRose("Sweet Cake", "sweet-cake", "roses", "/media/sweet-cake.webp"),
-  packedRose("Sweet Escimo", "sweet-escimo", "roses", "/media/sweet-escimo.webp"),
-  packedRose("Sweet Lady", "sweet-lady", "roses", "/media/sweet-lady.webp"),
-  packedRose("Toffee", "toffee", "roses", "/media/toffee.webp"),
+  packedRose("Quicksand", "quicksand", "roses", "/media/quicksand.webp", "peach"),
+  packedRose("Rosita Vendela", "rosita-vendela", "roses", "/media/rosita-vendela.webp", "pink"),
+  packedRose("Secret Garden", "secret-garden", "roses", "/media/secret-garden.webp", "pink"),
+  packedRose("Shocking Blue", "shocking-blue", "roses", "/media/shocking-blue.webp", "lavender"),
+  packedRose("Silantoi", "silantoi", "roses", "/media/silantoi.webp", "orange"),
+  packedRose("Stardust", "stardust", "roses", "/media/stardust.webp", "yellow"),
+  packedRose("Sweet Akito", "sweet-akito", "roses", "/media/sweet-akito.webp", "pink"),
+  packedRose("Sweet Cake", "sweet-cake", "roses", "/media/sweet-cake.webp", "pink"),
+  packedRose("Sweet Escimo", "sweet-escimo", "roses", "/media/sweet-escimo.webp", "pink"),
+  packedRose("Sweet Lady", "sweet-lady", "roses", "/media/sweet-lady.webp", "pink"),
+  packedRose("Toffee", "toffee", "roses", "/media/toffee.webp", "peach"),
   // The garden varieties, bought by name. There was a "Garden Rose" card here
   // too, and it is deliberately gone: it named the whole class rather than
   // anything a buyer can order, which is the chip's job now that the chip exists.
@@ -818,11 +834,11 @@ const items: CatalogueItem[] = [
   // their own pictures, and so did Kahala, which is why it is the one card here
   // that carries one. The apostrophe is the straight one the rest of the file
   // uses, as in Baby's Breath.
-  { name: "Pink O'Hara", slug: "pink-ohara", category: "garden", image: "/media/pink-ohara.webp" },
-  { name: "White O'Hara", slug: "white-ohara", category: "garden", image: "/media/white-ohara.webp" },
-  { name: "Pink X-pression", slug: "pink-x-pression", category: "garden", image: "/media/pink-x-pression.webp" },
-  { name: "Candy X-pression", slug: "candy-x-pression", category: "garden", image: "/media/candy-x-pression.webp" },
-  { name: "Melon X-pression", slug: "melon-x-pression", category: "garden", image: "/media/melon-x-pression.webp" },
+  { name: "Pink O'Hara", slug: "pink-ohara", category: "garden", image: "/media/pink-ohara.webp", colour: "pink" },
+  { name: "White O'Hara", slug: "white-ohara", category: "garden", image: "/media/white-ohara.webp", colour: "white" },
+  { name: "Pink X-pression", slug: "pink-x-pression", category: "garden", image: "/media/pink-x-pression.webp", colour: "pink" },
+  { name: "Candy X-pression", slug: "candy-x-pression", category: "garden", image: "/media/candy-x-pression.webp", colour: "orange and peach" },
+  { name: "Melon X-pression", slug: "melon-x-pression", category: "garden", image: "/media/melon-x-pression.webp", colour: "peach" },
   // Filed with the standard roses until the supplier lists came in and four
   // catalogues out of four called it a garden rose. It keeps its photograph, its
   // colour and its packing across the move — only the chip changed — and its old
@@ -873,38 +889,38 @@ const items: CatalogueItem[] = [
   // and where it doesn't, the shop knowing what lands in the cooler beats a
   // name. Two have since moved on again: Champagne to the spray chip, which is
   // the stem it actually is, and Glitz back to the standard roses.
-  packedRose("All 4 Love", "all-4-love", "garden", "/media/all-4-love.webp"),
-  packedRose("Aloha", "aloha", "garden", "/media/aloha.webp"),
-  packedRose("Antonia Gardens", "antonia-gardens", "garden", "/media/antonia-gardens.webp"),
-  packedRose("Arya", "arya", "garden", "/media/arya.webp"),
-  packedRose("Aurora Gardens", "aurora-gardens", "garden", "/media/aurora-gardens.webp"),
-  packedRose("Cotton X-pression", "cotton-x-pression", "garden", "/media/cotton-x-pression.webp"),
-  packedRose("Country Blues", "country-blues", "garden", "/media/country-blues.webp"),
-  packedRose("Country Candy", "country-candy", "garden", "/media/country-candy.webp"),
-  packedRose("Country Home", "country-home", "garden", "/media/country-home.webp"),
-  packedRose("Cream X-pression", "cream-x-pression", "garden", "/media/cream-x-pression.webp"),
+  packedRose("All 4 Love", "all-4-love", "garden", "/media/all-4-love.webp", "pink"),
+  packedRose("Aloha", "aloha", "garden", "/media/aloha.webp", "pink and lavender"),
+  packedRose("Antonia Gardens", "antonia-gardens", "garden", "/media/antonia-gardens.webp", "peach"),
+  packedRose("Arya", "arya", "garden", "/media/arya.webp", "lavender"),
+  packedRose("Aurora Gardens", "aurora-gardens", "garden", "/media/aurora-gardens.webp", "cream"),
+  packedRose("Cotton X-pression", "cotton-x-pression", "garden", "/media/cotton-x-pression.webp", "cream and peach"),
+  packedRose("Country Blues", "country-blues", "garden", "/media/country-blues.webp", "pink"),
+  packedRose("Country Candy", "country-candy", "garden", "/media/country-candy.webp", "peach, red and bicolour"),
+  packedRose("Country Home", "country-home", "garden", "/media/country-home.webp", "peach and pink"),
+  packedRose("Cream X-pression", "cream-x-pression", "garden", "/media/cream-x-pression.webp", "cream and peach"),
   // Two words, and the slug follows the name for the same reason the Mayras'
   // do: it was listed on the 14th, nothing outside this file has ever pointed at
   // it, and there is no saved link for the move to break.
-  packedRose("Creamy Kiss", "creamy-kiss", "garden", "/media/creamy-kiss.webp"),
-  packedRose("Dark X-pression", "dark-x-pression", "garden", "/media/dark-x-pression.webp"),
-  packedRose("Dragonfly", "dragonfly", "garden", "/media/dragonfly.webp"),
-  packedRose("Exotix Berry", "exotix-berry", "garden", "/media/exotix-berry.webp"),
-  packedRose("Free Spirit", "free-spirit", "garden", "/media/free-spirit.webp"),
-  packedRose("Garden Spirit", "garden-spirit", "garden", "/media/garden-spirit.webp"),
-  packedRose("Hearts", "hearts", "garden", "/media/hearts.webp"),
-  packedRose("Juicy X-pression", "juicy-x-pression", "garden", "/media/juicy-x-pression.webp"),
-  packedRose("Mademoiselle", "mademoiselle", "garden", "/media/mademoiselle.webp"),
-  packedRose("Mandarin X-pression", "mandarin-x-pression", "garden", "/media/mandarin-x-pression.webp"),
-  packedRose("Mayra Hot Pink", "mayra-hot-pink", "garden", "/media/mayra-hot-pink.webp"),
-  packedRose("Mayra Peach", "mayra-peach", "garden", "/media/mayra-peach.webp"),
-  packedRose("Mayra Bridal Pink", "mayra-bridal-pink", "garden", "/media/mayra-bridal-pink.webp"),
-  packedRose("Mayra Pink", "mayra-pink", "garden", "/media/mayra-pink.webp"),
-  packedRose("Mayra Red", "mayra-red", "garden", "/media/mayra-red.webp"),
-  packedRose("Mayra White", "mayra-white", "garden", "/media/mayra-white.webp"),
-  packedRose("Queen's Crown", "queens-crown", "garden", "/media/queens-crown.webp"),
-  packedRose("Shimmer", "shimmer", "garden", "/media/shimmer.webp"),
-  packedRose("Vicky Gardens", "vicky-gardens", "garden", "/media/vicky-gardens.webp"),
+  packedRose("Creamy Kiss", "creamy-kiss", "garden", "/media/creamy-kiss.webp", "white and cream"),
+  packedRose("Dark X-pression", "dark-x-pression", "garden", "/media/dark-x-pression.webp", "pink"),
+  packedRose("Dragonfly", "dragonfly", "garden", "/media/dragonfly.webp", "orange and peach"),
+  packedRose("Exotix Berry", "exotix-berry", "garden", "/media/exotix-berry.webp", "pink"),
+  packedRose("Free Spirit", "free-spirit", "garden", "/media/free-spirit.webp", "orange, peach, pink and bicolour"),
+  packedRose("Garden Spirit", "garden-spirit", "garden", "/media/garden-spirit.webp", "cream and peach"),
+  packedRose("Hearts", "hearts", "garden", "/media/hearts.webp", "red"),
+  packedRose("Juicy X-pression", "juicy-x-pression", "garden", "/media/juicy-x-pression.webp", "orange and peach"),
+  packedRose("Mademoiselle", "mademoiselle", "garden", "/media/mademoiselle.webp", "pink"),
+  packedRose("Mandarin X-pression", "mandarin-x-pression", "garden", "/media/mandarin-x-pression.webp", "pink"),
+  packedRose("Mayra Hot Pink", "mayra-hot-pink", "garden", "/media/mayra-hot-pink.webp", "pink"),
+  packedRose("Mayra Peach", "mayra-peach", "garden", "/media/mayra-peach.webp", "orange and peach"),
+  packedRose("Mayra Bridal Pink", "mayra-bridal-pink", "garden", "/media/mayra-bridal-pink.webp", "pink"),
+  packedRose("Mayra Pink", "mayra-pink", "garden", "/media/mayra-pink.webp", "pink"),
+  packedRose("Mayra Red", "mayra-red", "garden", "/media/mayra-red.webp", "red"),
+  packedRose("Mayra White", "mayra-white", "garden", "/media/mayra-white.webp", "white"),
+  packedRose("Queen's Crown", "queens-crown", "garden", "/media/queens-crown.webp", "pink"),
+  packedRose("Shimmer", "shimmer", "garden", "/media/shimmer.webp", "peach"),
+  packedRose("Vicky Gardens", "vicky-gardens", "garden", "/media/vicky-gardens.webp", "cream"),
   // A spray is a different stem rather than a grade of the standard rose — many
   // small heads on one stem, bought by the bunch of ten where a standard rose is
   // bought by the twenty-five — which is what the chip is for.
@@ -936,22 +952,23 @@ const items: CatalogueItem[] = [
   // the half box — and printing those over a spray is the one thing the note
   // above says not to do. They come back the moment the shop confirms what a
   // bunch of these actually holds. The photograph comes across untouched.
-  listedOnly("Champagne", "champagne", "spray", "/media/champagne.webp"),
-  listedOnly("Champagne Majolika", "champagne-majolika", "spray", "/media/champagne-majolika.webp"),
-  listedOnly("Cream Majolika", "cream-majolika", "spray", "/media/cream-majolika.webp"),
-  listedOnly("Elba", "elba", "spray", "/media/elba.webp"),
-  listedOnly("Fibonacci", "fibonacci", "spray", "/media/fibonacci.webp"),
-  listedOnly("Fire Up", "fire-up", "spray", "/media/fire-up.webp"),
-  listedOnly("Golden Blossom", "golden-blossom", "spray", "/media/golden-blossom.webp"),
-  listedOnly("Morning Star", "morning-star", "spray", "/media/morning-star.webp"),
-  listedOnly("Pink Majolika", "pink-majolika", "spray", "/media/pink-majolika.webp"),
-  listedOnly("Portrait", "portrait", "spray", "/media/portrait.webp"),
-  listedOnly("Rubicon", "rubicon", "spray", "/media/rubicon.webp"),
-  listedOnly("Shining Star", "shining-star", "spray", "/media/shining-star.webp"),
-  listedOnly("Star Blush", "star-blush", "spray", "/media/star-blush.webp"),
-  listedOnly("Suspiro", "suspiro", "spray", "/media/suspiro.webp"),
-  listedOnly("Sweet Dreams", "sweet-dreams", "spray", "/media/sweet-dreams.webp"),
-  listedOnly("White Majolika", "white-majolika", "spray", "/media/white-majolika.webp"),
+  listedOnly("Champagne", "champagne", "spray", "/media/champagne.webp", "white and cream"),
+  listedOnly("Champagne Majolika", "champagne-majolika", "spray", "/media/champagne-majolika.webp", "white and cream"),
+  listedOnly("Cream Majolika", "cream-majolika", "spray", "/media/cream-majolika.webp", "white and cream"),
+  listedOnly("Elba", "elba", "spray", "/media/elba.webp", "pink"),
+  listedOnly("Fibonacci", "fibonacci", "spray", "/media/fibonacci.webp", "orange and peach"),
+  listedOnly("Fire Up", "fire-up", "spray", "/media/fire-up.webp", "pink"),
+  listedOnly("Golden Blossom", "golden-blossom", "spray", "/media/golden-blossom.webp", "yellow"),
+  listedOnly("Morning Star", "morning-star", "spray", "/media/morning-star.webp", "cream and peach"),
+  listedOnly("Pink Majolika", "pink-majolika", "spray", "/media/pink-majolika.webp", "pink"),
+  listedOnly("Portrait", "portrait", "spray", "/media/portrait.webp", "cream and peach"),
+  listedOnly("Rubicon", "rubicon", "spray", "/media/rubicon.webp", "red"),
+  listedOnly("Shining Star", "shining-star", "spray", "/media/shining-star.webp", "white and cream"),
+  listedOnly("Star Blush", "star-blush", "spray", "/media/star-blush.webp", "pink"),
+  listedOnly("Suspiro", "suspiro", "spray", "/media/suspiro.webp", "pink"),
+  listedOnly("Sweet Dreams", "sweet-dreams", "spray", "/media/sweet-dreams.webp", "white and cream"),
+  listedOnly("White Majolika", "white-majolika", "spray", "/media/white-majolika.webp", "white"),
+  listedOnly("Snowflake", "snowflake", "spray", "/media/snowflake.webp", "white"),
   // A tint is a treatment rather than a colour group: white roses dyed or
   // infused at the farm, which is what makes the range of them unlimited and
   // what earns them a chip of their own.
@@ -964,20 +981,32 @@ const items: CatalogueItem[] = [
   // Easter. BellaRosa runs a full tinted catalogue of its own that has not been
   // sent, so this chip is the short version of what is actually available.
   packedRose("Black Dragon", "black-dragon", "tinted", "/media/black-dragon.webp"),
-  packedRose("Candy Cane Cocktail", "candy-cane", "tinted", "/media/candy-cane.webp"),
-  packedRose("Fall Hellujah", "fall-hellujah", "tinted", "/media/fall-hellujah.webp"),
-  packedRose("Fall in Love", "fall-in-love", "tinted", "/media/fall-in-love.webp"),
-  packedRose("Fluffy", "fluffy", "tinted", "/media/fluffy.webp"),
-  packedRose("Hallow Queen", "hallow-queen", "tinted", "/media/hallow-queen.webp"),
+  packedRose("Candy Cane Cocktail", "candy-cane", "tinted", "/media/candy-cane.webp", "cream, red and bicolour"),
+  packedRose("Fall Hellujah", "fall-hellujah", "tinted", "/media/fall-hellujah.webp", "orange, red and bicolour"),
+  packedRose("Fall in Love", "fall-in-love", "tinted", "/media/fall-in-love.webp", "peach"),
+  packedRose("Fluffy", "fluffy", "tinted", "/media/fluffy.webp", "blue and bicolour"),
+  packedRose("Hallow Queen", "hallow-queen", "tinted", "/media/hallow-queen.webp", "orange, red and bicolour"),
   packedRose("Harvest Delight", "harvest-delight", "tinted", "/media/harvest-delight.webp"),
-  packedRose("Hopper", "hopper", "tinted", "/media/hopper.webp"),
-  packedRose("Peeps", "peeps", "tinted", "/media/peeps.webp"),
-  packedRose("Pumpkin Patch", "pumpkin-patch", "tinted", "/media/pumpkin-patch.webp"),
-  packedRose("Santa's Helper", "santas-helper", "tinted", "/media/santas-helper.webp"),
-  packedRose("Spooktacular", "spooktacular", "tinted", "/media/spooktacular.webp"),
+  packedRose("Hopper", "hopper", "tinted", "/media/hopper.webp", "cream, lavender and bicolour"),
+  packedRose("Peeps", "peeps", "tinted", "/media/peeps.webp", "orange, peach, pink and bicolour"),
+  packedRose("Pumpkin Patch", "pumpkin-patch", "tinted", "/media/pumpkin-patch.webp", "orange"),
+  packedRose("Santa's Helper", "santas-helper", "tinted", "/media/santas-helper.webp", "red, green and bicolour"),
+  packedRose("Spooktacular", "spooktacular", "tinted", "/media/spooktacular.webp", "orange and bicolour"),
   packedRose("Stalk The Sun", "stalk-the-sun", "tinted", "/media/stalk-the-sun.webp"),
-  packedRose("T-Marshmellow", "t-marshmellow", "tinted", "/media/t-marshmallow.webp"),
-  packedRose("X-mas Gift", "x-mas-gift", "tinted", "/media/xmas-gift.webp"),
+  packedRose("T-Marshmellow", "t-marshmellow", "tinted", "/media/t-marshmallow.webp", "bicolour"),
+  packedRose("X-mas Gift", "x-mas-gift", "tinted", "/media/xmas-gift.webp", "red and bicolour"),
+  // The plain tints, named for what they are rather than for a holiday, and the
+  // three of them are the reason the chip cannot be answered by a colour chip:
+  // the colour row runs the ten a stem is grown in, and none of these is grown.
+  //   The two blues carry no colour of their own, and the photographs are why
+  // it stays that way rather than why it changes: both are plainly blue, there
+  // is no blue chip for the word to reach, and a colour no chip claims takes
+  // this file down at load rather than dropping the card off the colour row in
+  // silence. Rainbow says its own, since a stem dyed every colour is the
+  // plainest bicolour there is.
+  packedRose("Dark Blue", "dark-blue", "tinted", "/media/dark-blue.webp", "blue"),
+  packedRose("Light Blue", "light-blue", "tinted", "/media/light-blue.webp", "blue"),
+  packedRose("Rainbow", "rainbow", "tinted", "/media/rainbow.webp", "rainbow"),
 
   {
     name: "Select-grade Carnation",
@@ -1628,6 +1657,16 @@ const items: CatalogueItem[] = [
     boughtFor: "Cascading bridal bouquets, tablescapes and installations that need to spill over an edge, autumn arrangements and editorial design.",
     related: ["eucalyptus", "molucella", "israeli-ruscus"],
   },
+  // A photograph, a name and a colour, which is the whole of what is known
+  // here: the sheet has no line for it yet, and a stem length or a vase life
+  // written from general knowledge of the flower is a promise the cooler has to
+  // keep. The detail page renders what a record has, so this one is short
+  // rather than broken, and it fills in the day the shop hands over the figures.
+  //   White is what the picture shows and what the stem is bought as. The
+  // yellow at the centre of each head is an eye rather than a colour a buyer
+  // asks for, and filing it under Yellow would put a daisy in front of someone
+  // looking for a yellow flower.
+  { name: "Chamomile", slug: "chamomile", category: "greens", image: "/media/chamomile.webp" },
 
   // Made up rather than sold by the stem, so they close the list: everything
   // above is what goes into one.
@@ -1731,7 +1770,18 @@ export const flowers = items
     // bargain the haystack below makes. A record with no colour gets an empty
     // array and not a null, so the chip test is one `.some` with no guard in
     // front of it.
-    colourIds: item.colour ? colourGroupsOf(item.colour) : [],
+    //   A rose with no colour answers to Other instead of to nothing. Colour is
+    // a rose filter, so on the rose wall a stem that is under no chip is a stem
+    // a buyer scrolling the colours never reaches — either it was never read or
+    // it is a thing no single chip describes, and both of those are answers a
+    // buyer can act on. Outside the rose categories an empty array is still the
+    // right answer: there is no colour data there at all, and Other would claim
+    // the whole of the rest of the catalogue.
+    colourIds: item.colour
+      ? colourGroupsOf(item.colour)
+      : roseCategories.has(item.category)
+        ? ["other" as ColourGroupId]
+        : [],
     href: `/catalogue/${item.slug}`,
     search: normalize([item.name, item.colour, item.korean, item.botanical].filter(Boolean).join(" ")),
   }))
