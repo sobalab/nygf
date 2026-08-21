@@ -4,7 +4,8 @@ import { useMemo, useState } from "react";
 import { parseOrderList, type ParsedLine } from "../../../lib/order-list";
 import { variants, keyOf, label } from "../../data";
 import { normalizeQuery } from "../../../lib/text";
-import { useLedger, balance } from "../../store";
+import { useLedger, balance, useAliases, aliasKey, variantFor } from "../../store";
+import { NameIt } from "../../name-it";
 
 // Taking an order. Built from the corkboard rather than from a form library:
 // orders arrive as a typed list from the florist, get printed, pinned, and
@@ -18,13 +19,15 @@ import { useLedger, balance } from "../../store";
 
 type Line = ParsedLine & { asked: number; giving: number; unit: "bunch" | "stem"; matched: string | null };
 
-const toLine = (parsed: ParsedLine): Line => {
+const toLine = (parsed: ParsedLine, aliases: Record<string, string>): Line => {
   const unit = parsed.bunches !== null ? "bunch" : "stem";
   const asked = parsed.bunches ?? parsed.stems ?? 0;
   const needle = normalizeQuery(parsed.name);
   // A first pass only. Anything it gets wrong is meant to be corrected here,
   // which is why the label it read stays on screen underneath.
-  const hit = variants.find((v) => needle.includes(normalizeQuery(v.name)));
+  // A name somebody has already resolved once wins over guesswork.
+  const remembered = variantFor(aliases[aliasKey(parsed.name)] ?? "");
+  const hit = remembered ?? variants.find((v) => needle.includes(normalizeQuery(v.name)));
   return { ...parsed, asked, giving: asked, unit, matched: hit ? label(hit) : null };
 };
 
@@ -36,6 +39,8 @@ export default function NewOrder() {
   const [needed, setNeeded] = useState("");
   const [fulfilment, setFulfilment] = useState<"pickup" | "delivery" | null>(null);
   const [lines, setLines] = useState<Line[] | null>(null);
+  const [naming, setNaming] = useState<number | null>(null);
+  const aliases = useAliases();
 
   const read = () => {
     const list = parseOrderList(paste);
@@ -46,7 +51,7 @@ export default function NewOrder() {
       const { month, day } = list.neededOn;
       setNeeded(`${String(month).padStart(2, "0")}/${String(day).padStart(2, "0")}`);
     }
-    setLines(list.lines.map(toLine));
+    setLines(list.lines.map((line) => toLine(line, aliases)));
   };
 
   const set = (i: number, patch: Partial<Line>) =>
@@ -112,7 +117,8 @@ export default function NewOrder() {
           : variant?.stemsPerUnit ? { count: held * variant.stemsPerUnit, unit: "stem" }
           : null;
         return (
-          <div className="admin-row" key={`${line.raw}-${i}`}>
+          <div key={`${line.raw}-${i}`}>
+          <div className="admin-row">
             <div className="admin-row-main">
               <div className="admin-row-name">{line.matched ?? line.name}</div>
               {/* What the slip said stays visible under what it resolved to, so
@@ -128,6 +134,19 @@ export default function NewOrder() {
               <button type="button" onClick={() => set(i, { giving: Math.max(0, line.giving - 1) })} aria-label={`One fewer ${line.name}`}>−</button>
               <button type="button" onClick={() => set(i, { giving: line.giving + 1 })} aria-label={`One more ${line.name}`}>+</button>
             </div>
+          </div>
+          {!line.matched && (naming === i ? (
+            <NameIt
+              text={line.name}
+              onResolved={(_key, shown) => { set(i, { matched: shown }); setNaming(null); }}
+              onCancel={() => setNaming(null)}
+            />
+          ) : (
+            <button className="admin-button admin-button-quiet" style={{ marginTop: 0, marginBottom: 10 }}
+                    type="button" onClick={() => setNaming(i)}>
+              Say what “{line.name}” is
+            </button>
+          ))}
           </div>
         );
       })}

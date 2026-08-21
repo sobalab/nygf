@@ -1,4 +1,4 @@
-import { normalize } from "./lib/text";
+import { normalize } from "./lib/text.ts";
 
 // The filter chips, in the order they render. The stem chips were sized so none
 // of them came back with only two or three cards, which is the failure this
@@ -1744,7 +1744,7 @@ const categoryLabels = new Map<CategoryId, string>(categories.map(({ id, label }
 // share it without importing this file — see the note over it. Re-exported here
 // because the catalogue page has always imported it from this module, and the
 // rule is still as much a fact about this list as it is about that search box.
-export { normalizeQuery } from "./lib/text";
+export { normalizeQuery } from "./lib/text.ts";
 
 // Where a chip sits in the row, which is where its cards sit in the grid.
 const categoryOrder = new Map<CategoryId, number>(categories.map(({ id }, index) => [id, index]));

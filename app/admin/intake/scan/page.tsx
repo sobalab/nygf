@@ -2,8 +2,9 @@
 
 import { useState } from "react";
 import { fromDateCode } from "../../../lib/date-code";
-import { variants } from "../../data";
-import { normalizeQuery } from "../../../lib/text";
+import { NameIt } from "../../name-it";
+import { useAliases, aliasKey, variantFor } from "../../store";
+import { label } from "../../data";
 
 // Scanning a label. 33 close-ups of the real labels say this is worth building
 // and also say exactly what shape it has to be.
@@ -60,6 +61,7 @@ const SAMPLE: Reading = {
 };
 
 export default function Scan() {
+  const aliases = useAliases();
   const [reading, setReading] = useState<Reading | null>(null);
   const [busy, setBusy] = useState(false);
   const [lines, setLines] = useState<Line[]>([]);
@@ -69,7 +71,18 @@ export default function Scan() {
   // model through the AI Gateway with this schema and gets the lines back.
   const capture = () => {
     setBusy(true);
-    setTimeout(() => { setReading(SAMPLE); setLines(SAMPLE.lines); setBusy(false); }, 700);
+    setTimeout(() => {
+      setReading(SAMPLE);
+      // Anything this farm's wording has been resolved to before resolves
+      // itself now, which is the whole point of writing the aliases down.
+      setLines(SAMPLE.lines.map((line) => {
+        if (line.matched) return line;
+        const known = aliases[aliasKey(line.printed)];
+        const variant = known ? variantFor(known) : undefined;
+        return variant ? { ...line, matched: label(variant) } : line;
+      }));
+      setBusy(false);
+    }, 700);
   };
 
   const arrived = reading?.dateCode ? fromDateCode(reading.dateCode) : null;
@@ -122,7 +135,9 @@ export default function Scan() {
             <div className="admin-row-main">
               <div className="admin-row-name">
                 {line.matched ?? line.printed}
-                {line.grade && <span className="admin-row-grade">, {line.grade}cm</span>}
+                {/* Only when it is still the raw label text. A resolved variant
+                    already carries its own grade in its name. */}
+                {!line.matched && line.grade && <span className="admin-row-grade">, {line.grade}cm</span>}
               </div>
               {/* What the label actually said stays on screen next to what it
                   resolved to. A match is a claim, and the reader should be able
@@ -140,16 +155,11 @@ export default function Scan() {
           </div>
           {!line.matched && (
             naming === i ? (
-              <div style={{ paddingBottom: 10 }}>
-                {[...new Map(variants.map((v) => [v.name, v])).values()]
-                  .filter((v) => normalizeQuery(v.name).includes(normalizeQuery(line.printed.split(" ")[0])) || true)
-                  .slice(0, 5)
-                  .map((v) => (
-                    <button className="admin-jump" type="button" key={v.name} onClick={() => name(i, v.name)}>
-                      <span>{v.name}</span><span className="admin-jump-none">{v.category}</span>
-                    </button>
-                  ))}
-              </div>
+              <NameIt
+                text={line.printed}
+                onResolved={(_key, shown) => name(i, shown)}
+                onCancel={() => setNaming(null)}
+              />
             ) : (
               <button className="admin-button admin-button-quiet" style={{ marginTop: 0, marginBottom: 10 }} type="button" onClick={() => setNaming(i)}>
                 Say what “{line.printed}” is

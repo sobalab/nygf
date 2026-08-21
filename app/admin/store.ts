@@ -2,6 +2,7 @@
 
 import { useSyncExternalStore } from "react";
 import { variants, keyOf, type Variant } from "./data";
+import { normalize } from "../lib/text";
 
 // The prototype's data layer, and it is deliberately the shape the real one
 // will be: a ledger of movements, with every count derived from it. Nothing in
@@ -29,7 +30,7 @@ export type Movement = {
   at: number;
 };
 
-const STORAGE_KEY = "nygf-admin-prototype-v1";
+const STORAGE_KEY = "nygf-admin-prototype-v2";
 
 // The seeded cooler, expressed as the receipts that would have produced it, so
 // there is no state in the system that did not arrive as a movement.
@@ -48,10 +49,27 @@ function seed(): Movement[] {
   );
 }
 
-const SERVER: Movement[] = seed();
+// Everything the prototype holds. Movements are the ledger; the other two are
+// what makes the catalogue able to grow.
+//   `customs` are variants somebody typed in at the moment a box arrived with a
+// flower nobody had filed yet. That is the right moment to create one: the
+// alternative is a settings screen nobody opens, or seeding a cross product of
+// 201 varieties by 8 grades, most of which the shop never buys.
+//   `aliases` map the text a label or a florist's list actually used onto the
+// variant it turned out to be — "TIFANNY" to Tiffany, "High & Y. Magic Flame 40
+// 25" to High & Magic. Written on every confirmation, so the second box from the
+// same farm matches without asking. This is the table that makes scanning get
+// quieter over weeks instead of asking forever.
+export type State = {
+  movements: Movement[];
+  customs: Variant[];
+  aliases: Record<string, string>;
+};
 
-let movements: Movement[] = SERVER;
-let nextId = SERVER.length;
+const SERVER: State = { movements: seed(), customs: [], aliases: {} };
+
+let state: State = SERVER;
+let nextId = SERVER.movements.length;
 
 // Read at module load rather than in an effect, so the first client render is
 // already correct and React is never told a value changed when the component
@@ -60,10 +78,14 @@ if (typeof window !== "undefined") {
   try {
     const saved = window.localStorage.getItem(STORAGE_KEY);
     if (saved) {
-      const parsed = JSON.parse(saved) as Movement[];
-      if (Array.isArray(parsed) && parsed.length) {
-        movements = parsed;
-        nextId = Math.max(...parsed.map((m) => m.id)) + 1;
+      const parsed = JSON.parse(saved) as Partial<State>;
+      if (parsed && Array.isArray(parsed.movements) && parsed.movements.length) {
+        state = {
+          movements: parsed.movements,
+          customs: parsed.customs ?? [],
+          aliases: parsed.aliases ?? {},
+        };
+        nextId = Math.max(...parsed.movements.map((m) => m.id)) + 1;
       }
     }
   } catch {
@@ -74,8 +96,8 @@ if (typeof window !== "undefined") {
 
 const listeners = new Set<() => void>();
 
-function commit(next: Movement[]) {
-  movements = next;
+function commit(next: State) {
+  state = next;
   try {
     window.localStorage.setItem(STORAGE_KEY, JSON.stringify(next));
   } catch {
@@ -87,24 +109,61 @@ function commit(next: Movement[]) {
 
 export function post(entries: Array<Omit<Movement, "id" | "at">>) {
   const at = Date.now();
-  commit([...movements, ...entries.map((entry) => ({ ...entry, id: nextId++, at }))]);
+  commit({
+    ...state,
+    movements: [...state.movements, ...entries.map((entry) => ({ ...entry, id: nextId++, at }))],
+  });
 }
+
+// A flower nobody had filed, typed in at the moment a box of it turned up.
+// Returns the key so the caller can post against it straight away.
+export function addVariant(variant: Variant, labelText?: string) {
+  const key = keyOf(variant);
+  commit({
+    ...state,
+    customs: state.customs.some((v) => keyOf(v) === key) ? state.customs : [...state.customs, variant],
+    aliases: labelText ? { ...state.aliases, [aliasKey(labelText)]: key } : state.aliases,
+  });
+  return key;
+}
+
+// Remember that this piece of label text meant this variant.
+export function addAlias(labelText: string, key: string) {
+  commit({ ...state, aliases: { ...state.aliases, [aliasKey(labelText)]: key } });
+}
+
+// Matched loosely, because the same flower is written a dozen ways across farms:
+// accents off, case folded, and the packing digits farms tack on the end
+// ("Queen Crown 40 25", "HIGH & MAGIC 70CM 25 LA ROSALEDA") dropped, since they
+// repeat what the grade and bunch columns already say.
+export const aliasKey = (text: string) =>
+  normalize(text).replace(/\b\d+\s*cm\b/g, " ").replace(/\b\d+\b/g, " ").replace(/\s+/g, " ").trim();
 
 export function resetToSeed() {
-  nextId = SERVER.length;
-  commit(seed());
+  nextId = SERVER.movements.length;
+  commit({ movements: seed(), customs: [], aliases: {} });
 }
 
-export function useLedger() {
+function useStore() {
   return useSyncExternalStore(
     (notify) => {
       listeners.add(notify);
       return () => listeners.delete(notify);
     },
-    () => movements,
+    () => state,
     () => SERVER,
   );
 }
+
+export const useLedger = () => useStore().movements;
+
+// The seeded catalogue plus whatever has been typed in since.
+export const useVariants = () => {
+  const { customs } = useStore();
+  return customs.length ? [...variants, ...customs] : variants;
+};
+
+export const useAliases = () => useStore().aliases;
 
 // ---------------------------------------------------------------------------
 // Everything below reads the ledger. None of it stores anything.
@@ -160,4 +219,4 @@ export const wastedThisMonth = (ledger: Movement[], on: Date) => {
 };
 
 export const variantFor = (key: string): Variant | undefined =>
-  variants.find((v) => keyOf(v) === key);
+  [...variants, ...state.customs].find((v) => keyOf(v) === key);

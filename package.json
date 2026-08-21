@@ -14,7 +14,8 @@
     "media": "bash scripts/optimize-media.sh",
     "colours": "node --experimental-strip-types scripts/propose-colours.mjs",
     "colours:check": "node --experimental-strip-types scripts/propose-colours.mjs --check",
-    "colours:apply": "node --experimental-strip-types scripts/apply-colours.mjs"
+    "colours:apply": "node --experimental-strip-types scripts/apply-colours.mjs",
+    "sync:products": "node --experimental-strip-types scripts/sync-products.mjs"
   },
   "dependencies": {
     "@neondatabase/serverless": "^1.1.0",

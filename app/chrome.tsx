@@ -4,6 +4,7 @@ import { Fragment, useRef, useState } from "react";
 import { motion, useMotionValueEvent, useReducedMotion, useScroll, useTransform } from "motion/react";
 import { shop } from "./site";
 import { CallOrText } from "./ask";
+import { isStaff, useSession } from "./session";
 
 // The address and hours are stored as single strings with newlines, so they read
 // correctly in a text draft too. Break them for the page.
@@ -27,6 +28,10 @@ const TURN_PX = 5;
 
 export function SiteHeader({ home = false }: { home?: boolean }) {
   const [menuOpen, setMenuOpen] = useState(false);
+  // Read as a client fact, never awaited on the server. The header renders on
+  // every page in the site, so a session read here would turn all of them
+  // dynamic and cost the catalogue its 201 prerendered files.
+  const session = useSession();
   const prefix = home ? "" : "/";
   const ref = useRef<HTMLElement>(null);
   const still = useReducedMotion();
@@ -92,10 +97,20 @@ export function SiteHeader({ home = false }: { home?: boolean }) {
         <a href="/catalogue" onClick={() => setMenuOpen(false)}>Catalogue</a>
         <a href={`${prefix}#story`} onClick={() => setMenuOpen(false)}>Our story</a>
         <a href={`${prefix}#services`} onClick={() => setMenuOpen(false)}>Our Services</a>
-        {/* The header CTA is hidden below 800px, so the menu carries contact there. */}
-        <a className="nav-contact" href="/contact" onClick={() => setMenuOpen(false)}>Contact us</a>
+        <a href="/contact" onClick={() => setMenuOpen(false)}>Contact us</a>
+        {/* The button on the right is hidden below 800px, so the menu carries
+            the same destination there rather than dropping it. */}
+        <a className="nav-account" href={session ? (isStaff(session) ? "/admin" : "/account") : "/sign-in"} onClick={() => setMenuOpen(false)}>
+          {session ? (isStaff(session) ? "The cooler" : "My orders") : "Sign in"}
+        </a>
       </nav>
-      <a className="header-cta" href="/contact">Contact us</a>
+      {/* Signed out this says Sign in, and that is what ships in the prerendered
+          HTML on every page. Signed in it becomes the way back to whichever side
+          of the business you belong to: staff get the cooler, buyers get their
+          orders. */}
+      <a className="header-cta" href={session ? (isStaff(session) ? "/admin" : "/account") : "/sign-in"}>
+        {session ? (isStaff(session) ? "The cooler" : "My orders") : "Sign in"}
+      </a>
     </motion.header>
   );
 }

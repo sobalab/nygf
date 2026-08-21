@@ -51,6 +51,19 @@ body { margin:0; background:var(--paper); color:var(--ink); font-family:var(--sa
    page stopped doing so the moment it handed those pixels back to main to frame
    the floating bar with. */
 main:not(.home) { background:var(--footer-well,var(--paper)); display:flow-root; }
+/* The well is whatever the page's last block is painted in, worked out from the
+   block itself rather than declared again on <main>.
+     It used to be an inline --footer-well on every page, which made the colour
+   behind the footer a thing you had to remember, in a second file, matching a
+   section you might later recolour. Forget it and the fallback is paper — so the
+   panel slides up out of a strip of the footer's own colour and the movement
+   disappears, because a shape only reads as sliding in over something if the
+   something is a different colour.
+     :has() lets the ground be read off the last section instead, so it cannot
+   drift and cannot fall back to paper on a page anybody adds later. */
+main:has(> .gate:last-child) { --footer-well:var(--band-contact); }
+main:has(> .enquiry:last-child) { --footer-well:var(--band-contact); }
+main:has(> .catalogue:last-child) { --footer-well:var(--band-trade); }
 a { color:inherit; text-decoration:none; }
 button { color:inherit; font:inherit; }
 img { display:block; width:100%; }
@@ -89,7 +102,7 @@ section[id] { scroll-margin-top:102px; }
 .wordmark { font-family:var(--display); font-size:26px; line-height:1; letter-spacing:.02em; }
 .wordmark-full { font-size:21px; letter-spacing:.045em; }
 .nav { display:flex; gap:38px; font-size:12px; text-transform:uppercase; letter-spacing:1.4px; }
-.nav-contact { display:none; }
+.nav-account { display:none; }
 .header-cta { display:flex; align-items:center; justify-content:center; background:var(--ink); color:var(--paper); padding:12px 20px; border-radius:var(--btn-radius); text-transform:uppercase; font-size:11px; letter-spacing:1.2px; }
 .menu-toggle { display:none; border:0; background:none; padding:0; width:44px; height:44px; align-items:center; justify-content:flex-end; cursor:pointer; }
 .menu-icon { display:block; position:relative; width:22px; height:13px; }
@@ -189,7 +202,7 @@ html[data-splash="off"] { --hero-start:.15s; }
 .section-pad { padding:130px 6vw; }
 /* A shade smaller than the roman was: small caps run about a sixth wider at the
    same size, and these headings carry authored line breaks that have to hold. */
-.story-title,.catalogue h2,.trade h2,.offerings h2,.page-head h1 { font:400 clamp(30px,3.6vw,54px)/1.12 var(--display); letter-spacing:.015em; margin:0; }
+.story-title,.catalogue h2,.trade h2,.offerings h2,.page-head h1,.gate h1 { font:400 clamp(30px,3.6vw,54px)/1.12 var(--display); letter-spacing:.015em; margin:0; }
 /* Title, then the note beneath it, at every width — the note used to sit in a
    second column off to the right, which left the title stranded against a lot
    of empty band. Compounded with .section-pad so the zeroed bottom padding
@@ -1293,7 +1306,7 @@ a:focus-visible,button:focus-visible,input:focus-visible { outline:2px solid var
   .offerings-list { grid-template-columns:1fr; }
   .site-header .wordmark { font-size:20px; }
   .header-cta { display:none; }
-  .nav-contact { display:block; }
+  .nav-account { display:block; }
   .menu-toggle { display:flex; }
   /* The panel is the bar's own surface carried down the screen, so it takes the
      bar's shadow and hairline too. Without them it is a paper rectangle that
@@ -1574,3 +1587,31 @@ html[data-splash="off"] .splash { display:none; }
      frame anyway, so dropping the runs costs nothing but the movement. */
   .ask-dialog[open]::backdrop { animation:none; }
 }
+
+/* ---------------------------------------------------------------------------
+   Sign in. A full screen with one question on it, because it is the only thing
+   being asked and a short form floating at the top of a tall band reads as a
+   page that failed to load.
+   --------------------------------------------------------------------------- */
+/* Paints its own ground, which is the rule every section on the site follows
+   and the reason --footer-well works at all: main carries the well colour, each
+   section covers it, and the only place it is ever seen is the margin the footer
+   panel opens out of as it rises. A section that paints nothing lets the well
+   flood the whole page, which is what this one was doing — the animation and the
+   page colour were the same variable, so neither could move without the other.
+   Set apart here, so the band behind the form and the ground the footer lifts
+   off are two decisions. */
+.gate { min-height:100svh; display:flex; align-items:center; justify-content:center; padding:110px 24px 80px; background:var(--band-contact); }
+.gate-inner { width:100%; max-width:460px; text-align:center; }
+.gate h1 { font-size:clamp(38px,3.6vw,54px); margin:0 0 14px; }
+.gate p { margin:0 auto; max-width:38ch; }
+/* Two answers, side by side, because they are the same size of decision. Stacked
+   below 520px rather than squeezed: two dark buttons at half a phone's width
+   each is a pair of targets nobody can read. */
+.gate-choices { display:grid; grid-template-columns:1fr 1fr; gap:14px; margin-top:30px; }
+.gate-choice { display:flex; align-items:center; justify-content:center; background:var(--band-story); color:var(--cream); border:0; padding:22px 20px; border-radius:var(--btn-radius); cursor:pointer; font:500 16px/1.3 var(--sans); transition:background-color .3s var(--ease), transform .12s var(--ease); }
+.gate-choice:hover { background:var(--band-flowers); }
+.gate-choice:active { transform:translateY(1px); }
+.gate .field { text-align:left; }
+.gate-back { margin-top:22px; }
+@media (max-width:520px) { .gate-choices { grid-template-columns:1fr; } }
